@@ -1,0 +1,122 @@
+"""Draft an office-action response from a structured analysis.
+
+For each rejected claim we retrieve the claim text, cited-reference passages, and MPEP guidance,
+then ask the model to argue and/or amend — grounded strictly in that retrieved context. Output is
+a ``ResponseDraft`` whose every argument carries its supporting sources, ready for verification.
+"""
+
+from __future__ import annotations
+
+import logging
+
+from src.generation.llm_client import LLMClient
+from src.generation.prompt_templates import DRAFT_RESPONSE_ARGUMENT, SUGGEST_AMENDMENTS
+from src.models.schemas import (
+    ClaimRejection,
+    OfficeActionAnalysis,
+    ResponseArgument,
+    ResponseDraft,
+)
+
+logger = logging.getLogger(__name__)
+
+
+def _reference_blocks(rejection: ClaimRejection) -> str:
+    blocks = []
+    for ref in rejection.cited_references:
+        passages = "\n".join(ref.relevant_passages) or "(no passages provided)"
+        blocks.append(
+            f'<cited_reference ref="{ref.patent_number}">\n{passages}\n</cited_reference>'
+        )
+    return "\n".join(blocks) or "<cited_reference>(none)</cited_reference>"
+
+
+def draft_response(
+    analysis: OfficeActionAnalysis,
+    analysis_id: str,
+    strategy: str = "argue",
+    *,
+    claim_texts: dict[int, str] | None = None,
+    mpep_context: dict[int, str] | None = None,
+    llm: LLMClient | None = None,
+) -> ResponseDraft:
+    """Produce a per-claim response draft.
+
+    ``claim_texts`` and ``mpep_context`` supply the retrieved context per claim number; when
+    omitted, placeholders are used (the model will report INSUFFICIENT_CONTEXT for missing parts).
+    """
+    claim_texts = claim_texts or {}
+    mpep_context = mpep_context or {}
+    llm = llm or LLMClient()
+
+    arguments: list[ResponseArgument] = []
+    for rejection in analysis.rejections:
+        claim_text = claim_texts.get(rejection.claim_number, "(claim text not retrieved)")
+        refs = _reference_blocks(rejection)
+
+        if strategy in ("argue", "both"):
+            arguments.append(
+                _argue(llm, rejection, claim_text, refs, mpep_context)
+            )
+        if strategy in ("amend", "both"):
+            arguments.append(
+                _amend(llm, rejection, claim_text, refs)
+            )
+
+    return ResponseDraft(
+        analysis_id=analysis_id,
+        application_number=analysis.application_number,
+        strategy=strategy,
+        arguments=arguments,
+    )
+
+
+def _argue(llm, rejection, claim_text, refs, mpep_context) -> ResponseArgument:
+    prompt = DRAFT_RESPONSE_ARGUMENT
+    mpep = mpep_context.get(rejection.claim_number, "")
+    mpep_block = f"<mpep>\n{mpep}\n</mpep>" if mpep else "<mpep>(none retrieved)</mpep>"
+    user = prompt.render(
+        claim_number=rejection.claim_number,
+        claim_text=claim_text,
+        rejection_basis=rejection.rejection_basis.value,
+        rejection_text=_rejection_summary(rejection),
+        reference_blocks=refs,
+        mpep_blocks=mpep_block,
+    )
+    data = llm.complete_json(prompt.system, user)
+    return ResponseArgument(
+        claim_number=rejection.claim_number,
+        rejection_basis=rejection.rejection_basis,
+        strategy="argue",
+        argument_text=data.get("argument_text", ""),
+        supporting_sources=data.get("supporting_sources", []),
+        confidence=float(data.get("confidence", 0.0)),
+    )
+
+
+def _amend(llm, rejection, claim_text, refs) -> ResponseArgument:
+    prompt = SUGGEST_AMENDMENTS
+    user = prompt.render(
+        claim_number=rejection.claim_number,
+        claim_text=claim_text,
+        specification_support="(specification not retrieved)",
+        reference_blocks=refs,
+    )
+    data = llm.complete_json(prompt.system, user)
+    return ResponseArgument(
+        claim_number=rejection.claim_number,
+        rejection_basis=rejection.rejection_basis,
+        strategy="amend",
+        argument_text=data.get("distinction", ""),
+        supporting_sources=[data.get("source", "")] if data.get("source") else [],
+        suggested_amendment=data.get("suggested_amendment"),
+        confidence=float(data.get("confidence", 0.0)),
+    )
+
+
+def _rejection_summary(rejection: ClaimRejection) -> str:
+    refs = ", ".join(r.patent_number for r in rejection.cited_references) or "(no references)"
+    return (
+        f"Claim {rejection.claim_number} rejected under §{rejection.rejection_basis.value} "
+        f"over {refs}."
+    )

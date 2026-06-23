@@ -1,0 +1,25 @@
+UNITED STATES PATENT AND TRADEMARK OFFICE
+
+Application No.: 16/123,456
+Examiner: JOHN Q. SMITH
+Art Unit: 2186
+Notification Date: 03/14/2023
+
+DETAILED ACTION
+
+This is a non-final office action.
+
+Claim Rejections - 35 USC § 103
+
+Claims 1-3 are rejected under 35 U.S.C. § 103 as being unpatentable over
+Anderson (US 9,876,543 B2) in view of Chen (US2019/0123456 A1).
+
+Regarding claim 1, Anderson discloses a processor configured to handle interrupt
+requests using a priority queue (col. 4, lines 23-45). Anderson does not explicitly
+disclose dynamically reordering the priority queue based on task deadlines. However,
+Chen teaches dynamic deadline-based reordering of pending tasks (paragraph [0032],
+Fig. 3). It would have been obvious to one of ordinary skill in the art at the time of
+the invention to modify Anderson to incorporate the deadline-based reordering of Chen
+in order to improve real-time responsiveness.
+
+Claims 2-3 depend from claim 1 and are rejected for the same reasons.
