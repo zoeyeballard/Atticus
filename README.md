@@ -85,10 +85,13 @@ pytest
 python -m src.main analyze --file data/sample_office_actions/16-123456_non_final_103.txt --no-llm
 
 # Analyze a live application (requires USPTO_API_KEY + ANTHROPIC_API_KEY):
-python -m src.main analyze --application-number 16835899
+python -m src.main analyze --application-number 19531961
 
-# Validate the USPTO client against the live ODP API (Step 1):
-python scripts/validate_uspto.py 16835899
+# Validate the USPTO client against the live ODP API (Step 1, free):
+python scripts/validate_uspto.py 19531961
+
+# Confirm Anthropic billing is active (~$0.0001):
+python scripts/validate_anthropic.py
 ```
 
 ## API endpoints

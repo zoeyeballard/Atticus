@@ -332,45 +332,93 @@ curl -X POST http://localhost:8000/api/v1/draft-response \
 
 ## Priority order summary
 
-Do these in order. Each depends on the previous:
+Status as of the live-integration session (both API keys now in `.env`):
 
 ```
-[ ] Step 0: Get USPTO API key (blocker — needs your USPTO.gov account + ID.me)
-[~] Step 1: Validate USPTO client against live API  → run: python scripts/validate_uspto.py <appNum>
-[ ] Step 2: Find 5 test applications, create ground truth
-[~] Step 3: Start PostgreSQL + pgvector  → docker compose up -d db && python -m src.db.migrations
-[~] Step 4: Seed MPEP (chapters 700, 2100, 2200)  → python scripts/seed_mpep.py
-[ ] Step 5: Seed cited patents from test OAs
-[~] Step 6: Run full pipeline on first real OA  → python -m src.main analyze --application-number <appNum>
-[x] Step 7: Parser handles grouped/range/multi-basis rejections (offline tests added)
-[ ] Step 8: Test response drafting
-[ ] Step 9: Record hallucination metrics
+[x] Step 0: USPTO + Anthropic API keys obtained and in .env
+[x] Step 1: USPTO client VALIDATED LIVE — all checks pass (see Live results below)
+[ ] Step 2: Find 5 test applications, create ground truth        ← needs your patent-law judgment
+[~] Step 3: Start PostgreSQL + pgvector                          ← code ready; needs Docker/Postgres
+[~] Step 4: Seed MPEP (chapters 700, 2100, 2200)                 ← code ready; needs DB
+[~] Step 5: Seed cited patents from test OAs                     ← code ready; needs DB
+[◐] Step 6: Run full pipeline on a real OA                       ← deterministic path PROVEN live;
+                                                                    LLM enrichment needs API credits
+[x] Step 7: Parser handles real-world rejection phrasings        ← tuned against a live OA + tests
+[ ] Step 8: Test response drafting                               ← needs API credits
+[ ] Step 9: Record hallucination metrics                         ← needs Steps 2 + credits
 ```
 
-`[~]` = code is ready and runnable; only Step 0 (the API key) blocks live execution.
+`[x]` done · `[◐]` partly done · `[~]` code ready, blocked on infra/credits.
 
-### Offline prep landed (commit on top of Phase 1)
+### Two things block full live execution (neither is a code problem)
 
-These were done without an API key so the steps run as soon as the key is in `.env`:
+1. **Anthropic API credits.** The key is valid but the account balance is $0 — a live call returns
+   `400 invalid_request_error: "Your credit balance is too low"`. The claude.ai plan does **not**
+   fund the API; add credits at <https://console.anthropic.com> → Plans & Billing. Re-check with
+   `python scripts/validate_anthropic.py` (costs ~$0.0001 once credits exist). This blocks the LLM
+   half of Steps 6/8/9.
+2. **PostgreSQL + pgvector.** Steps 3–5 need a running DB. Bring it up with Docker, then
+   `python -m src.db.migrations`. (Wasn't available in the session environment, so seeding hasn't
+   been run yet — but the scripts are verified to import and the schema is in place.)
 
-- **USPTO client** rewritten for the new ODP surface (`api.uspto.gov`, `X-Api-Key`): added
-  `get_application`, `get_documents`, `get_office_action_text`, plus ODP `office-action`
-  citations/rejections/enriched-citations endpoints, and application/patent-number
-  normalization. Endpoint paths are centralized in `_Endpoints` for easy Swagger reconciliation.
-- **Step 1 validator**: `scripts/validate_uspto.py` runs the metadata → documents → OA-text
-  sequence and reports pass/fail.
-- **Step 3**: `python -m src.db.migrations` applies `NNN_*.sql` idempotently
-  (`schema_migrations` tracking table). DB naming unified to `atticus`.
-- **DB credentials** live only in `.env` (`POSTGRES_*`); `docker-compose.yml` references them via
-  `${...}` — nothing hardcoded.
-- **Step 4**: `seed_mpep.py` now downloads chapters (best-effort) with local-file fallback.
-- **Step 6**: CLI `python -m src.main analyze` (accepts `--application-number`, `--file`, or
-  `--text`; `--no-llm` for deterministic-only).
-- **Step 7**: the deterministic parser now expands `Claims 1-4`, `5, 7 and 9-11`, scopes cited
-  references per rejection block, and emits one rejection per (claim, basis) so a claim rejected
-  under multiple statutes is captured. Covered by `tests/unit/test_rejection_extraction.py`.
+### Live validation results (Step 1 — real data, no mocks)
 
-**Time estimate:** Steps 0–3 are infrastructure (1–2 days). Steps 4–5 are seeding (1 day). Steps 6–9 are iterative testing and fixing (3–5 days). Total: ~1 week to have Atticus running against live data with measured accuracy.
+Validated against the live ODP API (`api.uspto.gov`, `X-Api-Key`) using **application 19531961**
+(a real non-final rejection, Art Unit 2172):
+
+- `get_application` → metadata (art unit, examiner) ✓
+- `get_documents` → 51 documents, 1 office action (CTNF) ✓
+- `get_office_action_text` → 30,487 chars extracted ✓
+- Deterministic parse of that real OA → **§102** claims 21–24/33–36, **§103** claims 25–27/32,
+  **§112(b)** claims 33–36 ✓
+
+What the live data forced us to fix (all done):
+
+- **Base URL** needed the `/api/v1` prefix; auth header is `X-Api-Key`.
+- **Real ODP shapes**: application metadata is under `patentFileWrapperDataBag[].applicationMetaData`;
+  documents under `documentBag`; doc id is `documentIdentifier`; date is `officialDate`.
+- **No inline OA text** — office actions are downloadable artifacts only. `get_office_action_text`
+  now downloads the document and extracts text, preferring **DOCX** (clean text) → XML (tar) → PDF.
+  USPTO OA **PDFs are scanned images** (no text layer), so DOCX is the reliable source.
+- The per-application `office-actions/{citations,rejections}` structured endpoints return **403**
+  with a standard key, so we rely on download-and-parse (those methods were removed).
+- **Parser (Step 7)** now handles the real boilerplate: `Claim(s)`, the literal `is/are`, headers
+  with no "is/are" and no `§` symbol, comma-lists + ranges, and one rejection per (claim, basis).
+  Locked by `tests/unit/test_rejection_extraction.py` (29 tests pass total).
+
+### Still code-ready, just not yet run live
+
+- **Step 3**: `python -m src.db.migrations` (idempotent). DB creds live only in `.env`
+  (`POSTGRES_*`); `docker-compose.yml` references them via `${...}`.
+- **Step 4**: `python scripts/seed_mpep.py` downloads chapters (best-effort) with local fallback.
+  Embeddings are local (sentence-transformers) — **$0 API cost** to seed.
+- **Step 5**: `python scripts/seed_sample_patents.py US9876543 …` chunks by claim into pgvector.
+- **Step 6 CLI**: `python -m src.main analyze --application-number <n>` (or `--file`/`--text`;
+  `--no-llm` for the free deterministic path).
+
+## Budget ($500/month target)
+
+> Note: there is no standard "$500/month free" Anthropic API tier — confirm what the $500 actually
+> is in the console (a credit grant vs. a self-set spend limit). Right now the balance reads $0.
+
+The economics are very comfortable for a prototype, because **the expensive parts are free**:
+
+| Activity | API cost |
+|---|---|
+| USPTO fetch (apps, documents, OA download) | **$0** (USPTO key, no charge) |
+| Embeddings for MPEP + patent seeding | **$0** (local `all-MiniLM-L6-v2`) |
+| Deterministic parsing / `--no-llm` / all tests | **$0** |
+| LLM analysis + verification per office action | ~**$1–3** (Sonnet generation + Haiku verification) |
+| Response drafting per OA | ~**$0.50–2** |
+
+At current pricing (Opus 4.8 $5/$25, Sonnet 4.6 $3/$15, Haiku 4.5 $1/$5 per 1M tok), **$500/month
+is roughly 150–400 full office-action analyses** — far beyond a summer prototype's needs. To stretch
+it further: set `GENERATION_MODEL=claude-haiku-4-5`, keep `ENABLE_PROMPT_CACHING=true` (caches the
+stable system prompt), and set `MAX_COST_PER_RUN_USD` as a hard per-run cap (raises
+`BudgetExceededError`). Also set a spend limit in the console as a backstop.
+
+**Time estimate (remaining):** add credits + stand up Postgres (~1–2 hrs), curate 5 ground-truth
+apps (Step 2, your judgment, ~half a day), then Steps 6/8/9 iterate (2–4 days) to measured accuracy.
 
 ---
 

@@ -35,7 +35,10 @@ class Settings(BaseSettings):
 
     # --- USPTO Open Data Portal ---
     uspto_api_key: str = Field(default="", description="USPTO Open Data Portal API key")
-    uspto_base_url: str = Field(default="https://api.uspto.gov", description="USPTO API base URL")
+    uspto_base_url: str = Field(
+        default="https://api.uspto.gov/api/v1",
+        description="USPTO ODP API base URL (includes the /api/v1 prefix)",
+    )
 
     # --- Models ---
     embedding_model: str = Field(default="all-MiniLM-L6-v2")
@@ -45,6 +48,16 @@ class Settings(BaseSettings):
 
     # --- Retrieval ---
     default_top_k: int = Field(default=8, description="Default number of chunks to retrieve")
+
+    # --- Budget controls ---
+    max_cost_per_run_usd: float = Field(
+        default=0.0,
+        description="Hard cap on Anthropic spend per LLMClient instance; 0 disables the cap.",
+    )
+    enable_prompt_caching: bool = Field(
+        default=True,
+        description="Cache the (stable) system prompt to cut input-token cost on repeated calls.",
+    )
 
     # --- App ---
     log_level: str = Field(default="INFO")

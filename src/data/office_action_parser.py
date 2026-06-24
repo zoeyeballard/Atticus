@@ -84,11 +84,15 @@ def detect_bases(text: str) -> list[RejectionBasis]:
     return [basis for basis, pattern in _BASIS_PATTERNS if pattern.search(text)]
 
 
-# Header of a rejection block, e.g. "Claims 1-4 are rejected under 35 U.S.C. § 103" or
-# "Claim 1 is rejected under 35 U.S.C. 112(b)". The claim spec is captured lazily up to
-# "is/are rejected" so ranges, lists, and "and" all fall inside group(1).
+# Header of a rejection block. Real USPTO office actions vary widely on the boilerplate:
+#   "Claims 1-4 are rejected under 35 U.S.C. § 103 ..."
+#   "Claims 33-36 rejected under 35 U.S.C. 112(b) ..."        (no "is/are", no § symbol)
+#   "Claim(s) 21-24, 33-36 is/are rejected under 35 U.S.C. 102(a)(1) ..."  (literal "(s)" and "is/are")
+# The claim spec is captured lazily up to "rejected" so ranges, comma-lists, and "and" all fall
+# inside group(1); the connective verb (is/are/is-are/was/were) is optional.
 _REJECTION_HEADER_RE = re.compile(
-    r"Claims?\s+([\d,\s–and-]+?)\s+(?:is|are)\s+rejected\s+under\s+"
+    r"Claims?(?:\(s\))?\s+([\d,\s–and-]+?)\s+"
+    r"(?:is/are\s+|is\s+|are\s+|was\s+|were\s+)?rejected\s+under\s+"
     r"35\s*U\.?S\.?C\.?\s*§*\s*(\d{3})",
     re.IGNORECASE,
 )

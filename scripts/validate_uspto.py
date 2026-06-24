@@ -13,10 +13,16 @@ from __future__ import annotations
 
 import sys
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
 from src.config import get_settings
 from src.data.uspto_client import USPTOClient, USPTOError
 
-DEFAULT_APP = "16835899"
+# A real application with a non-final rejection (CTNF), useful as a default smoke test.
+# Note: application states change over time — if this one has been allowed/abandoned and no
+# longer exposes an office action, pass a current one as the first CLI argument.
+DEFAULT_APP = "19531961"
 
 
 def _check(label: str, fn) -> bool:

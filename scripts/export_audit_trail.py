@@ -5,6 +5,9 @@ from __future__ import annotations
 import json
 import sys
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
 from src.db.repositories import get_repository
 
 

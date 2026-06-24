@@ -62,3 +62,30 @@ def test_112a_basis_detection():
     text = "Claim 2 is rejected under 35 U.S.C. § 112(a) as failing the written description."
     rejections = oap.extract_rejections(text)
     assert rejections[0].rejection_basis == RejectionBasis.SEC_112_A
+
+
+# --- Real-world phrasings observed in live USPTO office actions (app 19531961, CTNF) ---
+# These are the exact boilerplate variants that broke the first regex; keep them locked.
+
+
+def test_real_no_isare_no_section_symbol():
+    # "Claims 33-36 rejected under 35 U.S.C. 112(b)" — no "is/are", no § symbol.
+    text = "Claims 33-36 rejected under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), second paragraph"
+    rejections = oap.extract_rejections(text)
+    assert {r.claim_number for r in rejections} == {33, 34, 35, 36}
+    assert all(r.rejection_basis == RejectionBasis.SEC_112_B for r in rejections)
+
+
+def test_real_claim_s_and_is_are_slash():
+    # "Claim(s) 21-24, 33-36 is/are rejected under 35 U.S.C. 102(a)(1)" — literal "(s)" and "is/are".
+    text = "Claim(s) 21-24, 33-36 is/are rejected under 35 U.S.C. 102(a)(1) as being anticipated by Fink"
+    rejections = oap.extract_rejections(text)
+    assert {r.claim_number for r in rejections} == {21, 22, 23, 24, 33, 34, 35, 36}
+    assert all(r.rejection_basis == RejectionBasis.SEC_102 for r in rejections)
+
+
+def test_real_103_unpatentable_over():
+    text = "Claim(s) 25-26 is/are rejected under 35 U.S.C. 103 as being unpatentable over Fink"
+    rejections = oap.extract_rejections(text)
+    assert {r.claim_number for r in rejections} == {25, 26}
+    assert all(r.rejection_basis == RejectionBasis.SEC_103 for r in rejections)

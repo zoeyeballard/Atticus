@@ -42,18 +42,16 @@ _CACHE_DIR = Path("data/cache/uspto")
 class _Endpoints:
     """ODP endpoint path templates (relative to the API base, which already ends in /api/v1).
 
-    Verify these against the live Swagger at data.uspto.gov during Step 1 — some paths changed
-    in the Developer-Hub → ODP migration. Keeping them here makes that a one-place fix.
+    Paths are relative to ``base_url`` (which includes ``/api/v1``). Verified live against
+    api.uspto.gov (2026-06): application metadata and documents work with an ``X-Api-Key`` header;
+    the per-application ``office-actions/{citations,rejections}`` structured products return 403
+    with a standard data.uspto.gov key, so office-action *text* is obtained by downloading the
+    document (DOCX/PDF/XML) from each document's ``downloadOptionBag``.
     """
 
     APPLICATION = "patent/applications/{app}"
     DOCUMENTS = "patent/applications/{app}/documents"
-    DOCUMENT = "patent/documents/{doc_id}"
-    # ODP office-action-specific products.
-    OA_TEXT = "patent/applications/{app}/office-actions/text"
-    OA_CITATIONS = "patent/applications/{app}/office-actions/citations"
-    OA_REJECTIONS = "patent/applications/{app}/office-actions/rejections"
-    OA_ENRICHED_CITATIONS = "patent/applications/{app}/office-actions/enriched-citations"
+    SEARCH = "patent/applications/search"
     GRANT_FULL_TEXT = "patent/grants/{patent}/full-text"
 
 
@@ -160,74 +158,73 @@ class USPTOClient:
         self._write_cache(key, data)
         return data
 
+    def _download(self, url: str) -> bytes:
+        """Download a document artifact (PDF/DOCX/XML) from a downloadOptionBag URL."""
+        resp = self._client.get(url, follow_redirects=True)
+        if resp.status_code >= 400:
+            raise USPTOError(f"USPTO download {resp.status_code} for {url}")
+        return resp.content
+
     # -- application metadata & documents ----------------------------------------------------
 
     def get_application(self, application_number: str) -> dict[str, Any]:
-        """Application metadata (filing date, status, art unit, examiner)."""
+        """Application file-wrapper object (filing date, status, art unit, examiner under
+        ``applicationMetaData``). Returns the first entry of ``patentFileWrapperDataBag``."""
         app = normalize_application_number(application_number)
-        return self._get_cached(_Endpoints.APPLICATION.format(app=app))
+        data = self._get_cached(_Endpoints.APPLICATION.format(app=app))
+        bag = data.get("patentFileWrapperDataBag") if isinstance(data, dict) else None
+        if isinstance(bag, list) and bag:
+            return bag[0]
+        return data if isinstance(data, dict) else {}
 
     def get_documents(self, application_number: str) -> list[dict[str, Any]]:
-        """All documents in the file wrapper for an application."""
+        """All documents in the file wrapper for an application (the ODP ``documentBag``)."""
         app = normalize_application_number(application_number)
         data = self._get_cached(_Endpoints.DOCUMENTS.format(app=app))
-        # ODP wraps lists in a consistent envelope; accept a few known shapes.
         if isinstance(data, list):
             return data
-        for key in ("documents", "documentBag", "docBag", "results"):
+        for key in ("documentBag", "documents", "docBag", "results"):
             if isinstance(data.get(key), list):
                 return data[key]
         return []
 
     def get_office_actions(self, application_number: str) -> list[dict[str, Any]]:
-        """Office-action document descriptors only, newest first when dates are present."""
+        """Office-action document descriptors only, newest first."""
         docs = [d for d in self.get_documents(application_number) if _is_office_action(d)]
         return sorted(docs, key=_doc_date, reverse=True)
 
-    def get_document_text(self, document_id: str) -> str:
-        """Full text of a document by id."""
-        data = self._get_cached(_Endpoints.DOCUMENT.format(doc_id=document_id))
-        return _extract_text(data)
-
-    # -- office-action structured products (ODP) ---------------------------------------------
-
     def get_office_action_text(self, application_number: str) -> str:
-        """Full text of the most recent office action for an application.
+        """Plain text of the most recent office action.
 
-        Tries the dedicated ODP Office Action Text Retrieval API first, then falls back to
-        locating the latest OA document and fetching its text.
+        ODP exposes OA documents only as downloadable artifacts (no inline text field), so we
+        locate the latest OA document and extract text from its ``downloadOptionBag``. DOCX is
+        preferred (clean text); XML next; PDF last (USPTO OA PDFs are usually scanned images with
+        no text layer, so PDF extraction may yield little).
         """
-        app = normalize_application_number(application_number)
-        try:
-            data = self._get_cached(_Endpoints.OA_TEXT.format(app=app))
-            text = _extract_text(data)
-            if text:
-                return text
-        except USPTOError as exc:
-            logger.info("OA text API unavailable for %s (%s); falling back to documents.", app, exc)
-
-        actions = self.get_office_actions(app)
+        actions = self.get_office_actions(application_number)
         if not actions:
-            raise USPTOError(f"No office action found for application {app}.")
-        doc_id = actions[0].get("documentId") or actions[0].get("id")
-        if not doc_id:
-            raise USPTOError(f"Office action for {app} has no retrievable document id.")
-        return self.get_document_text(str(doc_id))
-
-    def get_office_action_citations(self, application_number: str) -> dict[str, Any]:
-        """Structured citation data extracted from the application's office actions."""
-        app = normalize_application_number(application_number)
-        return self._get_cached(_Endpoints.OA_CITATIONS.format(app=app))
-
-    def get_office_action_rejections(self, application_number: str) -> dict[str, Any]:
-        """Structured rejection data extracted from the application's office actions."""
-        app = normalize_application_number(application_number)
-        return self._get_cached(_Endpoints.OA_REJECTIONS.format(app=app))
-
-    def get_enriched_citations(self, application_number: str) -> dict[str, Any]:
-        """Enhanced citation context from the ODP Enriched Citations API."""
-        app = normalize_application_number(application_number)
-        return self._get_cached(_Endpoints.OA_ENRICHED_CITATIONS.format(app=app))
+            raise USPTOError(
+                f"No office action found for application {application_number}."
+            )
+        options = {
+            o.get("mimeTypeIdentifier"): o.get("downloadUrl")
+            for o in actions[0].get("downloadOptionBag", [])
+        }
+        for fmt in ("MS_WORD", "XML", "PDF"):
+            url = options.get(fmt)
+            if not url:
+                continue
+            try:
+                text = _extract_document_text(self._download(url), fmt)
+            except Exception as exc:  # noqa: BLE001 — try the next format
+                logger.info("OA %s extract failed (%s); trying next format.", fmt, exc)
+                continue
+            if text and len(text.strip()) > 200:
+                return text
+        raise USPTOError(
+            f"Could not extract office-action text for {application_number} "
+            f"(formats available: {sorted(k for k in options if k)})."
+        )
 
     # -- patents -----------------------------------------------------------------------------
 
@@ -259,15 +256,40 @@ def _doc_date(doc: dict[str, Any]) -> str:
     return ""
 
 
-def _extract_text(doc: dict[str, Any]) -> str:
-    if isinstance(doc, str):
-        return doc
-    for key in ("plainText", "text", "documentText", "officeActionText", "content"):
-        if isinstance(doc.get(key), str):
-            return doc[key]
-    # ODP sometimes nests text under a results/bag wrapper.
-    for key in ("results", "documentBag", "officeActionBag"):
-        nested = doc.get(key)
-        if isinstance(nested, list) and nested and isinstance(nested[0], dict):
-            return _extract_text(nested[0])
+def _strip_xml_tags(xml: str) -> str:
+    """Convert an OOXML/USPTO XML body to plain text (paragraph-aware, tags removed)."""
+    xml = re.sub(r"</w:p>", "\n", xml)  # Word paragraph breaks
+    xml = re.sub(r"</(p|para|paragraph)>", "\n", xml, flags=re.IGNORECASE)
+    text = re.sub(r"<[^>]+>", "", xml)
+    text = text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&#167;", "§")
+    return re.sub(r"[ \t]+", " ", text)
+
+
+def _extract_document_text(blob: bytes, fmt: str) -> str:
+    """Extract plain text from a downloaded OA artifact (DOCX / XML-tar / PDF)."""
+    import io
+
+    if fmt == "MS_WORD":
+        import zipfile
+
+        with zipfile.ZipFile(io.BytesIO(blob)) as z:
+            return _strip_xml_tags(z.read("word/document.xml").decode("utf-8", "ignore"))
+
+    if fmt == "XML":
+        # The ODP "xmlarchive" endpoint returns a tar archive containing the OA .xml.
+        import tarfile
+
+        try:
+            with tarfile.open(fileobj=io.BytesIO(blob)) as tar:
+                member = next(m for m in tar.getmembers() if m.name.endswith(".xml"))
+                return _strip_xml_tags(tar.extractfile(member).read().decode("utf-8", "ignore"))
+        except tarfile.TarError:
+            return _strip_xml_tags(blob.decode("utf-8", "ignore"))  # plain XML fallback
+
+    if fmt == "PDF":
+        from pypdf import PdfReader  # deferred; OA PDFs are often scanned (no text layer)
+
+        reader = PdfReader(io.BytesIO(blob))
+        return "\n".join((page.extract_text() or "") for page in reader.pages)
+
     return ""

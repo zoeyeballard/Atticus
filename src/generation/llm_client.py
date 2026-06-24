@@ -23,9 +23,11 @@ from src.config import get_settings
 logger = logging.getLogger(__name__)
 
 # Approximate USD per 1M tokens (input, output) — used for cost tracking, not billing.
+# Current as of 2026-06; verify at https://platform.claude.com/docs/en/pricing.
 _PRICING: dict[str, tuple[float, float]] = {
+    "claude-opus-4-8": (5.0, 25.0),
     "claude-sonnet-4-6": (3.0, 15.0),
-    "claude-haiku-4-5": (0.25, 1.25),
+    "claude-haiku-4-5": (1.0, 5.0),
 }
 
 
@@ -53,6 +55,10 @@ class LLMResponse:
     usage: dict = field(default_factory=dict)
 
 
+class BudgetExceededError(RuntimeError):
+    """Raised when cumulative spend on an LLMClient exceeds ``max_cost_per_run_usd``."""
+
+
 class LLMClient:
     """Wrapper around the Anthropic SDK with retries and cost tracking."""
 
@@ -61,8 +67,18 @@ class LLMClient:
         self._api_key = api_key if api_key is not None else settings.anthropic_api_key
         self.generation_model = settings.generation_model
         self.verification_model = settings.verification_model
+        self.max_cost_per_run_usd = settings.max_cost_per_run_usd
+        self.enable_prompt_caching = settings.enable_prompt_caching
         self.usage = Usage()
         self._client = None  # lazily created
+
+    def _check_budget(self) -> None:
+        cap = self.max_cost_per_run_usd
+        if cap and self.usage.cost_usd >= cap:
+            raise BudgetExceededError(
+                f"Spend ${self.usage.cost_usd:.4f} reached the per-run cap of ${cap:.4f} "
+                f"after {self.usage.calls} call(s). Raise MAX_COST_PER_RUN_USD or start a new run."
+            )
 
     @property
     def client(self):
@@ -86,15 +102,23 @@ class LLMClient:
     ) -> LLMResponse:
         """Single completion. Defaults to the generation model."""
         model = model or self.generation_model
+        self._check_budget()  # stop before spending if the cap is already reached
+        # Cache the stable system prompt so repeated calls pay ~0.1x on those input tokens.
+        system_param: object = system
+        if self.enable_prompt_caching and system:
+            system_param = [
+                {"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}
+            ]
         message = self.client.messages.create(
             model=model,
             max_tokens=max_tokens,
             temperature=temperature,
-            system=system,
+            system=system_param,
             messages=[{"role": "user", "content": user}],
         )
         text = "".join(block.text for block in message.content if block.type == "text")
         self.usage.add(model, message.usage.input_tokens, message.usage.output_tokens)
+        self._check_budget()  # surface overage immediately after the call that caused it
         return LLMResponse(
             text=text,
             model=model,
