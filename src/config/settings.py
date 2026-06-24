@@ -29,7 +29,7 @@ class Settings(BaseSettings):
 
     # --- Database ---
     database_url: str = Field(
-        default="postgresql://patentpilot:password@localhost:5432/patentpilot",
+        default="postgresql://atticus:atticus_dev@localhost:5432/atticus",
         description="PostgreSQL (with pgvector) connection string",
     )
 

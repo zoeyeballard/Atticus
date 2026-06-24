@@ -40,13 +40,12 @@ def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
     if text is None:
         try:
             with USPTOClient() as client:
-                actions = client.get_office_actions(req.application_number or "")
-                if not actions:
-                    raise HTTPException(404, "No office action found for that application.")
-                doc_id = actions[0].get("documentId") or actions[0].get("id")
-                text = client.get_document_text(str(doc_id))
+                text = client.get_office_action_text(req.application_number or "")
         except USPTOError as exc:
-            raise HTTPException(502, f"USPTO fetch failed: {exc}") from exc
+            # No-OA / bad-app-number cases surface as 404; auth/connectivity as 502.
+            msg = str(exc)
+            status = 404 if "No office action" in msg else 502
+            raise HTTPException(status, f"USPTO fetch failed: {exc}") from exc
 
     analysis = office_action_parser.parse(text, application_number=req.application_number)
 

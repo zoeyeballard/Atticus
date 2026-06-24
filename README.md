@@ -73,8 +73,22 @@ Local development without Docker:
 
 ```bash
 pip install -e ".[dev]"
+python -m src.db.migrations          # apply schema (needs Postgres + pgvector running)
 uvicorn src.main:app --reload
 pytest
+```
+
+### CLI
+
+```bash
+# Analyze a stored office action file, deterministic parse only (no API keys needed):
+python -m src.main analyze --file data/sample_office_actions/16-123456_non_final_103.txt --no-llm
+
+# Analyze a live application (requires USPTO_API_KEY + ANTHROPIC_API_KEY):
+python -m src.main analyze --application-number 16835899
+
+# Validate the USPTO client against the live ODP API (Step 1):
+python scripts/validate_uspto.py 16835899
 ```
 
 ## API endpoints

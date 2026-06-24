@@ -21,6 +21,7 @@ import re
 
 from src.models.schemas import (
     CitedReference,
+    ClaimRejection,
     OfficeActionAnalysis,
     RejectionBasis,
 )
@@ -83,19 +84,103 @@ def detect_bases(text: str) -> list[RejectionBasis]:
     return [basis for basis, pattern in _BASIS_PATTERNS if pattern.search(text)]
 
 
+# Header of a rejection block, e.g. "Claims 1-4 are rejected under 35 U.S.C. § 103" or
+# "Claim 1 is rejected under 35 U.S.C. 112(b)". The claim spec is captured lazily up to
+# "is/are rejected" so ranges, lists, and "and" all fall inside group(1).
+_REJECTION_HEADER_RE = re.compile(
+    r"Claims?\s+([\d,\s–and-]+?)\s+(?:is|are)\s+rejected\s+under\s+"
+    r"35\s*U\.?S\.?C\.?\s*§*\s*(\d{3})",
+    re.IGNORECASE,
+)
+
+
+def parse_claim_numbers(spec: str) -> list[int]:
+    """Expand a claim spec like ``"1-4, 7 and 9-11"`` into ``[1,2,3,4,7,9,10,11]``."""
+    normalized = spec.replace("–", "-")  # en-dash → hyphen
+    normalized = re.sub(r"\band\b", ",", normalized, flags=re.IGNORECASE)
+    numbers: set[int] = set()
+    for part in normalized.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            lo, _, hi = part.partition("-")
+            if lo.strip().isdigit() and hi.strip().isdigit():
+                numbers.update(range(int(lo), int(hi) + 1))
+        elif part.isdigit():
+            numbers.add(int(part))
+    return sorted(numbers)
+
+
+def _basis_from_section(section: str, following: str) -> RejectionBasis | None:
+    """Resolve the statutory basis from the captured § number plus a window of trailing text."""
+    section = section.strip()
+    simple = {
+        "101": RejectionBasis.SEC_101,
+        "102": RejectionBasis.SEC_102,
+        "103": RejectionBasis.SEC_103,
+    }
+    if section in simple:
+        return simple[section]
+    if section == "112":
+        window = following[:80].lower()
+        if "(a)" in window or "first paragraph" in window or "written description" in window or "enablement" in window:
+            return RejectionBasis.SEC_112_A
+        if "(b)" in window or "second paragraph" in window or "indefinite" in window or "definite" in window:
+            return RejectionBasis.SEC_112_B
+        return RejectionBasis.SEC_112_B  # § 112 most commonly indefiniteness in prosecution
+    return None
+
+
+def extract_rejections(text: str) -> list[ClaimRejection]:
+    """Deterministically extract per-claim rejections, expanding grouped/range headers.
+
+    A claim rejected under more than one statute appears once per basis. References are scoped to
+    the text span of each rejection block so a claim's cited art is attributed to the right block.
+    """
+    matches = list(_REJECTION_HEADER_RE.finditer(text))
+    rejections: list[ClaimRejection] = []
+    for i, m in enumerate(matches):
+        following = text[m.end() : m.end() + 120]
+        basis = _basis_from_section(m.group(2), following)
+        if basis is None:
+            continue
+        claim_numbers = parse_claim_numbers(m.group(1))
+        if not claim_numbers:
+            continue
+        block_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        block_refs = extract_cited_references(text[m.start() : block_end])
+        lowest = min(claim_numbers)
+        for claim_number in claim_numbers:
+            rejections.append(
+                ClaimRejection(
+                    claim_number=claim_number,
+                    rejection_basis=basis,
+                    # Heuristic: the lowest claim in a block is usually the independent one.
+                    # Corrected later when the actual patent claims are retrieved.
+                    is_independent=(claim_number == lowest),
+                    cited_references=block_refs,
+                )
+            )
+    return rejections
+
+
 def parse_scaffold(text: str, application_number: str | None = None) -> OfficeActionAnalysis:
     """Regex-only structured scaffold. Deterministic and offline-safe."""
     app_no = application_number or _first(_APP_NO_RE, text) or "UNKNOWN"
+    rejections = extract_rejections(text)
     return OfficeActionAnalysis(
         application_number=app_no,
         examiner_name=_first(_EXAMINER_RE, text),
         art_unit=_first(_ART_UNIT_RE, text),
         mailing_date=_first(_MAIL_DATE_RE, text) or "",
         rejection_type=_detect_rejection_type(text),
+        rejections=rejections,
         raw_text=text,
-        # rejections/mappings filled by the LLM stage; bases recorded as flags for now.
+        # Bases recorded as flags for any rejection text the block parser didn't structure.
         unverified_claims=[f"§{b.value} rejection detected" for b in detect_bases(text)],
-        confidence_score=0.4,  # scaffold-only confidence
+        # Deterministic structure raises confidence above a bare metadata-only scaffold.
+        confidence_score=0.6 if rejections else 0.4,
     )
 
 

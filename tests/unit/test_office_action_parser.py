@@ -27,4 +27,6 @@ def test_extracts_cited_references(sample_office_action):
 def test_parse_without_llm_is_offline_safe(sample_office_action):
     analysis = office_action_parser.parse(sample_office_action, use_llm=False)
     assert analysis.raw_text == sample_office_action
-    assert analysis.confidence_score < 0.5  # scaffold-only confidence
+    # The offline path now structures the § 103 rejection of claims 1-3 deterministically.
+    assert {r.claim_number for r in analysis.rejections} == {1, 2, 3}
+    assert analysis.confidence_score == 0.6  # deterministic-structured (not LLM) confidence

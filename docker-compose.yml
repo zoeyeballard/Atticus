@@ -1,16 +1,18 @@
 services:
   db:
     image: pgvector/pgvector:pg16
+    container_name: atticus-db
     ports: ["5432:5432"]
+    # Credentials come from .env (POSTGRES_*) — never hardcoded here.
     environment:
-      POSTGRES_DB: patentpilot
-      POSTGRES_USER: patentpilot
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./src/db/migrations:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U patentpilot"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,6 +24,10 @@ services:
       db:
         condition: service_healthy
     env_file: .env
+    # Override the host so the container reaches the db service (the .env DATABASE_URL
+    # targets localhost for host-side dev). Built from the same POSTGRES_* vars.
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     volumes:
       - ./src:/app/src
       - ./data:/app/data
