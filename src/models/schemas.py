@@ -148,7 +148,7 @@ class Patent(BaseModel):
 
 
 class PriorArtSearchResult(BaseModel):
-    """A single retrieval hit for prior-art search."""
+    """A single retrieval hit for prior-art / MPEP search."""
 
     patent_number: str
     title: str | None = None
@@ -156,6 +156,25 @@ class PriorArtSearchResult(BaseModel):
     matched_chunk: str
     document_type: str = "patent"  # "patent" | "mpep"
     metadata: dict = Field(default_factory=dict)
+
+    # Convenience aliases so callers can use natural names regardless of document type.
+    @property
+    def score(self) -> float:
+        return self.relevance_score
+
+    @property
+    def text(self) -> str:
+        return self.matched_chunk
+
+    @property
+    def section(self) -> str:
+        """MPEP section number (for mpep hits) — falls back to the identifier."""
+        return self.metadata.get("section", self.patent_number)
+
+    @property
+    def section_type(self) -> str | None:
+        """Patent section label (background/summary/claims/…) for patent hits."""
+        return self.metadata.get("section_type")
 
 
 # --------------------------------------------------------------------------------------------

@@ -1,0 +1,196 @@
+
+Notice of Pre-AIA or AIA Status
+The present application, filed on or after March 16, 2013, is being examined under the first inventor to file provisions of the AIA.
+
+DETAILED ACTION
+This non-final office action is in response to the Application filed on 2/6/2026, which is a CIP of 18/793,556 Filing Date 08/02/2024 with priority to has PRO 63/530,390 Filing Date 8/02/2023.
+Claim(s) 21-40 are pending for examination. Claim(s) 21 and 33 is/are independent claim(s). Claim 28-31 and 37-40 are withdrawn. Claims 21-27, 32-36 are rejected. 
+
+Election/Restriction
+Restriction to one of the following inventions is required under 35 U.S.C. 121:
+I. Claims 21-27, 32, 33-36, drawn to sentiment analysis, insight report, classified in G06F 40/253 Grammatical analysis Style critique.
+II. Claims 21, 28-31, 33, 37-40, drawn to identify miscommunication, present red-flag, prompting users classified in G06F3/0484 for the control of specific functions or operations.
+The inventions are independent or distinct, each from the other because:
+Inventions I and II are directed to related processes. The related inventions are distinct if: (1) the inventions as claimed are either not capable of use together or can have a materially different design, mode of operation, function, or effect; (2) the inventions do not overlap in scope, i.e., are mutually exclusive; and (3) the inventions as claimed are not obvious variants. See MPEP § 806.05(j). In the instant case, the inventions as claimed have a materially different design, mode of operation, function, or effect such as sentiment analysis and miscommunication red-flags. Furthermore, the inventions as claimed do not encompass overlapping subject matter and there is nothing of record to show them to be obvious variants.
+Restriction for examination purposes as indicated is proper because all the inventions listed in this action are independent or distinct for the reasons given above and there would be a serious search and/or examination burden if restriction were not required because one or more of the following reasons apply:
+A separate search is required for each invention.
+Applicant is advised that the reply to this requirement to be complete must include (i) an election of an invention to be examined even though the requirement may be traversed (37 CFR 1.143) and (ii) identification of the claims encompassing the elected invention. 
+The election of an invention may be made with or without traverse. To reserve a right to petition, the election must be made with traverse. If the reply does not distinctly and specifically point out supposed errors in the restriction requirement, the election shall be treated as an election without traverse. Traversal must be presented at the time of election in order to be considered timely. Failure to timely traverse the requirement will result in the loss of right to petition under 37 CFR 1.144. If claims are added after the election, applicant must indicate which of these claims are readable upon the elected invention.
+Should applicant traverse on the ground that the inventions are not patentably distinct, applicant should submit evidence or identify such evidence now of record showing the inventions to be obvious variants or clearly admit on the record that this is the case. In either instance, if the examiner finds one of the inventions unpatentable over the prior art, the evidence or admission may be used in a rejection under 35 U.S.C. 103 or pre-AIA 35 U.S.C. 103(a) of the other invention.
+During a telephone conversation with Michelle Dawson on 4/29/2026 a provisional election was made with traverse to prosecute the invention of I, claims 21-27, 32, 33-36. Affirmation of this election must be made by applicant in replying to this Office action. Claims 21, 28-31, 33, 37-40 withdrawn from further consideration by the examiner, 37 CFR 1.142(b), as being drawn to a non-elected invention.
+Applicant is reminded that upon the cancelation of claims to a non-elected invention, the inventorship must be corrected in compliance with 37 CFR 1.48(a) if one or more of the currently named inventors is no longer an inventor of at least one claim remaining in the application. A request to correct inventorship under 37 CFR 1.48(a) must be accompanied by an application data sheet in accordance with 37 CFR 1.76 that identifies each inventor by his or her legal name and by the processing fee required under 37 CFR 1.17(i).
+
+Drawings
+New corrected drawings in compliance with 37 CFR 1.121(d) are required in this application because Fig. 31 appear to be screenshots or photo copies. Greyscale images are is permitted, however some of the text is not legible and does not meet the requirements in 37 CFR 1.84 Standards for drawings, specifically 37 CFR 1.84(p)(3) which requires numbers, letters, and reference characters must measure at least .32 cm. (1/8 inch) in height. 
+See 37 CFR 1.84 Standards for drawings.
+(l) Character of lines, numbers, and letters. All drawings must be made by a process which will give them satisfactory reproduction characteristics. Every line, number, and letter must be durable, clean, black (except for color drawings), sufficiently dense and dark, and uniformly thick and well-defined. The weight of all lines and letters must be heavy enough to permit adequate reproduction. This requirement applies to all lines however fine, to shading, and to lines representing cut surfaces in sectional views. Lines and strokes of different thicknesses may be used in the same drawing where different thicknesses have a different meaning.
+…
+(p) Numbers, letters, and reference characters.
+…
+(3) Numbers, letters, and reference characters must measure at least .32 cm. (1/8 inch) in height. They should not be placed in the drawing so as to interfere with its comprehension. Therefore, they should not cross or mingle with the lines. They should not be placed upon hatched or shaded surfaces. When necessary, such as indicating a surface or cross section, a reference character may be underlined and a blank space may be left in the hatching or shading where the character occurs so that it appears distinct.
+
+Applicant is advised to employ the services of a competent patent draftsperson outside the Office, as the U.S. Patent and Trademark Office no longer prepares new drawings. The corrected drawings are required in reply to the Office action to avoid abandonment of the application. The requirement for corrected drawings will not be held in abeyance.
+
+Claim Rejections - 35 USC § 112
+The following is a quotation of 35 U.S.C. 112(b):
+(b) CONCLUSION.—The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the inventor or a joint inventor regards as the invention.
+
+
+The following is a quotation of 35 U.S.C. 112 (pre-AIA), second paragraph:
+The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the applicant regards as his invention.
+
+
+Claims 33-36 rejected under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), second paragraph, as being indefinite for failing to particularly point out and distinctly claim the subject matter which the inventor or a joint inventor (or for applications subject to pre-AIA 35 U.S.C. 112, the applicant), regards as the invention.
+Claim limitation “behavior-aware communications engine configured to analyze” of claim 33, “sentiment analysis engine is configured to: analyze” of claim “34”, “time-series analysis module is configured to: track” of claim 36 invokes 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph. However, the written description fails to disclose the corresponding structure, material, or acts for performing the entire claimed function and to clearly link the structure, material, or acts to the function. In the specification, there is insufficient disclosure of the corresponding structure, material, or acts for performing the entire claimed function. Therefore, the claim is indefinite and is rejected under 35 U.S.C. 112(b) or pre-AIA 35 U.S.C. 112, second paragraph.
+Applicant may:
+(a) Amend the claim so that the claim limitation will no longer be interpreted as a limitation under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph; 
+(b) Amend the written description of the specification such that it expressly recites what structure, material, or acts perform the entire claimed function, without introducing any new matter (35 U.S.C. 132(a)); or 
+(c) Amend the written description of the specification such that it clearly links the structure, material, or acts disclosed therein to the function recited in the claim, without introducing any new matter (35 U.S.C. 132(a)).
+If applicant is of the opinion that the written description of the specification already implicitly or inherently discloses the corresponding structure, material, or acts and clearly links them to the function so that one of ordinary skill in the art would recognize what structure, material, or acts perform the claimed function, applicant should clarify the record by either: 
+(a) Amending the written description of the specification such that it expressly recites the corresponding structure, material, or acts for performing the claimed function and clearly links or associates the structure, material, or acts to the claimed function, without introducing any new matter (35 U.S.C. 132(a)); or 
+(b) Stating on the record what the corresponding structure, material, or acts, which are implicitly or inherently set forth in the written description of the specification, perform the claimed function. For more information, see 37 CFR 1.75(d) and MPEP §§ 608.01(o) and 2181.
+
+112 Means analysis: 
+There is a presumption of not invoking 35 U.S.C. 112(f) when the terms “means for” or “step for” is not used. However, the claims are interpreted as invoking 35 U.S.C. 112(f) using the 3-prong analysis in MPEP § 2181: 
+(A) - Fist prong - The term “means” is not used, however, the term(s) “engine” in claim 33, “engine” in claim 34, “module” in claim 36, is/are used as a substitute for “means” that is a generic placeholders, or nonce term(s), for performing the claimed function; 
+ (B) - Second prong - The term “means” or the generic placeholder is modified by the functional language “analyze” in claim 33, “analyze” in claim 34, “track” in claim 36, and linked with the transition word, or linking phrase, (“for”) “configured to”; and 
+(C) - Third prong - The generic placeholder(s) is/are not modified by sufficient structure, material, or acts for performing the claimed function. No hardware or structure, material, or acts are claimed. Therefor there is no “structure” or “material” in the claim(s). 
+This analysis shows that the presumption of not invoking 35 U.S.C. 112(f) is overcome. 
+Further, because 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph is invoked the written description must disclose the corresponding structure, material, or acts for performing the entire claimed function and to clearly link the structure, material, or acts to the function. 
+ Applicant should keep in mind that the “structure, material, or acts” recited in the written description must be more than “general purpose computer” or general computer components. 
+See MPEP 2181 (II)(B) “Computer-Implemented Means-Plus-Function Limitations” describes what is required for these claims (emphasis by examiner): 
+“In cases involving a special purpose computer-implemented means-plus-function limitation, the Federal Circuit has consistently required that the structure be more than simply a general purpose computer or microprocessor and that the specification must disclose an algorithm for performing the claimed function. See, e.g., Noah Systems Inc. v. Intuit Inc.,675 F.3d 1302, 1312, 102 USPQ2d 1410, 1417 (Fed. Cir. 2012); Aristocrat, 521 F.3d at 1333, 86 USPQ2d at 1239.”
+
+Claim Rejections - 35 USC § 102
+In the event the determination of the status of the application as subject to AIA 35 U.S.C. 102 and 103 (or as subject to pre-AIA 35 U.S.C. 102 and 103) is incorrect, any correction of the statutory basis (i.e., changing from AIA to pre-AIA) for the rejection will not be considered a new ground of rejection if the prior art relied upon, and the rationale supporting the rejection, would be the same under either status. 
+The following is a quotation of the appropriate paragraphs of 35 U.S.C. 102 that form the basis for the rejections under this section made in this Office action:
+A person shall be entitled to a patent unless –
+
+(a)(1) the claimed invention was patented, described in a printed publication, or in public use, on sale, or otherwise available to the public before the effective filing date of the claimed invention.
+
+
+Claim(s) 21-24, 33-36 is/are rejected under 35 U.S.C. 102(a)(1) as being anticipated by Fink; Patrick W. et al. US Pub. No. 2014/0188459 (Fink).
+Claim 21: 
+Fink teaches: 
+A computer-implemented method of providing improved electronic communication and internal electronic communication insights, comprising:
+{Examiner’s Note: for purposes of examination the phrase “for a would-be-sender or an aggregate group of would-be-senders or recipients” is interpreted as nonfunctional descriptive material, see MPEP 2111.05 }
+receiving a plurality of sample electronic communications for a would-be-sender or an aggregate group of would-be-senders or recipients [¶ 0034] (receive communication) [¶ 0047] (communication in text format found in a Common Analysis Structure);
+analyzing the plurality of sample electronic communications [¶ 0039] (sentiment text analysis on the selected chunk to generate a sentiment score) [¶ 0030, 46] (lexical analysis and annotation);
+providing internal communication insights to one or more authorized users based on the analyzed plurality of sample electronic communications [¶ 0004, 29, 40, 61] (supervisors and managers could be considered “authorized users”); and
+displaying the internal communication insights on at least one interactable dashboard interface [¶ 0040, 42] (displays the total score and/or the sentiment in the interactive dashboard) [¶ 0065-70] (Figs. 9-13 show the dashboard).
+
+Claim 22: 
+Fink teaches: 
+ The method of claim 21, wherein the step of providing internal communication insights comprises providing a sentiment analysis engine, wherein the sentiment analysis engine includes:
+reviewing the plurality of sample communications for the would-be-sender or the aggregate group of would-be-senders or recipients [¶ 0061, 66, 69] (review communication);
+generating an insight report related to the analyzed communications; and providing the insight report to the one or more authorized users via the at least one interactable dashboard interface [¶ 0004, 29, 40, 61] (supervisors and managers could be considered “authorized users”) [¶ 0040, 42] (displays the total score and/or the sentiment in the interactive dashboard) [¶ 0065-70] (Figs. 9-13 show the dashboard).
+
+Claim 23: 
+Fink teaches: 
+ The method of claim 22, wherein the insight report includes evaluating the received and analyzed electronic communication from a would-be-sender or the aggregate of would-be-senders or recipient on a rating sentiment scale or sentiment score [¶ 0027-28, 39-40, 59-60] (sentiment scores).
+
+Claim 24: 
+Fink teaches: 
+The method of claim 23, wherein the sentiment scale or sentiment score is based on individual electronic communications for the would-be-sender or as the aggregate group of electronic communications from two or more would-be-senders or recipients [¶ 0039] (sentiment score for chunk) [¶ 0042] (sentiment analysis engine adds the sentiment scores of the one or more chunks to generate a total score).
+
+ALTERNATE REJECTION: 
+Claim(s) 21, 33 is/are rejected under 35 U.S.C. 102(a)(1) as being anticipated by Shevchenko; Oleksiy et al. US Pub. No. 2025/0053735 (Shevchenko).
+Claim 21: 
+Shevchenko teaches: 
+A computer-implemented method of providing improved electronic communication and internal electronic communication insights, comprising:
+{Examiner’s Note: for purposes of examination the phrase “for a would-be-sender or an aggregate group of would-be-senders or recipients” is interpreted as nonfunctional descriptive material, see MPEP 2111.05}
+receiving a plurality of sample electronic communications for a would-be-sender or an aggregate group of would-be-senders or recipients [¶ 0045] (score the plurality of communication templates) [¶ 0149, 175, 178] (email thread, email history);
+analyzing the plurality of sample electronic communications [¶ 0193, 213, 219, 227-228] (sentiment analysis);
+providing internal communication insights to one or more authorized users based on the analyzed plurality of sample electronic communications [¶ 0309, 324] (authentication and authorization of users) ; and
+displaying the internal communication insights on at least one interactable dashboard interface [¶ 0267] (Figs. 18-20, interface with suggestions could be considered a “dashboard”).
+
+Claims 33-36: 
+Claim(s) 33 is/are substantially similar to claim 1 and is/are rejected using the same prior art and the same reason, rationale and/or motivation as used above. 
+Claim 21 is a “method” claim, claim 33 is a “system” claim, but the steps or elements of each claim are essentially the same. 
+Claim 33 is a reworded version of claim 21. Claim 33 recites “a sentiment analysis engine or a behavior-aware communications engine” where claim 21 only recites “analyzing the plurality of sample electronic communications”. 
+Claim(s) 34 is/are substantially similar to claim 22 and is/are rejected using the same prior art and the same reason, rationale and/or motivation as used above. 
+Claim(s) 35 is/are substantially similar to claim 23 and is/are rejected using the same prior art and the same reason, rationale and/or motivation as used above. 
+Claim(s) 36 is/are substantially similar to claim 24 and is/are rejected using the same prior art and the same reason, rationale and/or motivation as used above. 
+
+Claim Rejections - 35 USC § 103
+The following is a quotation of 35 U.S.C. 103 which forms the basis for all obviousness rejections set forth in this Office action:
+A patent for a claimed invention may not be obtained, notwithstanding that the claimed invention is not identically disclosed as set forth in section 102, if the differences between the claimed invention and the prior art are such that the claimed invention as a whole would have been obvious before the effective filing date of the claimed invention to a person having ordinary skill in the art to which the claimed invention pertains. Patentability shall not be negated by the manner in which the invention was made.
+
+Claim(s) 25-26 is/are rejected under 35 U.S.C. 103 as being unpatentable over Fink; Patrick W. et al. US Pub. No. 2014/0188459 (Fink) in view of Evans; Russell et al. US Pub. No. 2026/0004086 (Evans).
+Claim 25: 
+Fink teaches all the elements of the claims as shown above. 
+Fink does not appear to explicitly disclose “heatmap”. 
+However, the disclosure of Evans teaches: 
+The method of 23, wherein the step of providing internal communication insights comprises providing the insight report as a generated heatmap for view by the one or more authorized users, via the at least one interactable dashboard interface [¶ 0256-257] (Fig. 10, sentiment heatmap).
+
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to combine the method of sentiment analysis in Fink and the method of sentiment analysis in Evans, with a reasonable expectation of success. 
+The motivation for doing so would have been the use of known technique to improve similar devices (methods, or products) in the same way; (See KSR Int’l Co. v. Teleflex Inc., 550 US 398, 82 USPQ2d 1385, 1396 (U.S. 2007) and MPEP § 2143(D)).
+The know technique of heatmaps in Evans could be applied to the report and dashboard in Fink. Fink and Evans are similar devices because each compute sentiment analysis. One of ordinary skill in the art would have recognized that applying the known technique would improve the similar devices and resulted in an improved system, with a reasonable expectation of success, to “improve human interpretability and support collaborative refinement” [Evans: ¶ 0175].
+
+Claim 26: 
+The combination of Fink and Evans discloses the limitations recited in the parent claim(s) for the reasons discussed above. In addition, the present claim would be further obvious using the same reason, rationale and/or motivation as used above, over the disclosure of Evans, which teaches: 
+The method of 23, comprising tracking changes in the sentiment scale or the sentiment score over a selected or predetermined period of time, via a time-series analysis module [¶ 0060] (detecting shifts in consumer mood over time).
+
+Claim(s) 27, 32 is/are rejected under 35 U.S.C. 103 as being unpatentable over Fink; Patrick W. et al. US Pub. No. 2014/0188459 (Fink) in view of in view of Evans; Russell et al. US Pub. No. 2026/0004086 (Evans) in view of Holyfield; Shon US Pub. No. 2026/0017615 (Holyfield).
+Claim 27: 
+Fink and Evans teach all the elements of the claims as shown above. 
+Fink and Evans do not appear to explicitly disclose “historical baseline”. 
+However, the disclosure of Holyfield teaches: 
+The method of claim 26, comprising detecting anomalies, by the time-series analysis module, in the sentiment scale or the sentiment score by comparing a current sentiment trajectory to a historical baseline of the would-be-sender or the aggregate group of would-be senders or recipients [¶ 0069, 146] (visualizations that show how sentiment values or participation metrics for one workplace group compare to those of other groups or to an overall organizational baseline).
+
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to combine the method of sentiment analysis in Fink and the method of sentiment analysis in Evans and the method of generating visualizations in Holyfield, with a reasonable expectation of success. 
+The motivation for doing so would have been the use of known technique to improve similar devices (methods, or products) in the same way; (See KSR Int’l Co. v. Teleflex Inc., 550 US 398, 82 USPQ2d 1385, 1396 (U.S. 2007) and MPEP § 2143(D)).
+The know technique of a visualization of a historical baseline in Holyfield could be applied to the report and dashboard in Fink and the heatmaps in Evans. Fink, Evans and Holyfield are similar devices because each compute sentiment analysis. One of ordinary skill in the art would have recognized that applying the known technique would improve the similar devices and resulted in an improved system, with a reasonable expectation of success, for “understanding and improving employee satisfaction” [Holyfield: ¶ 0006].
+
+Claim 32: 
+The combination of Holyfield, Fink and Evans discloses the limitations recited in the parent claim(s) for the reasons discussed above. In addition, the present claim would be further obvious using the same reason, rationale and/or motivation as used above, over the disclosure of Holyfield, which teaches: 
+ The method of claim 21, wherein the step of providing internal communication insights comprises providing a sentiment analysis engine and a behavior-aware communications engine, wherein the sentiment analysis engine includes:
+reviewing the plurality of sample communications for the would-be-sender or the aggregate group of would-be-senders or recipients [¶ 0148] (review and analyze employee emotional sentiment data gathered through a topic-based emotional survey process);
+generating an insight report related to the analyzed communications; and providing the insight report to the one or more authorized users via the at least one interactable dashboard interface [¶ 0016, 0069-70] (visualizations of aggregated emotional sentiment data and associated commentary for individual users or workplace groups);
+and wherein the behavior-aware communication engine includes:
+reviewing the plurality of sample communications for the would-be-sender or the aggregate group of would-be-senders or recipients; and analyzing the communications to reveal interaction patterns or detect conversational anomalies of the would-be-sender or the aggregate group of would-be-senders or recipients [¶ 065] (behavioral patterns).
+
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to combine the method of sentiment analysis in Fink and the method of sentiment analysis in Evans and the method of generating visualizations in Holyfield, with a reasonable expectation of success. 
+The motivation for doing so would have been the use of known technique to improve similar devices (methods, or products) in the same way; (See KSR Int’l Co. v. Teleflex Inc., 550 US 398, 82 USPQ2d 1385, 1396 (U.S. 2007) and MPEP § 2143(D)).
+The know technique of a visualization of a historical baseline in Holyfield could be applied to the report and dashboard in Fink and the heatmaps in Evans. Fink, Evans and Holyfield are similar devices because each compute sentiment analysis. One of ordinary skill in the art would have recognized that applying the known technique would improve the similar devices and resulted in an improved system, with a reasonable expectation of success, for “understanding and improving employee satisfaction” [Holyfield: ¶ 0006].
+
+Prior Art
+The prior art made of record and not relied upon is considered pertinent to applicant's disclosure. 
+Please See PTO-892: Notice of References Cited.
+
+Evidence of the level skill of an ordinary person in the art for Claim 21: 
+Kursun; Eren US 20150039705 teaches: sentiment visualization of an inbox may be based on an extracted sentiment signal of individual messages and text snippets; visualization of sentiment through different geos/topics/projects. 
+Juarez, Jr.; Michael Gilbert US 11526829 teaches: analyze tone of messages posted by at least one employee, visualizing info, Fig. 5A-C tone analysis of the organization over any given time period and to display trends over time. 
+Johnson; Steven Brook et al. US 20190220777 teaches: customer sentiment score based on the text data; Fig. 3, measure in real time client emotion and sentiment across various natural language and voice channels, email channels, telephone calls. 
+
+Evidence of the level skill of an ordinary person in the art for Claim 25:
+CHEN; FRANCINE et al. US 20160110381 teaches: computing an overall sentiment of the core venue based on sentiment scores associated with the tagged short unstructured electronic messages; and deriving a sentiment heatmap from the venue group. 
+ 
+Evidence of the level skill of an ordinary person in the art for Claim 26: 
+Bao; Shenghua et al. US 20140317118 
+Hui; Ka-Chuen Sam et al. US 9430738 
+Subrahmanian; Venkatramanan Siva et al. US 20100023311 
+
+Evidence of the level skill of an ordinary person in the art for Claim 27: 
+Lisnic; Maxim et al. US Pub. No. 2026/0065549 (Lisnic) comparing interaction patterns against expected flows, tracking user engagement patterns. 
+
+Citations to Prior Art
+A reference to specific paragraphs, columns, pages, or figures in a cited prior art reference is not limited to preferred embodiments or any specific examples. It is well settled that a prior art reference, in its entirety, must be considered for all that it expressly teaches and fairly suggests to one having ordinary skill in the art. Stated differently, a prior art disclosure reading on a limitation of Applicant's claim cannot be ignored on the ground that other embodiments disclosed were instead cited. Therefore, the Examiner's citation to a specific portion of a single prior art reference is not intended to exclusively dictate, but rather, to demonstrate an exemplary disclosure commensurate with the specific limitations being addressed. In re Heck, 699 F.2d 1331, 1332-33,216 USPQ 1038, 1039 (Fed. Cir. 1983) (quoting In re Lemelson, 397 F.2d 1006, 1009, 158 USPQ 275, 277 (CCPA 1968". In re: Upsher-Smith Labs. v. Pamlab, LLC, 412 F.3d 1319, 1323,75 USPQ2d 1213,1215 (Fed. Cir. 2005); In re Fritch, 972 F.2d 1260, 1264,23 USPQ2d 1780, 1782 (Fed. Cir. 1992); Merck & Co. v. Biocraft Labs., Inc., 874 F.2d 804, 807,10 USPQ2d 1843, 1846 (Fed. Cir. 1989); In re Fracalossi, 681 F.2d 792,794 n.1, 215 USPQ 569, 570 n.1 (CCPA 1982); In re Lamberti, 545 F.2d 747, 750, 192 USPQ 278, 280 (CCPA 1976); In re Bozek, 416 F.2d 1385,1390,163 USPQ 545, 549 (CCPA 1969).
+
+Conclusion
+Any inquiry concerning this communication or earlier communications from the examiner should be directed to FILLIN "Examiner name" \* MERGEFORMATBENJAMIN J SMITH whose telephone number is FILLIN "Phone number" \* MERGEFORMAT(571)270-3825. The examiner can normally be reached FILLIN "Work Schedule?" \* MERGEFORMATMonday - Friday 11:00 - 7:30 EST.
+Examiner interviews are available via telephone, in-person, and video conferencing using a USPTO supplied web-based collaboration tool. To schedule an interview, applicant is encouraged to use the USPTO Automated Interview Request (AIR) at http://www.uspto.gov/interviewpractice.
+If attempts to reach the examiner by telephone are unsuccessful, the examiner’s supervisor, FILLIN "SPE Name?" \* MERGEFORMATADAM QUELER can be reached at FILLIN "SPE Phone?" \* MERGEFORMAT(571) 272-4140. The fax phone number for the organization where this application or proceeding is assigned is 571-273-8300.
+Information regarding the status of published or unpublished applications may be obtained from Patent Center. Unpublished application information in Patent Center is available to registered users. To file and manage patent submissions in Patent Center, visit: https://patentcenter.uspto.gov. Visit https://www.uspto.gov/patents/apply/patent-center for more information about Patent Center and https://www.uspto.gov/patents/docx for information about filing in DOCX format. For additional questions, contact the Electronic Business Center (EBC) at 866-217-9197 (toll-free). If you would like assistance from a USPTO Customer Service Representative, call 800-786-9199 (IN USA OR CANADA) or 571-272-1000.
+
+
+/Benjamin Smith/Primary Examiner, Art Unit 2172 Direct Phone: 571-270-3825
+Direct Fax: 571-270-4825
+Email: benjamin.smith@uspto.gov
+
+
+
+
+
+
+

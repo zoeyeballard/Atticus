@@ -36,3 +36,11 @@ class PatentRetriever:
             )
             for hit in hits
         ]
+
+    # Natural-language alias used throughout the docs/verification snippets.
+    def search(self, query: str, top_k: int | None = None) -> list[PriorArtSearchResult]:
+        return self.retrieve(query, top_k=top_k)
+
+    def count(self) -> int:
+        """Number of indexed patent chunks."""
+        return self.vector_store.count(filters={"document_type": "patent"})

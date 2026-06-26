@@ -87,6 +87,20 @@ class VectorStore:
             )
             conn.commit()
 
+    def count(self, filters: dict | None = None) -> int:
+        """Count stored chunks, optionally filtered by exact metadata matches."""
+        where = ""
+        params: list = []
+        if filters:
+            clauses = []
+            for key, value in filters.items():
+                clauses.append("metadata ->> %s = %s")
+                params.extend([key, str(value)])
+            where = "WHERE " + " AND ".join(clauses)
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(f"SELECT count(*) FROM chunks {where}", params)
+            return int(cur.fetchone()[0])
+
     def search(
         self,
         query: str,
@@ -95,10 +109,12 @@ class VectorStore:
     ) -> list[SearchHit]:
         """Cosine-similarity search with optional exact-match metadata filters."""
         top_k = top_k or get_settings().default_top_k
-        query_vec = self.embedder.embed(query)
+        # Bind the query vector as a pgvector literal ("[v1,v2,...]"::vector) so the cosine
+        # operator gets a `vector`, not a float8[] (which fails with "operator does not exist").
+        vec_literal = "[" + ",".join(repr(float(x)) for x in self.embedder.embed(query)) + "]"
 
         where = ""
-        params: list = [query_vec]
+        params: list = [vec_literal]
         if filters:
             clauses = []
             for key, value in filters.items():
@@ -108,14 +124,14 @@ class VectorStore:
         params.append(top_k)
 
         sql = f"""
-            SELECT document_id, text, metadata, 1 - (embedding <=> %s) AS score
+            SELECT document_id, text, metadata, 1 - (embedding <=> %s::vector) AS score
             FROM chunks
             {where}
-            ORDER BY embedding <=> %s
+            ORDER BY embedding <=> %s::vector
             LIMIT %s
         """
         # The ORDER BY needs the query vector too; insert it before LIMIT.
-        params.insert(-1, query_vec)
+        params.insert(-1, vec_literal)
 
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(sql, params)

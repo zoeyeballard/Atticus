@@ -53,11 +53,24 @@ _BASIS_PATTERNS: list[tuple[RejectionBasis, re.Pattern[str]]] = [
 ]
 
 
+# A final action carries the standard USPTO boilerplate "THIS ACTION IS MADE FINAL"; the bare
+# word "final" appears in many non-final actions (boilerplate about after-final practice), so
+# match the specific phrase, not \bfinal\b. The authoritative signal is the document code
+# (CTNF/CTFR/CTAV) when available — see office_action_parser.parse(rejection_type=...).
+_FINAL_MARKERS = (
+    "this action is made final",
+    "action is made final",
+    "is hereby made final",
+    "this action is final",
+)
+
+
 def _detect_rejection_type(text: str) -> str:
     lowered = text.lower()
-    if "advisory action" in lowered:
+    # An advisory action announces itself as a heading at the very top.
+    if "advisory action" in lowered[:2000]:
         return "advisory"
-    if re.search(r"\bfinal\b", lowered) and "non-final" not in lowered:
+    if any(marker in lowered for marker in _FINAL_MARKERS):
         return "final"
     return "non-final"
 
@@ -169,8 +182,16 @@ def extract_rejections(text: str) -> list[ClaimRejection]:
     return rejections
 
 
-def parse_scaffold(text: str, application_number: str | None = None) -> OfficeActionAnalysis:
-    """Regex-only structured scaffold. Deterministic and offline-safe."""
+def parse_scaffold(
+    text: str,
+    application_number: str | None = None,
+    rejection_type: str | None = None,
+) -> OfficeActionAnalysis:
+    """Regex-only structured scaffold. Deterministic and offline-safe.
+
+    ``rejection_type`` overrides text-based detection — pass it when the authoritative document
+    code is known (CTNF→non-final, CTFR→final, CTAV→advisory).
+    """
     app_no = application_number or _first(_APP_NO_RE, text) or "UNKNOWN"
     rejections = extract_rejections(text)
     return OfficeActionAnalysis(
@@ -178,7 +199,7 @@ def parse_scaffold(text: str, application_number: str | None = None) -> OfficeAc
         examiner_name=_first(_EXAMINER_RE, text),
         art_unit=_first(_ART_UNIT_RE, text),
         mailing_date=_first(_MAIL_DATE_RE, text) or "",
-        rejection_type=_detect_rejection_type(text),
+        rejection_type=rejection_type or _detect_rejection_type(text),
         rejections=rejections,
         raw_text=text,
         # Bases recorded as flags for any rejection text the block parser didn't structure.
@@ -188,13 +209,18 @@ def parse_scaffold(text: str, application_number: str | None = None) -> OfficeAc
     )
 
 
-def parse(text: str, application_number: str | None = None, use_llm: bool = True) -> OfficeActionAnalysis:
+def parse(
+    text: str,
+    application_number: str | None = None,
+    use_llm: bool = True,
+    rejection_type: str | None = None,
+) -> OfficeActionAnalysis:
     """Parse OA text into an ``OfficeActionAnalysis``.
 
     With ``use_llm=True`` and a configured Anthropic key, the claim→limitation→reference
     mappings are filled in by the analyzer pipeline. Otherwise returns the regex scaffold.
     """
-    scaffold = parse_scaffold(text, application_number)
+    scaffold = parse_scaffold(text, application_number, rejection_type=rejection_type)
     if not use_llm:
         return scaffold
     try:

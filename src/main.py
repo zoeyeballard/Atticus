@@ -62,12 +62,18 @@ def _cli() -> None:
     src_group.add_argument("--file", help="Path to an office-action text file")
     src_group.add_argument("--text", help="Office-action text inline")
     analyze_cmd.add_argument(
+        "--app-label", help="Record this application number when the source is --file/--text"
+    )
+    analyze_cmd.add_argument(
         "--no-llm", action="store_true", help="Deterministic parse only (no LLM, no verification)"
     )
+    analyze_cmd.add_argument("--output-json", help="Write the result JSON to this path")
 
     args = parser.parse_args()
 
     if args.command == "analyze":
+        from pathlib import Path
+
         from src.data import office_action_parser
         from src.data.uspto_client import USPTOClient, USPTOError
 
@@ -79,14 +85,13 @@ def _cli() -> None:
                 print(f"error: {exc}", file=sys.stderr)  # noqa: T201
                 sys.exit(2)
         elif args.file:
-            from pathlib import Path
-
             text = Path(args.file).read_text("utf-8")
         else:
             text = args.text
 
+        app_number = args.application_number or args.app_label
         analysis = office_action_parser.parse(
-            text, application_number=args.application_number, use_llm=not args.no_llm
+            text, application_number=app_number, use_llm=not args.no_llm
         )
         output = {"analysis": analysis.model_dump()}
 
@@ -96,7 +101,13 @@ def _cli() -> None:
             report = hallucination_detector.verify_output(analysis.raw_text or text)
             output["verification"] = report.model_dump()
 
-        print(json.dumps(output, indent=2, default=str))  # noqa: T201
+        payload = json.dumps(output, indent=2, default=str)
+        if args.output_json:
+            Path(args.output_json).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.output_json).write_text(payload, encoding="utf-8")
+            print(f"wrote {args.output_json}")  # noqa: T201
+        else:
+            print(payload)  # noqa: T201
 
 
 if __name__ == "__main__":

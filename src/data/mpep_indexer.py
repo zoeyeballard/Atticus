@@ -65,6 +65,47 @@ def chunk_mpep(text: str, revision: str = "") -> list[MPEPChunk]:
     return chunks
 
 
+def chunk_section(
+    section: str,
+    title: str,
+    text: str,
+    chapter: str = "",
+    target_words: int = 380,
+) -> list[MPEPChunk]:
+    """Chunk one MPEP section's text into ~target_words pieces without splitting paragraphs.
+
+    ~380 words ≈ ~500 tokens. Paragraphs are kept whole; an over-long single paragraph becomes
+    its own chunk. Each chunk carries the section header metadata.
+    """
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+    chunks: list[MPEPChunk] = []
+    buf: list[str] = []
+    words = 0
+
+    def flush() -> None:
+        nonlocal buf, words
+        if buf:
+            chunks.append(
+                MPEPChunk(
+                    section=section,
+                    title=title,
+                    text="\n\n".join(buf),
+                    chapter=chapter or (section.split(".")[0][:2] + "00"),
+                    metadata={"chunk_index": len(chunks)},
+                )
+            )
+            buf, words = [], 0
+
+    for para in paragraphs:
+        pw = len(para.split())
+        if words + pw > target_words and buf:
+            flush()
+        buf.append(para)
+        words += pw
+    flush()
+    return chunks
+
+
 def index_mpep(text: str, revision: str = "", vector_store=None) -> int:
     """Chunk MPEP text and upsert chunks into the vector store.
 

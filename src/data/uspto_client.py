@@ -149,6 +149,23 @@ class USPTOClient:
             raise USPTOError(f"USPTO API {resp.status_code} for {url}: {resp.text[:200]}")
         return resp.json()
 
+    @retry(
+        reraise=True,
+        stop=stop_after_attempt(4),
+        wait=wait_exponential(multiplier=1, min=1, max=20),
+        retry=retry_if_exception_type((httpx.TransportError, httpx.HTTPStatusError)),
+    )
+    def _post(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        if not self.api_key:
+            raise USPTOError("USPTO_API_KEY is not configured.")
+        url = f"{self.base_url}/{path.lstrip('/')}"
+        resp = self._client.post(url, json=body)
+        if resp.status_code == 429 or resp.status_code >= 500:
+            resp.raise_for_status()
+        if resp.status_code >= 400:
+            raise USPTOError(f"USPTO API {resp.status_code} for {url}: {resp.text[:200]}")
+        return resp.json()
+
     def _get_cached(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         key = f"{path}?{json.dumps(params, sort_keys=True)}"
         cached = self._read_cache(key)
@@ -188,10 +205,55 @@ class USPTOClient:
                 return data[key]
         return []
 
+    def search_applications(
+        self, query: str, limit: int = 20, offset: int = 0
+    ) -> list[dict[str, Any]]:
+        """Search applications via the ODP search API (Lucene-style ``q``).
+
+        Example query: ``applicationMetaData.groupArtUnitNumber:2186 AND
+        applicationMetaData.applicationStatusDescriptionText:"Non Final Action Mailed"``.
+        Returns the ``patentFileWrapperDataBag`` entries (each has ``applicationNumberText`` and
+        ``applicationMetaData``). Not cached — searches are exploratory and time-varying.
+        """
+        body = {"q": query, "pagination": {"offset": offset, "limit": limit}}
+        data = self._post(_Endpoints.SEARCH, body)
+        bag = data.get("patentFileWrapperDataBag") if isinstance(data, dict) else None
+        return bag if isinstance(bag, list) else []
+
     def get_office_actions(self, application_number: str) -> list[dict[str, Any]]:
         """Office-action document descriptors only, newest first."""
         docs = [d for d in self.get_documents(application_number) if _is_office_action(d)]
         return sorted(docs, key=_doc_date, reverse=True)
+
+    def get_document_text(self, application_number: str, document_code: str) -> str:
+        """Plain text of the latest document of a given code (e.g. SPEC, CLM, ABST, CTNF).
+
+        Downloads from the document's ``downloadOptionBag``, preferring DOCX → XML → PDF.
+        """
+        docs = [
+            d
+            for d in self.get_documents(application_number)
+            if (d.get("documentCode") or "").upper() == document_code.upper()
+        ]
+        if not docs:
+            raise USPTOError(f"No '{document_code}' document for application {application_number}.")
+        doc = sorted(docs, key=_doc_date, reverse=True)[0]
+        options = {
+            o.get("mimeTypeIdentifier"): o.get("downloadUrl")
+            for o in doc.get("downloadOptionBag", [])
+        }
+        for fmt in ("MS_WORD", "XML", "PDF"):
+            url = options.get(fmt)
+            if not url:
+                continue
+            try:
+                text = _extract_document_text(self._download(url), fmt)
+            except Exception as exc:  # noqa: BLE001
+                logger.info("%s %s extract failed (%s); trying next.", document_code, fmt, exc)
+                continue
+            if text and len(text.strip()) > 100:
+                return text
+        raise USPTOError(f"Could not extract '{document_code}' text for {application_number}.")
 
     def get_office_action_text(self, application_number: str) -> str:
         """Plain text of the most recent office action.
