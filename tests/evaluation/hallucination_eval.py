@@ -21,7 +21,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from src.config.data_classification import DEFAULT_TENANT_ID
+from src.config import get_settings
+from src.config.data_classification import DEFAULT_TENANT_ID, DataClass
 
 _REGISTRY = Path("data/test_applications.json")
 _OA_DIR = Path("data/sample_office_actions")
@@ -141,9 +142,10 @@ def run_evaluation(mode: str = "no-llm", timestamp: str = "") -> EvalSummary:
         if not oa_file.exists():
             continue
         text = oa_file.read_text(encoding="utf-8")
+        # Registry test apps are all published → PUBLIC data (safe on any provider tier).
         analysis = office_action_parser.parse(
             text, application_number=app, use_llm=use_llm,
-            rejection_type=entry.get("rejection_type"),
+            rejection_type=entry.get("rejection_type"), data_class=DataClass.PUBLIC,
         ).model_dump()
         s = _score(analysis, entry)
         rt.append(s["rejection_type_correct"])
@@ -169,7 +171,7 @@ def run_evaluation(mode: str = "no-llm", timestamp: str = "") -> EvalSummary:
         if use_llm:
             from src.verification import hallucination_detector
 
-            report = hallucination_detector.verify_output(text)
+            report = hallucination_detector.verify_output(text, data_class=DataClass.PUBLIC)
             rate = (report.fabricated_count / report.total_claims) if report.total_claims else 0.0
             halluc.append(rate)
             case["hallucination_rate"] = rate
@@ -201,3 +203,171 @@ def load_cases() -> list[dict]:
     if not _CASES_DIR.exists():
         return []
     return [json.loads(p.read_text("utf-8")) for p in sorted(_CASES_DIR.glob("*.json"))]
+
+
+# --------------------------------------------------------------------------------------------
+# Draft-level hallucination evaluation (Phase 4 Task 1) — scores GENERATED drafts.
+# --------------------------------------------------------------------------------------------
+
+import re as _re  # noqa: E402
+
+_SOURCE_RE = _re.compile(r"\[Source:\s*([^,\]]+?)\s*(?:,\s*([^\]]+))?\]", _re.IGNORECASE)
+_LEGAL_RE = _re.compile(r"\bMPEP\b|\b§\s*\d|\b35\s*U\.?S\.?C\b|KSR|Graham|Alice|obvious", _re.IGNORECASE)
+_FACTUAL_HINT_RE = _re.compile(r"\bdiscloses?\b|\bteaches?\b|\bshows?\b|\bdescribes?\b", _re.IGNORECASE)
+
+
+def _classify_assertion(text: str) -> str:
+    """SOURCED | LEGAL | ARGUMENT | FACTUAL (danger zone: factual without a source)."""
+    if _SOURCE_RE.search(text):
+        return "sourced"
+    if _LEGAL_RE.search(text):
+        return "legal"
+    if _FACTUAL_HINT_RE.search(text):
+        return "factual"  # a factual disclosure claim with no [Source: ...]
+    return "argument"
+
+
+def _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment) -> dict:
+    """Generate + score one application's draft. Returns a counts dict. May raise (e.g. 429)."""
+    from src.data import office_action_parser
+    from src.generation.response_drafter import draft_response
+    from src.verification import claim_decomposer
+    from src.verification.citation_verifier import extract_patent_numbers
+    from src.verification.entailment_checker import check_entailment
+
+    analysis = office_action_parser.parse(
+        oa.read_text(encoding="utf-8"), application_number=app, use_llm=True,
+        rejection_type=entry.get("rejection_type"), data_class=DataClass.PUBLIC,
+    )
+    draft = draft_response(analysis, app, strategy=strategy, llm=llm, data_class=DataClass.PUBLIC)
+    draft_text = "\n".join(a.argument_text for a in draft.arguments if a.argument_text)
+
+    # Map each cited reference -> the examiner's mapped limitation (entailment context).
+    passage_by_ref: dict[str, str] = {}
+    for rej in analysis.rejections:
+        for m in rej.limitation_mappings:
+            if m.mapped_to_reference:
+                passage_by_ref.setdefault(m.mapped_to_reference, m.limitation_text)
+
+    assertions = claim_decomposer.decompose(draft_text, llm=llm, data_class=DataClass.PUBLIC)
+    counts = {k: 0 for k in ("sourced", "legal", "argument", "factual_unsourced",
+                             "verified", "fabricated", "contradicts", "neutral",
+                             "location_invalid")}
+    budget = max_entailment
+    for a in assertions:
+        atext = a.get("claim_text", "")
+        cls = _classify_assertion(atext)
+        if cls in ("legal", "argument"):
+            counts[cls] += 1
+            continue
+        if cls == "factual":
+            counts["factual_unsourced"] += 1  # grounding-rule violation: unsourced factual claim
+            continue
+        # SOURCED
+        counts["sourced"] += 1
+        nums = extract_patent_numbers(atext)
+        if nums and not uspto.patent_exists(nums[0]):
+            counts["fabricated"] += 1
+            continue
+        m = _SOURCE_RE.search(atext)
+        loc = (m.group(2) or "") if m else ""
+        if loc and not _re.search(r"col\.|line|para|\[\d|fig", loc, _re.IGNORECASE):
+            counts["location_invalid"] += 1
+            continue
+        ref = m.group(1).strip() if m else ""
+        context = passage_by_ref.get(ref) or ""
+        if context and budget > 0:
+            budget -= 1
+            ent = check_entailment(context, atext, llm=llm, data_class=DataClass.PUBLIC)
+            verdict = ent["verdict"]
+            counts["contradicts" if verdict == "CONTRADICTS"
+                   else "neutral" if verdict == "NEUTRAL" else "verified"] += 1
+        else:
+            counts["verified"] += 1  # document exists + plausible location; entailment not run
+    return counts
+
+
+def run_draft_evaluation(
+    strategy: str = "argue", timestamp: str = "", limit: int | None = None, max_entailment: int = 6
+) -> dict:
+    """Generate response drafts and score their assertions (existence / location / entailment).
+
+    Definitions (see docs/evaluation-methodology.md):
+      hallucination = fabricated document OR entailment CONTRADICTS
+      review-needed = location invalid, entailment NEUTRAL, or unsourced factual claim
+      verified      = document exists, location plausible, passage entails the assertion
+    """
+    from src.data import office_action_parser
+    from src.data.uspto_client import USPTOClient
+    from src.generation.llm_client import LLMClient
+    from src.generation.response_drafter import draft_response
+    from src.verification import claim_decomposer
+    from src.verification.citation_verifier import extract_patent_numbers
+    from src.verification.entailment_checker import check_entailment
+
+    settings = get_settings()
+    registry = json.loads(_REGISTRY.read_text()) if _REGISTRY.exists() else []
+    if limit:
+        registry = registry[:limit]
+
+    llm = LLMClient()
+    apps_out = []
+    agg = {"total": 0, "sourced": 0, "verified": 0, "fabricated": 0, "contradicts": 0,
+           "neutral": 0, "location_invalid": 0, "factual_unsourced": 0, "legal": 0, "argument": 0}
+
+    errors: list[str] = []
+    with USPTOClient() as uspto:
+        for entry in registry:
+            app = entry["application_number"]
+            oa = Path(entry.get("oa_text_file", _OA_DIR / f"{app}_oa.txt"))
+            if not oa.exists():
+                continue
+            try:
+                counts = _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment)
+            except Exception as exc:  # noqa: BLE001 — e.g. provider rate limit (429): record + continue
+                errors.append(f"{app}: {type(exc).__name__}: {str(exc)[:140]}")
+                continue
+            app_total = sum(
+                counts[k] for k in ("sourced", "legal", "argument", "factual_unsourced")
+            )
+            apps_out.append({
+                "application_number": app,
+                "draft_assertions_total": app_total,
+                "sourced": counts["sourced"], "legal": counts["legal"],
+                "argument": counts["argument"], "factual_unsourced": counts["factual_unsourced"],
+                "sourced_breakdown": {
+                    "verified": counts["verified"], "location_invalid": counts["location_invalid"],
+                    "entailment_neutral": counts["neutral"],
+                    "entailment_contradicts": counts["contradicts"],
+                    "fabricated_document": counts["fabricated"],
+                },
+            })
+            for k in counts:
+                agg[k] = agg.get(k, 0) + counts[k]
+            agg["total"] += app_total
+
+    sourced = max(agg["sourced"], 1)
+    total = max(agg["total"], 1)
+    report = {
+        "timestamp": timestamp,
+        "provider": settings.llm_provider,
+        "generation_model": llm.generation_model,
+        "verification_model": llm.verification_model,
+        "strategy": strategy,
+        "applications": apps_out,
+        "errors": errors,
+        "aggregate": {
+            "hallucination_rate": round((agg["fabricated"] + agg["contradicts"]) / sourced, 4),
+            "review_rate": round(
+                (agg["neutral"] + agg["location_invalid"] + agg["factual_unsourced"]) / total, 4
+            ),
+            "verified_rate": round(agg["verified"] / sourced, 4),
+            "usage": {"calls": llm.usage.calls, "cost_usd": round(llm.usage.cost_usd, 4)},
+        },
+    }
+    if timestamp:
+        _OUT_DIR.mkdir(parents=True, exist_ok=True)
+        (_OUT_DIR / f"draft_eval_{settings.llm_provider}_{timestamp}.json").write_text(
+            json.dumps(report, indent=2)
+        )
+    return report

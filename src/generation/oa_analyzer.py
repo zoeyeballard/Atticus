@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import logging
 
+from src.config.data_classification import DataClass
 from src.data.office_action_parser import extract_cited_references, parse_scaffold
 from src.generation.llm_client import LLMClient
 from src.generation.prompt_templates import ANALYZE_OFFICE_ACTION
@@ -36,6 +37,7 @@ def structure_office_action(
     text: str,
     scaffold: OfficeActionAnalysis | None = None,
     llm: LLMClient | None = None,
+    data_class: DataClass = DataClass.CLIENT,
 ) -> OfficeActionAnalysis:
     """Use the LLM to fill in structured rejections, constrained to known references."""
     scaffold = scaffold or parse_scaffold(text)
@@ -50,7 +52,7 @@ def structure_office_action(
     )
     # Large office actions produce large structured output; give room to avoid truncation
     # (on overflow the caller degrades to the deterministic scaffold, preserving accuracy).
-    data = llm.complete_json(prompt.system, user, max_tokens=8192)
+    data = llm.complete_json(prompt.system, user, max_tokens=8192, data_class=data_class)
 
     rejections = _build_rejections(data.get("rejections", []), known_numbers)
     objections = list(data.get("objections", [])) + scaffold.objections

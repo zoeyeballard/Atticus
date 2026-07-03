@@ -214,20 +214,28 @@ def parse(
     application_number: str | None = None,
     use_llm: bool = True,
     rejection_type: str | None = None,
+    data_class=None,
 ) -> OfficeActionAnalysis:
     """Parse OA text into an ``OfficeActionAnalysis``.
 
-    With ``use_llm=True`` and a configured Anthropic key, the claim→limitation→reference
-    mappings are filled in by the analyzer pipeline. Otherwise returns the regex scaffold.
+    With ``use_llm=True`` and a configured LLM key, the claim→limitation→reference mappings are
+    filled in by the analyzer pipeline. Otherwise returns the regex scaffold. ``data_class``
+    controls the compliance routing guard (defaults to CLIENT inside the analyzer).
     """
     scaffold = parse_scaffold(text, application_number, rejection_type=rejection_type)
     if not use_llm:
         return scaffold
+    from src.config.data_classification import DataClass
+    from src.generation.llm_client import DataClassificationError
+
+    dc = data_class if data_class is not None else DataClass.CLIENT
     try:
         # Imported lazily to avoid a hard dependency on the LLM client for offline parsing.
         from src.generation.oa_analyzer import structure_office_action
 
-        return structure_office_action(text, scaffold)
+        return structure_office_action(text, scaffold, data_class=dc)
+    except DataClassificationError:
+        raise  # compliance blocks must surface to the caller, not silently degrade
     except Exception as exc:  # noqa: BLE001 — degrade gracefully to the scaffold
         logger.warning("LLM structuring unavailable (%s); returning regex scaffold.", exc)
         return scaffold

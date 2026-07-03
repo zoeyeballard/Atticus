@@ -26,16 +26,24 @@ def _classify_heuristic(sentence: str) -> str:
     return "factual_assertion"
 
 
-def decompose(text: str, llm: LLMClient | None = None) -> list[dict]:
+def decompose(text: str, llm: LLMClient | None = None, data_class=None) -> list[dict]:
     """Return a list of ``{"claim_text", "claim_type"}`` dicts."""
+    from src.config.data_classification import DataClass
+    from src.generation.llm_client import DataClassificationError
+
     llm = llm or LLMClient()
+    dc = data_class if data_class is not None else DataClass.CLIENT
     try:
         prompt = DECOMPOSE_CLAIMS
-        data = llm.complete_json(prompt.system, prompt.render(text=text), max_tokens=8192)
+        data = llm.complete_json(
+            prompt.system, prompt.render(text=text), max_tokens=8192, data_class=dc
+        )
         if isinstance(data, list):
             return data
         if isinstance(data, dict) and "claims" in data:
             return data["claims"]
+    except DataClassificationError:
+        raise  # compliance blocks must surface
     except Exception as exc:  # noqa: BLE001 — degrade to heuristic split
         logger.warning("LLM decomposition unavailable (%s); using heuristic split.", exc)
 

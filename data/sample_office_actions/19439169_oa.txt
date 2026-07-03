@@ -1,0 +1,142 @@
+
+DETAILED ACTION
+Claims 31-50 have been presented and examined.
+
+Notice of Pre-AIA or AIA Status
+The present application, filed on or after March 16, 2013, is being examined under the first inventor to file provisions of the AIA.
+
+Priority
+Applicant’s claim for the benefit of a prior-filed application (18/217,185) under 35 U.S.C. 119(e) or under 35 U.S.C. 120, 121, 365(c), or 386(c) is acknowledged.
+
+Information Disclosure Statement
+Per MPEP 609.02(I) and (II)(A)(2), the examiner of a continuing application will consider information which has been considered by the Office in the parent application. Therefore, information considered in parent application 18/217,185 has been considered during examination of the instant application. However, if applicant wants said considered information to be printed on any patent resulting from the instant application, applicant must ensure that said information appears on either an IDS or an 892 in the instant application.
+
+Specification
+The title of the invention is not sufficiently descriptive. A new title is required that is clearly indicative of the invention to which the claims are directed. At this point in time, the examiner recommends --Chip for Performing Combining and Inverting Operations in an Order based on Chip Position Among Serially-Connected Chips--. If claim amendments are made, the title suggestion may change.
+The lengthy specification has not been checked to the extent necessary to determine the presence of all possible minor errors. Applicant’s cooperation is requested in correcting any errors of which applicant may become aware in the specification.
+The disclosure is objected to because of the following informalities:
+In paragraph 1, please include the patent number of the parent application.
+In paragraph 41, line 3, replace “gates” with --gate-- to improve grammar.
+In each of paragraphs 68 and 79, it appears that “220a-220h” should be replaced with --210a-210h-- to match FIG.2.
+In paragraph 96, replace “invert 750” with --inverter 750--.
+Appropriate correction is required.
+
+Drawings
+FIG.2 is objected to as failing to comply with 37 CFR 1.84(p)(5) because it includes reference number 230, which is not mentioned in the description.
+The FIGs are generally objected to because the text is too small in some locations. 37 CFR 1.84(p)(3) requires that all numbers, letters, and reference characters measure at least 1/8 inches in height. The examiner asserts that at least some of the text does not satisfy this requirement. Applicant is asked to print the drawings, measure the text, and enlarge the text where appropriate and where feasible. The examiner does not expect all text to be enlarged, particularly where there is little room to enlarge it. However, in FIGs.3 and 8, text such as “Controller” and “Hash Engines” could easily be enlarged.
+Corrected drawing sheets in compliance with 37 CFR 1.121(d) and/or amendment to the specification to add any missing reference number in the description in compliance with 37 CFR 1.121(b) are required in reply to the Office action to avoid abandonment of the application. Please ensure each replacement is in only black and white to avoid pixelation and further objection. Each drawing sheet submitted after the filing date of an application must be labeled in the top margin as either “Replacement Sheet” or “New Sheet” pursuant to 37 CFR 1.121(d). If the changes are not accepted by the examiner, the applicant will be notified and informed of any required corrective action in the next Office action. The objection to the drawings will not be held in abeyance.
+
+Claim Objections
+Claim 31 is objected to because of the following informalities:
+In claim 31, replace “combing” with --combining--.
+Claim 33 is objected to because of the following informalities:
+Insert a comma before “depending”.
+Claim 34 is objected to because of the following informalities:
+Replace both instances of “combing” with --combining--.
+Claim 35 is objected to because of the following informalities:
+In line 3, delete “the” after “determining”.
+Claim 37 is objected to because of the following informalities:
+Either combine the last paragraph and the preceding paragraph, or insert a colon after “one of” and have separate paragraphs for (i) and (ii).
+Claim 39 is objected to because of the following informalities:
+Insert a comma before “depending”.
+In the 8th to last line, it appears “a first bus” is the same bus as the first bus in the 9th to last line. If so, the examiner recommends replacing “a first bus” with --the first bus-- and deleting “connecting the plurality of IC chips in series” because the first bus is already established as being of the plurality of buses that connect the IC chips in series (lines 2-3 and 14).
+In the 4th to last line, replace “combing” with --combining--.
+Claim 41 is objected to because of the following informalities:
+Replace both instances of “combing” with --combining--.
+Claim 42 is objected to because of the following informalities:
+In line 3, delete “the” after “determining”.
+Claim 44 is objected to because of the following informalities:
+Replace both instances of “determine” with --determining--.
+Either combine the last paragraph and the preceding paragraph, or insert a colon after “one of” and have separate paragraphs for (i) and (ii).
+Claim 46 is objected to because of the following informalities:
+Insert a comma before “depending”.
+Replace “combing” with --combining--.
+Claim 48 is objected to because of the following informalities:
+Replace each instance of “combing” with --combining--.
+Claim 49 is objected to because of the following informalities:
+In line 3, delete “the” after “determining”.
+Claim 50 is objected to because of the following informalities:
+In line 3, insert --and-- before “the”.
+Either combine (ii) and the preceding paragraph, or insert a colon after “one of” and have separate paragraphs for (i) and (ii).
+Appropriate correction is required.
+
+Claim Rejections - 35 USC § 112
+The following is a quotation of 35 U.S.C. 112(b):
+
+(b) CONCLUSION.—The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the inventor or a joint inventor regards as the invention.
+
+The following is a quotation of 35 U.S.C. 112 (pre-AIA), second paragraph:
+
+The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the applicant regards as his invention.
+
+Claims 31-50 are rejected under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), second paragraph, as being indefinite for failing to particularly point out and distinctly claim the subject matter which the inventor or a joint inventor (or for applications subject to pre-AIA 35 U.S.C. 112, the applicant), regards as the invention.
+The claims recite the following limitation for which there is a lack of antecedent basis:
+In claim 31, each instance of “the IC chip” because there are multiple IC chips. Applicant should claim --a first/given/current/selected/particular (or the like) integrated circuit (IC) chip-- in line 2, and then use the selected descriptor for each subsequent reference to this same chip.
+In claims 32, 34-36, each instance of “the IC chip” for similar reasoning.
+In claim 36, “the next chip on the second bus”. Please replace “the next” with --a next--.
+In claims 37-39, each instance of “the IC chip” for similar reasoning as set forth above.
+In claim 39, lines 9-11, both instances of “the plurality of chips”, because there is a plurality of chips in line 2, and another plurality of chips in line 6.
+In claims 40-43, all instances of “the IC chip” for similar reasoning as set forth above.
+In claims 40-43, “the first bus” for reasoning given in the objection to claim 39 above. The recommendation to overcome the objection also serves to address this rejection.
+In claim 43, “the next chip on the second bus”. Please replace “the next” with --a next--.
+In claims 44-45, all instances of “the IC chip” for similar reasoning as set forth above.
+In claims 46-47, each instance of “the plurality of IC chips”. Only a plurality of chips (without “IC”) was previously set forth.
+In claims 47-50, each instance of “the IC chip” for similar reasoning as set forth above.
+In claim 50, each instance of “the plurality of IC chips” for similar reasoning as set forth above.
+In claim 50, “the next chip on the second bus”. Please replace “the next” with --a next--.
+All dependent claims are rejected due to their dependence on an indefinite claim.
+
+Double Patenting
+The nonstatutory double patenting rejection is based on a judicially created doctrine grounded in public policy (a policy reflected in the statute) so as to prevent the unjustified or improper timewise extension of the “right to exclude” granted by a patent and to prevent possible harassment by multiple assignees. A nonstatutory double patenting rejection is appropriate where the conflicting claims are not identical, but at least one examined application claim is not patentably distinct from the reference claim(s) because the examined application claim is either anticipated by, or would have been obvious over, the reference claim(s). See, e.g., In re Berg, 140 F.3d 1428, 46 USPQ2d 1226 (Fed. Cir. 1998); In re Goodman, 11 F.3d 1046, 29 USPQ2d 2010 (Fed. Cir. 1993); In re Longi, 759 F.2d 887, 225 USPQ 645 (Fed. Cir. 1985); In re Van Ornum, 686 F.2d 937, 214 USPQ 761 (CCPA 1982); In re Vogel, 422 F.2d 438, 164 USPQ 619 (CCPA 1970); In re Thorington, 418 F.2d 528, 163 USPQ 644 (CCPA 1969).
+A timely filed terminal disclaimer in compliance with 37 CFR 1.321(c) or 1.321(d) may be used to overcome an actual or provisional rejection based on nonstatutory double patenting provided the reference application or patent either is shown to be commonly owned with the examined application, or claims an invention made as a result of activities undertaken within the scope of a joint research agreement. See MPEP § 717.02 for applications subject to examination under the first inventor to file provisions of the AIA as explained in MPEP § 2159. See MPEP § 2146 et seq. for applications not subject to examination under the first inventor to file provisions of the AIA. A terminal disclaimer must be signed in compliance with 37 CFR 1.321(b). 
+The filing of a terminal disclaimer by itself is not a complete reply to a nonstatutory double patenting (NSDP) rejection. A complete reply requires that the terminal disclaimer be accompanied by a reply requesting reconsideration of the prior Office action. Even where the NSDP rejection is provisional the reply must be complete. See MPEP § 804, subsection I.B.1. For a reply to a non-final Office action, see 37 CFR 1.111(a). For a reply to final Office action, see 37 CFR 1.113(c). A request for reconsideration while not provided for in 37 CFR 1.113(c) may be filed after final for consideration. See MPEP §§ 706.07(e) and 714.13.
+The USPTO Internet website contains terminal disclaimer forms which may be used. Please visit www.uspto.gov/patent/patents-forms. The actual filing date of the application in which the form is filed determines what form (e.g., PTO/SB/25, PTO/SB/26, PTO/AIA/25, or PTO/AIA/26) should be used. A web-based eTerminal Disclaimer may be filled out completely online using web-screens. An eTerminal Disclaimer that meets all requirements is auto-processed and approved immediately upon submission. For more information about eTerminal Disclaimers, refer to www.uspto.gov/patents/apply/applying-online/eterminal-disclaimer.
+Claims 31-39, 41, 43-44, 46, and 50 are rejected on the ground of nonstatutory double patenting as being unpatentable over claims 1, 3, 1, 1, 6, 13, 11-12, 27, 35, 37-38, 14, and 25, respectively, of U.S. Patent No. 12,541,483. Although the claims at issue are not identical, they are not patentably distinct from each other because the aforementioned claims of ‘483 respectively anticipate the aforementioned claims of this application. Of note:
+The selective performing in claim 31 is based on a position of the IC chip. In claim 1 of ‘483, the selective performing is based on whether the IC chip is an even or odd chip in a sequential ordering of IC chips. As such, even/odd is indicative of position.
+The names of the buses in claim 43 is not a patentable distinction. The first bus may be called a response bus in claim 37 of ‘483, while the second bus may be called a command bus.
+
+Claims 40 and 47-49 are rejected on the ground of nonstatutory double patenting as being unpatentable over claims 27, 14, 14, and 20, respectively, of ‘483, in view of the examiner’s taking of Official Notice.
+Referring to claim 40, the claim is mostly anticipated by claim 27 of ‘483 except that claim 27 of ‘483 doesn’t teach that the first input signal and the signal produced by the IC chip comprises a result of a computation operation. However, Official Notice is taken that results of computations are known to transmitted. This allows increased flexibility in opening up what values can be sent from one chip to another. Instead of just passing a signal through, for instance, a chip can generate a result and then pass that onto another chip for compound processing. As a result, it would have been obvious to one of ordinary skill in the art to modify claim 27 of ‘483 such that the first input signal and the signal produced by the IC chip comprises a result of a computation operation.
+Claim 47 is not patentable over claim 14 for similar reasoning that claim 40 is not patentable over claim 27.
+
+Claim Rejections - 35 USC § 101
+35 U.S.C. 101 reads as follows:
+Whoever invents or discovers any new and useful process, machine, manufacture, or composition of matter, or any new and useful improvement thereof, may obtain a patent therefor, subject to the conditions and requirements of this title.
+
+Claims 31-32 are rejected under 35 U.S.C. 101 because the claimed invention is directed to an abstract idea without significantly more. Applying the subject matter eligibility test in MPEP 2106:
+In step 1, each claim is directed to a statutory category of invention.
+Referring to claim 31:
+In step 2A (prong 1), claim 31 recites selectively performing a combining operation followed by an inverting operation, or an inverting operation followed by a combining operation on multiple signals to generate a first output signal. From FIG.3 and paragraph 65, this involves, for instance, performing an AND operation (334 or 338) and a NOT operation (336 or 340), which amount to Boolean algebra that can be mentally performed by a human with or without the aid of pen and paper. Thus, claim 31 recites limitations that fall into the group of mathematical concepts (e.g. math calculation) and/or mental processes.
+In step 2A (prong 2), claim 31 recites additional elements of receiving, by an integrated circuit (IC) chip of a plurality of IC chips, a first input signal on a first bus connecting the plurality of IC chips in series; selectively performing an operation, by the IC chip based on a position of the IC chip within the plurality of chips along the first bus, on a signal produced by the IC chip and the first input signal; and sending, by the IC chip, the first output signal to a next chip of the plurality of IC chips on the first bus. The receiving and sending are insignificant extra-solution activity that, per the courts, does not integrate the abstract idea into a practical application (MPEP 2106.04(d), 7th bullet). Further, the IC chip being in a position to receive data to perform the operation and send a result of the operation is merely a highly generic computer being used as a tool to implement the abstract idea, which again, per the courts, does not integrate the abstract idea into a practical application (MPEP 2106.04(d), 6th bullet).
+In step 2B, the courts have deemed generic computing components performing an abstract idea as not amounting to significantly more (MPEP 2106.05(I)(A), 2nd enumerated list, element (i)). Further, the courts have deemed receiving/sending data as being well-understood, routine, and conventional, and, thus, not significantly more (MPEP 2106.05(d)(II), 1st enumerated list, element (i)).
+Referring to claim 32, any additional element again only includes generic components used as a tool to perform an abstract idea and/or insignificant extra solution activity, which do not integrate the abstract idea into a practical application, nor amount to significantly more.
+
+Claim Rejections - 35 USC § 103
+The following is a quotation of 35 U.S.C. 103 which forms the basis for all obviousness rejections set forth in this Office action:
+A patent for a claimed invention may not be obtained, notwithstanding that the claimed invention is not identically disclosed as set forth in section 102, if the differences between the claimed invention and the prior art are such that the claimed invention as a whole would have been obvious before the effective filing date of the claimed invention to a person having ordinary skill in the art to which the claimed invention pertains. Patentability shall not be negated by the manner in which the invention was made.
+
+Claims 31-32 are rejected under 35 U.S.C. 103 as being unpatentable over Alverson et al. (US 2022/0191128), in view of AllAboutCircuits.com (“The ‘Buffer’ Gate”).
+Referring to claim 31, Alverson has taught a method for signal processing, the method comprising:
+receiving, by an integrated circuit (IC) chip of a plurality of IC chips, a first input signal on a first bus connecting the plurality of IC chips in series (from FIG.2, at least some of components 202, 204, 206, 208 form a plurality of IC chips (paragraph 110). Chip 206 is a chip that receives a reduction result (first input) from one of its endpoint chips 208 (note that data flows serially upwards as shown in FIG.2);
+selectively performing, by the IC chip based on a position of the IC chip within the plurality of IC chips along the first bus, a combining operation, on a signal produced by the IC chip and the first input signal to generate a first output signal (paragraphs 35-40 describe the reduction process performed by the chips. Data to be reduced (according to command in FIG.7) is distributed to the endpoint chips. Each endpoint chip 208 will generate a result and send it to the buffer of parent chip 206. Chip 206 will combine the first input (one of the results from one of its four endpoint chips 208) with a signal produced by the IC chip (which may be one or more results from one or more of the three other endpoint chips 208 and/or chip 206’s own contribution result). In other words, because chip 208’s position is an intermediate position, it will selectively combine results from endpoint chips with its own result. The combined result to be passed to chip 204 is the first output signal); and
+sending, by the IC chip, the first output signal to a next chip of the plurality of IC chips on the first bus (again, data flows up the tree until the reduction is complete. Thus, IC chip 206 will send its reduced result (first output signal) to chip 204, where the first output signal is combined with other results).
+Alverson has not taught that the selectively performing includes performing an inverting operation before or after the combining operation. However, AllAboutCircuits has taught a fundamental digital buffer gate, which comprises two inverters used to amplify/boost a signal to more appropriately drive a load (see pp.1-2). One of ordinary skill in the art would have recognized that this could help ensure high signal quality, particularly in a system that may include longer transmission distances over a network between chips (FIG.1 of Alverson). As a result, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to modify Alverson to selectively perform the combining operation followed by an inverting operation, or an inverting operation followed by the combining operation, the inversion operation corresponding to one or more inversions performed to buffer the data.
+Referring to claim 32, Alverson, as modified, has taught the method of claim 31, wherein the first input signal is received from a previous chip of the plurality of IC chips connected in series on the first bus, and wherein the first input signal comprises a result of a computation operation performed by the previous chip (again, a computation result according to an operation set forth in FIG.7 causes an endpoint (previous chip) to send a result of computation to IC chip 206), and wherein the signal produced by the IC chip comprises a result of a computation operation performed by the IC chip (paragraphs 35 and 40-41 discuss how each chip provides its own contribution to the overall result. Thus, IC chip 206 reduces its own data and combined that with results from chips 208. As an example, if an integer sum in FIG.7 is performed, many integer values will be distributed to chips in FIG.2. A set of endpoint chips 208 will compute sums of their respective integer values and send their results to parent chip 206, which combines those sums with its own sum of its own integer values).
+
+Allowable Subject Matter
+Claims 39-50 are allowable over the prior art, which, alone or in combination, does not teach the limitations appearing in claims 39 and 46 that are not in claim 31, including “wherein the plurality of IC chips are sequentially ordered by a first set of integer indices in a first transmission direction of signals on a first bus of the plurality of buses, and wherein each IC chip is operable to selectively perform a combining operation followed by an inverting operation, or an inverting operation followed by a combining operation depending on whether an integer index of the IC chip is even or odd in the first transmission direction of signals on the first bus.” Please address double-patenting and 112 issues where necessary.
+Claims 33-38 are objected to as being dependent upon a rejected base claim, but would be allowable over the prior art if rewritten in independent form including all of the limitations of the base claim and any intervening claims. Please address double-patenting and 112 issues where necessary.
+
+Conclusion
+The following prior art made of record and not relied upon is considered pertinent to applicant's disclosure:
+Berthelemy (US 3,735,109) has taught a node M with a predecessor node Np and a successor node Ns, where node M performs various combination (AND/OR) operations along with inversion (FIG.5).
+Han (US 2022/0308890) has taught a distributed reduction, where nodes pass values to each other for combination.
+Any inquiry concerning this communication or earlier communications from the examiner should be directed to FILLIN "Examiner name" \* MERGEFORMATDavid J. Huisman whose telephone number is 571-272-4168. The examiner can normally be reached on FILLIN "Work Schedule?" \* MERGEFORMATMonday-Friday, 9:00 am-5:30 pm.
+If attempts to reach the examiner by telephone are unsuccessful, the examiner’s supervisor, Jyoti Mehta, can be reached at 571-270-3995. The fax phone number for the organization where this application or proceeding is assigned is 571-273-8300.
+Information regarding the status of published or unpublished applications may be obtained from Patent Center. Unpublished application information in Patent Center is available to registered users. To file and manage patent submissions in Patent Center, visit: https://patentcenter.uspto.gov. Visit https://www.uspto.gov/patents/apply/patent-center for more information about Patent Center and https://www.uspto.gov/patents/docx for information about filing in DOCX format. For additional questions, contact the Electronic Business Center (EBC) at 866-217-9197 (toll-free). If you would like assistance from a USPTO Customer Service Representative, call 800-786-9199 (IN USA OR CANADA) or 571-272-1000.
+
+
+
+
+
+/David J. Huisman/Primary Examiner, Art Unit 2183

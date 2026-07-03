@@ -102,6 +102,10 @@ class InMemoryRepository:
         rec = self._analyses.get(analysis_id)
         return rec.analysis if rec and rec.tenant_id == tenant_id else None
 
+    def is_publication_verified(self, analysis_id: str, tenant_id: str = DEFAULT_TENANT_ID) -> bool:
+        rec = self._analyses.get(analysis_id)
+        return bool(rec and rec.tenant_id == tenant_id and rec.publication_verified)
+
     def list_analyses(self, tenant_id: str = DEFAULT_TENANT_ID, limit: int = 20) -> list[dict]:
         items = [
             {

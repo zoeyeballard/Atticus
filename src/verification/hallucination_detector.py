@@ -34,6 +34,7 @@ def verify_output(
     known_mpep_sections: set[str] | None = None,
     uspto: USPTOClient | None = None,
     llm: LLMClient | None = None,
+    data_class=None,
 ) -> VerificationReport:
     """Verify an AI-generated text end to end.
 
@@ -44,14 +45,19 @@ def verify_output(
         characterizations of a real source are actually supported.
     known_mpep_sections:
         The set of MPEP section numbers present in the indexed corpus (for existence checks).
+    data_class:
+        Classification for the compliance routing guard (defaults to CLIENT).
     """
+    from src.config.data_classification import DataClass
+
     sources = sources or {}
+    dc = data_class if data_class is not None else DataClass.CLIENT
     llm = llm or LLMClient()
     owns_client = uspto is None
     uspto = uspto or USPTOClient()
 
     try:
-        atomic = claim_decomposer.decompose(text, llm=llm)
+        atomic = claim_decomposer.decompose(text, llm=llm, data_class=dc)
         verified: list[VerifiedClaim] = []
 
         for item in atomic:
@@ -66,13 +72,13 @@ def verify_output(
                 if result.status == VerificationStatus.VERIFIED and result.source_document:
                     source_text = sources.get(result.source_document)
                     if source_text:
-                        ent = check_entailment(source_text, claim_text, llm=llm)
+                        ent = check_entailment(source_text, claim_text, llm=llm, data_class=dc)
                         result.status = ent["status"]
                         result.source_span = source_text[:200]
                         result.explanation = ent["explanation"] or result.explanation
                 verified.append(result)
             else:
-                verified.append(_verify_non_citation(claim_text, claim_type, sources, llm))
+                verified.append(_verify_non_citation(claim_text, claim_type, sources, llm, dc))
 
         report = confidence_scorer.score(verified)
         if get_settings().audit_trail_enabled:
@@ -89,7 +95,7 @@ def verify_output(
 
 
 def _verify_non_citation(
-    claim_text: str, claim_type: str, sources: dict[str, str], llm: LLMClient
+    claim_text: str, claim_type: str, sources: dict[str, str], llm: LLMClient, data_class=None
 ) -> VerifiedClaim:
     if claim_type == "opinion":
         return VerifiedClaim(
@@ -102,7 +108,7 @@ def _verify_non_citation(
     # Check the assertion against any provided source via entailment.
     if sources:
         combined = "\n\n".join(sources.values())[:8000]
-        ent = check_entailment(combined, claim_text, llm=llm)
+        ent = check_entailment(combined, claim_text, llm=llm, data_class=data_class)
         return VerifiedClaim(
             claim_text=claim_text,
             claim_type=claim_type,

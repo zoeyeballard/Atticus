@@ -12,9 +12,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
 
-from src.config.data_classification import DEFAULT_TENANT_ID
+from src.config.data_classification import DEFAULT_TENANT_ID, DataClass
 from src.db.repositories import AuditEvent, get_repository
 from src.generation.docx_export import analysis_to_docx, draft_to_docx
+from src.generation.llm_client import DataClassificationError
 from src.generation.response_drafter import draft_response
 from src.models.schemas import OfficeActionAnalysis, ResponseDraft
 
@@ -68,7 +69,22 @@ def create_draft(analysis_id: str, req: DraftRequest) -> ResponseDraft:
         raise HTTPException(422, _err("BAD_STRATEGY", "strategy must be argue, amend, or both."))
     analysis = _require_analysis(analysis_id)
     repo = get_repository()
-    draft = draft_response(analysis, analysis_id, strategy=req.strategy)
+    dc = (
+        DataClass.PUBLIC
+        if repo.is_publication_verified(analysis_id, tenant_id=DEFAULT_TENANT_ID)
+        else DataClass.CLIENT
+    )
+    try:
+        draft = draft_response(analysis, analysis_id, strategy=req.strategy, data_class=dc)
+    except DataClassificationError as exc:
+        raise HTTPException(
+            403,
+            _err(
+                "PROVIDER_NOT_PERMITTED_FOR_CLIENT_DATA",
+                str(exc),
+                "Switch to a no-training provider in Settings before drafting on client data.",
+            ),
+        ) from exc
     repo.save_draft(draft, tenant_id=DEFAULT_TENANT_ID)
     repo.append_audit(
         analysis_id,

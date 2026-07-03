@@ -1,0 +1,19 @@
+# Ground-truth annotation — fill in from your OWN reading of the office action.
+# Do NOT look at parser or LLM output while annotating.
+application_number: "19551719"
+annotator: ""            # your name
+date: ""                 # YYYY-MM-DD
+minutes_spent: 0
+
+rejection_type: ""       # non-final | final | advisory
+
+rejections:
+  # one block per (statutory basis) group as the examiner presented it
+  - basis: ""            # "101" | "102" | "103" | "112(a)" | "112(b)" | "dp"
+    claim_numbers: []    # e.g. [1, 2, 3]
+    primary_reference: ""    # e.g. "US10,234,567" (empty for 101/112)
+    secondary_references: [] # e.g. ["US11,345,678"]
+    notes: ""
+
+objections: []           # claim objections (not rejections), free text
+notes: ""

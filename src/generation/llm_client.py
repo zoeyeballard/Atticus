@@ -21,8 +21,23 @@ from dataclasses import dataclass, field
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from src.config import get_settings
+from src.config.data_classification import DataClass
 
 logger = logging.getLogger(__name__)
+
+# Whether a (provider, tier) may train on / retain inputs. Extend as providers/tiers are added.
+# Unknown combinations are treated as training-enabled (fail closed).
+PROVIDER_CAPABILITIES: dict[tuple[str, str], dict] = {
+    ("gemini", "free"): {"trains_on_inputs": True},
+    ("gemini", "paid"): {"trains_on_inputs": False},
+    ("anthropic", "api"): {"trains_on_inputs": False},
+    ("anthropic", "free"): {"trains_on_inputs": False},  # Anthropic API never trains by default
+    ("vertex", "enterprise"): {"trains_on_inputs": False},
+}
+
+
+class DataClassificationError(RuntimeError):
+    """Raised when client/privileged data would be routed to a training-enabled provider tier."""
 
 # Approximate USD per 1M tokens (input, output) — for cost tracking, not billing.
 # Gemini has a free tier (effective $0 within quota); list rates are for accounting.
@@ -78,10 +93,25 @@ class LLMClient:
             self._api_key = api_key if api_key is not None else settings.anthropic_api_key
             self.generation_model = settings.generation_model
             self.verification_model = settings.verification_model
+        self.tier = settings.llm_tier
         self.max_cost_per_run_usd = settings.max_cost_per_run_usd
         self.enable_prompt_caching = settings.enable_prompt_caching
         self.usage = Usage()
         self._client = None  # lazily created, provider-specific
+
+    def _check_data_class(self, data_class: DataClass) -> None:
+        """Refuse to send client/privileged data to a provider tier that may train on inputs."""
+        if data_class == DataClass.PUBLIC:
+            return
+        caps = PROVIDER_CAPABILITIES.get((self.provider, self.tier), {"trains_on_inputs": True})
+        if caps["trains_on_inputs"]:
+            raise DataClassificationError(
+                f"Cannot send {data_class.value} data to {self.provider}/{self.tier}: this "
+                "provider tier may train on inputs, which risks destroying attorney-client "
+                "privilege (see docs/data-handling-policy.md and U.S. v. Heppner). Configure a "
+                "no-training provider: LLM_PROVIDER=anthropic, or LLM_PROVIDER=gemini with "
+                "LLM_TIER=paid."
+            )
 
     def _check_budget(self) -> None:
         cap = self.max_cost_per_run_usd
@@ -120,8 +150,14 @@ class LLMClient:
         max_tokens: int = 4096,
         temperature: float = 0.0,
         json_mode: bool = False,
+        data_class: DataClass = DataClass.CLIENT,
     ) -> LLMResponse:
-        """Single completion. Defaults to the generation model. Dispatches by provider."""
+        """Single completion. Defaults to the generation model. Dispatches by provider.
+
+        ``data_class`` defaults to CLIENT (conservative): callers working on public data must pass
+        ``DataClass.PUBLIC`` explicitly. The compliance guard runs before any network call.
+        """
+        self._check_data_class(data_class)
         model = model or self.generation_model
         self._check_budget()
         if self.provider == "gemini":
@@ -185,17 +221,24 @@ class LLMClient:
         *,
         model: str | None = None,
         max_tokens: int = 4096,
+        data_class: DataClass = DataClass.CLIENT,
     ) -> dict:
         """Completion that must return JSON. Uses native JSON mode on Gemini; robust parsing else."""
         resp = self.complete(
             system, user, model=model, max_tokens=max_tokens, temperature=0.0,
-            json_mode=(self.provider == "gemini"),
+            json_mode=(self.provider == "gemini"), data_class=data_class,
         )
         return _extract_json(resp.text)
 
-    def verify(self, system: str, user: str, max_tokens: int = 1024) -> LLMResponse:
+    def verify(
+        self, system: str, user: str, max_tokens: int = 1024,
+        data_class: DataClass = DataClass.CLIENT,
+    ) -> LLMResponse:
         """Completion using the cheaper verification model."""
-        return self.complete(system, user, model=self.verification_model, max_tokens=max_tokens)
+        return self.complete(
+            system, user, model=self.verification_model, max_tokens=max_tokens,
+            data_class=data_class,
+        )
 
 
 def _extract_json(text: str) -> dict:

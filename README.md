@@ -51,10 +51,39 @@ USPTO / MPEP ──▶ data/ ──▶ retrieval/ ──▶ generation/ ──�
 
 ## Tech stack
 
-Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · Anthropic Claude
-(`claude-sonnet-4-6` generation, `claude-haiku-4-5` verification) · sentence-transformers ·
-custom RAG pipeline (no LangChain — full control over retrieve/generate/verify) · React + Tailwind ·
-Docker.
+Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · pluggable LLM provider —
+**Anthropic Claude** (`claude-sonnet-4-6` / `claude-haiku-4-5`) or **Google Gemini**
+(`gemini-2.5-flash` / `-flash-lite`), selected by `LLM_PROVIDER` · sentence-transformers
+(local embeddings, $0) · custom RAG pipeline (no LangChain) · React + Tailwind · Docker.
+
+## Measured results
+
+Test set: real USPTO office actions in TC 2100 (art units 2172/2183–2189), each a non-final
+rejection with §103 present. **10 applications** total — 5 seen during development, 5 held out.
+
+**Parse accuracy** (deterministic, `--no-llm`), against the registry ground truth extracted from
+the OA text — 5 seen apps:
+
+| Metric | Result |
+|---|---|
+| Rejection-type accuracy (from the authoritative document code) | 100% |
+| Statutory-basis recall / precision | 100% / 100% |
+| Claim-set accuracy | 100% |
+
+**Draft-level hallucination eval** (`--mode draft`) — the pipeline that scores *generated* draft
+citations (existence → location → entailment) is built and runs; see
+[`docs/evaluation-methodology.md`](docs/evaluation-methodology.md) for the strict definitions of
+*hallucination / review-needed / verified*. Headline numbers are pending a Gemini quota window (the
+free tier's daily limit was exhausted during development) or a paid/Anthropic run.
+
+**Honest caveats:**
+- Small N (10 apps), single technology center (TC 2100).
+- The registry ground truth shares regex lineage with the parser, so the 100% partly reflects
+  self-consistency. **Independent human ground truth** (v2) tooling is in place
+  (`scripts/annotate.py` + `scripts/score_against_ground_truth.py`, 10 blank templates in
+  `data/ground_truth_v2/`); the annotation itself is pending. `rejection_type` ground truth **is**
+  independent (from the document code).
+- 5 of the 10 apps are **held out** (parser not run on them until after annotation).
 
 ## Quick start
 
@@ -97,14 +126,30 @@ pytest
 # Analyze a stored office action file, deterministic parse only (no API keys needed):
 python -m src.main analyze --file data/sample_office_actions/16-123456_non_final_103.txt --no-llm
 
-# Analyze a live application (requires USPTO_API_KEY + ANTHROPIC_API_KEY):
+# Analyze a live application (requires USPTO_API_KEY + an LLM key per LLM_PROVIDER):
 python -m src.main analyze --application-number 19531961
 
-# Validate the USPTO client against the live ODP API (Step 1, free):
-python scripts/validate_uspto.py 19531961
+# Validate services (free):
+python scripts/validate_uspto.py 19531961     # USPTO ODP client
+python scripts/validate_gemini.py             # Gemini key (or validate_anthropic.py)
+```
 
-# Confirm Anthropic billing is active (~$0.0001):
-python scripts/validate_anthropic.py
+### Evaluations & tests
+
+```bash
+# Backend + frontend tests
+pytest -q                        # 46 backend tests
+cd frontend && npm test          # 14 frontend (vitest) tests
+
+# Evaluations (reports land in results/evaluations/)
+python scripts/run_evaluation.py --mode no-llm                    # parse-only baseline
+python scripts/run_evaluation.py --mode full                     # LLM analysis eval
+python scripts/run_evaluation.py --mode draft --strategy argue   # draft-level hallucination eval
+python scripts/compare_evaluations.py A.json B.json              # side-by-side provider/model
+
+# Independent ground truth (human annotation)
+python scripts/annotate.py --application 19531961                # blank template + OA path
+python scripts/score_against_ground_truth.py --ground-truth data/ground_truth_v2/
 ```
 
 ## API endpoints
@@ -120,17 +165,24 @@ python scripts/validate_anthropic.py
 
 ## Project status
 
-This repository is an actively-scaffolded prototype. Phase 1 (data models, config, API
-surface, grounded-generation prompt scaffolding) is in place; retrieval, generation, and
-verification implementations are being filled in per the build plan in
-[`CLAUDE.md`](CLAUDE.md). Modules not yet implemented raise `NotImplementedError` rather than
-returning unverified output — consistent with the verification-first principle.
+Working prototype through Phase 4. Live USPTO ODP integration; PostgreSQL + pgvector with MPEP
+(655 chunks) and patent text indexed; deterministic + LLM-enriched analysis; verification pipeline;
+response drafting; React UI served from a single Docker image; a legal-compliance layer (data
+classification, tenant isolation, a publication guard, and a routing guard that blocks client data
+from training-enabled provider tiers); and an evaluation harness (parse-level and draft-level).
+Consistent with the verification-first principle, LLM steps degrade to deterministic output rather
+than emitting unverified content when a provider is unavailable.
 
 ## Known limitations
 
-- USPTO only (no international patents).
-- Single-user prototype (no auth / multi-tenancy).
+- USPTO only (no international patents); single technology center in the test set (TC 2100).
+- Single-user prototype (schema supports multi-tenancy; no auth yet).
 - Baseline embeddings (`all-MiniLM-L6-v2`); patent-tuned model planned.
+- Draft-eval headline numbers pending a provider quota window; independent human ground truth
+  (v2) pending annotation.
+- **Compliance:** the Gemini free tier may train on inputs — used for public patent data only;
+  real client work product requires a no-training tier (see
+  [`docs/data-handling-policy.md`](docs/data-handling-policy.md)).
 
 ## License
 

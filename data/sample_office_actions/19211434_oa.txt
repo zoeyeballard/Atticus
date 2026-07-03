@@ -1,0 +1,194 @@
+
+DETAILED ACTION
+Notice of Pre-AIA or AIA Status
+The present application, filed on or after March 16, 2013, is being examined under the first inventor to file provisions of the AIA.
+
+Priority
+Applicant’s claim for the benefit of a prior-filed application under 35 U.S.C. 119(e) or under 35 U.S.C. 120, 121, 365(c), or 386(c) is acknowledged. 
+
+Specification
+The lengthy specification has not been checked to the extent necessary to determine the presence of all possible minor errors. Applicant’s cooperation is requested in correcting any errors of which applicant may become aware in the specification.
+The title of the invention is not descriptive. A new title is required that is clearly indicative of the invention to which the claims are directed. 
+Examiner makes the following recommendation:
+[0056]: The example embodiments should be written in a similar way as the claims if possible.
+Appropriate correction is required.
+
+Claim Interpretation
+The following is a quotation of 35 U.S.C. 112(f):
+(f) Element in Claim for a Combination. – An element in a claim for a combination may be expressed as a means or step for performing a specified function without the recital of structure, material, or acts in support thereof, and such claim shall be construed to cover the corresponding structure, material, or acts described in the specification and equivalents thereof. 
+
+The following is a quotation of pre-AIA 35 U.S.C. 112, sixth paragraph:
+An element in a claim for a combination may be expressed as a means or step for performing a specified function without the recital of structure, material, or acts in support thereof, and such claim shall be construed to cover the corresponding structure, material, or acts described in the specification and equivalents thereof.
+
+The claims in this application are given their broadest reasonable interpretation using the plain meaning of the claim language in light of the specification as it would be understood by one of ordinary skill in the art. The broadest reasonable interpretation of a claim element (also commonly referred to as a claim limitation) is limited by the description in the specification when 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, is invoked. 
+As explained in MPEP § 2181, subsection I, claim limitations that meet the following three-prong test will be interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph:
+(A)the claim limitation uses the term “means” or “step” or a term used as a substitute for “means” that is a generic placeholder (also called a nonce term or a non-structural term having no specific structural meaning) for performing the claimed function; 
+(B)the term “means” or “step” or the generic placeholder is modified by functional language, typically, but not always linked by the transition word “for” (e.g., “means for”) or another linking word or phrase, such as “configured to” or “so that”; and 
+(C)the term “means” or “step” or the generic placeholder is not modified by sufficient structure, material, or acts for performing the claimed function. 
+Use of the word “means” (or “step”) in a claim with functional language creates a rebuttable presumption that the claim limitation is to be treated in accordance with 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph. The presumption that the claim limitation is interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, is rebutted when the claim limitation recites sufficient structure, material, or acts to entirely perform the recited function. 
+Absence of the word “means” (or “step”) in a claim creates a rebuttable presumption that the claim limitation is not to be treated in accordance with 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph. The presumption that the claim limitation is not interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, is rebutted when the claim limitation recites function without reciting sufficient structure, material or acts to entirely perform the recited function. 
+Claim limitations in this application that use the word “means” (or “step”) are being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, except as otherwise indicated in an Office action. Conversely, claim limitations in this application that do not use the word “means” (or “step”) are not being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, except as otherwise indicated in an Office action.
+Claim 8 recites the following limitations:
+“Means for detecting a load instruction in a front end of an instruction processing circuit”. Examiner identifies the “means” of the limitation as a ”dependency identifier circuit”, which is identified to provide the recited function as seen in paragraphs [0009, 0032]. However, the recitation of the term “dependency identifier circuit” is not sufficient structure in a means-plus-function limitation. Therefore, the limitation is given the broadest reasonable interpretation.
+“Means for determining whether one or more entries of a store instruction queue store the load physical register number and the load immediate value”. Examiner identifies the “means” of the limitation as a ”dependency identifier circuit”, which is identified to provide the recited function as seen in paragraphs [0009, 0032]. However, the recitation of the term “dependency identifier circuit” is not sufficient structure in a means-plus-function limitation. Therefore, the limitation is given the broadest reasonable interpretation.
+“Means for selecting an entry of the one or more entries”. Examiner identifies the “means” of the limitation as a ”dependency identifier circuit”, which is identified to provide the recited function as seen in paragraph [0009]. However, the recitation of the term “dependency identifier circuit” is not sufficient structure in a means-plus-function limitation. Therefore, the limitation is given the broadest reasonable interpretation.
+“Means for establishing a dependency between the load instruction and a store instruction”. Examiner identifies the “means” of the limitation as a ”dependency identifier circuit”, which is identified to provide the recited function as seen in paragraphs [0009, 0032]. However, the recitation of the term “dependency identifier circuit” is not sufficient structure in a means-plus-function limitation. Therefore, the limitation is given the broadest reasonable interpretation.
+This application includes one or more claim limitations that do not use the word “means,” but are nonetheless being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, because the claim limitation(s) uses a generic placeholder that is coupled with functional language without reciting sufficient structure to perform the recited function and the generic placeholder is not preceded by a structural modifier. Such claim limitation(s) is/are: 
+Processor device executing computer-executable instructions in claim 15 invokes 112(f). The structure of the processing device is indicated to structurally be a “processor core” or “central processing unit core” (see [0024]) and the support of the functionality can be seen in paragraph [0012].
+Because this/these claim limitation(s) is/are being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, it/they is/are being interpreted to cover the corresponding structure described in the specification as performing the claimed function, and equivalents thereof.
+If applicant does not intend to have this/these limitation(s) interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph, applicant may: (1) amend the claim limitation(s) to avoid it/them being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph (e.g., by reciting sufficient structure to perform the claimed function); or (2) present a sufficient showing that the claim limitation(s) recite(s) sufficient structure to perform the claimed function so as to avoid it/them being interpreted under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph.
+Claim Rejections - 35 USC § 112
+The following is a quotation of the first paragraph of 35 U.S.C. 112(a):
+(a) IN GENERAL.—The specification shall contain a written description of the invention, and of the manner and process of making and using it, in such full, clear, concise, and exact terms as to enable any person skilled in the art to which it pertains, or with which it is most nearly connected, to make and use the same, and shall set forth the best mode contemplated by the inventor or joint inventor of carrying out the invention.
+
+The following is a quotation of the first paragraph of pre-AIA 35 U.S.C. 112:
+The specification shall contain a written description of the invention, and of the manner and process of making and using it, in such full, clear, concise, and exact terms as to enable any person skilled in the art to which it pertains, or with which it is most nearly connected, to make and use the same, and shall set forth the best mode contemplated by the inventor of carrying out his invention.
+
+Claim 8 is rejected under 35 U.S.C. 112(a) or 35 U.S.C. 112 (pre-AIA), first paragraph, as failing to comply with the written description requirement. The claim(s) contains subject matter which was not described in the specification in such a way as to reasonably convey to one skilled in the relevant art that the inventor or a joint inventor, or for applications subject to pre-AIA 35 U.S.C. 112, the inventor(s), at the time the application was filed, had possession of the claimed invention. 
+
+Regarding claim 8, as described in the 112(b) rejection, the disclosure does not provide adequate structure to perform the claimed functions of “detecting a load instruction in the front end of the instruction processing circuit”, “determining whether one or more entries of the store instruction queue store the load physical register number and the load immediate value”, “selecting an entry of the one or more entries”, and “establishing a dependency between the load instruction and a store instruction”. The application does not demonstrate that the applicant has made an invention that achieves the claimed functions because the invention is not described with sufficient detail such that one of ordinary skill in the art can reasonably conclude that the inventor had possession of the claimed invention.
+
+The following is a quotation of 35 U.S.C. 112(b):
+(b) CONCLUSION.—The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the inventor or a joint inventor regards as the invention.
+
+
+The following is a quotation of 35 U.S.C. 112 (pre-AIA), second paragraph:
+The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the applicant regards as his invention.
+
+
+Claim 8 is rejected under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), second paragraph, as being indefinite for failing to particularly point out and distinctly claim the subject matter which the inventor or a joint inventor (or for applications subject to pre-AIA 35 U.S.C. 112, the applicant), regards as the invention.
+
+Regarding claim 8, the means-plus-function limitations invoke 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph. However, the written description fails to disclose the corresponding structure, material, or acts for performing the entire claimed function and to clearly link the structure, material, or acts to the function. The specification is devoid of adequate structure to perform the claimed functions and does not provide sufficient details such that one of ordinary skill in the art would understand which structure would perform the claimed functions. Therefore, the claim is indefinite and is rejected under 35 U.S.C. 112(b) or pre-AIA 35 U.S.C. 112, second paragraph.
+Applicant may:
+(a) Amend the claim so that the claim limitation will no longer be interpreted as a limitation under 35 U.S.C. 112(f) or pre-AIA 35 U.S.C. 112, sixth paragraph; 
+(b) Amend the written description of the specification such that it expressly recites what structure, material, or acts perform the entire claimed function, without introducing any new matter (35 U.S.C. 132(a)); or 
+(c) Amend the written description of the specification such that it clearly links the structure, material, or acts disclosed therein to the function recited in the claim, without introducing any new matter (35 U.S.C. 132(a)).
+If applicant is of the opinion that the written description of the specification already implicitly or inherently discloses the corresponding structure, material, or acts and clearly links them to the function so that one of ordinary skill in the art would recognize what structure, material, or acts perform the claimed function, applicant should clarify the record by either: 
+(a) Amending the written description of the specification such that it expressly recites the corresponding structure, material, or acts for performing the claimed function and clearly links or associates the structure, material, or acts to the claimed function, without introducing any new matter (35 U.S.C. 132(a)); or 
+(b) Stating on the record what the corresponding structure, material, or acts, which are implicitly or inherently set forth in the written description of the specification, perform the claimed function. For more information, see 37 CFR 1.75(d) and MPEP §§ 608.01(o) and 2181.
+
+Double Patenting
+The nonstatutory double patenting rejection is based on a judicially created doctrine grounded in public policy (a policy reflected in the statute) so as to prevent the unjustified or improper timewise extension of the “right to exclude” granted by a patent and to prevent possible harassment by multiple assignees. A nonstatutory double patenting rejection is appropriate where the conflicting claims are not identical, but at least one examined application claim is not patentably distinct from the reference claim(s) because the examined application claim is either anticipated by, or would have been obvious over, the reference claim(s). See, e.g., In re Berg, 140 F.3d 1428, 46 USPQ2d 1226 (Fed. Cir. 1998); In re Goodman, 11 F.3d 1046, 29 USPQ2d 2010 (Fed. Cir. 1993); In re Longi, 759 F.2d 887, 225 USPQ 645 (Fed. Cir. 1985); In re Van Ornum, 686 F.2d 937, 214 USPQ 761 (CCPA 1982); In re Vogel, 422 F.2d 438, 164 USPQ 619 (CCPA 1970); In re Thorington, 418 F.2d 528, 163 USPQ 644 (CCPA 1969).
+A timely filed terminal disclaimer in compliance with 37 CFR 1.321(c) or 1.321(d) may be used to overcome an actual or provisional rejection based on nonstatutory double patenting provided the reference application or patent either is shown to be commonly owned with the examined application, or claims an invention made as a result of activities undertaken within the scope of a joint research agreement. See MPEP § 717.02 for applications subject to examination under the first inventor to file provisions of the AIA as explained in MPEP § 2159. See MPEP § 2146 et seq. for applications not subject to examination under the first inventor to file provisions of the AIA. A terminal disclaimer must be signed in compliance with 37 CFR 1.321(b). 
+The filing of a terminal disclaimer by itself is not a complete reply to a nonstatutory double patenting (NSDP) rejection. A complete reply requires that the terminal disclaimer be accompanied by a reply requesting reconsideration of the prior Office action. Even where the NSDP rejection is provisional the reply must be complete. See MPEP § 804, subsection I.B.1. For a reply to a non-final Office action, see 37 CFR 1.111(a). For a reply to final Office action, see 37 CFR 1.113(c). A request for reconsideration while not provided for in 37 CFR 1.113(c) may be filed after final for consideration. See MPEP §§ 706.07(e) and 714.13.
+The USPTO Internet website contains terminal disclaimer forms which may be used. Please visit www.uspto.gov/patent/patents-forms. The actual filing date of the application in which the form is filed determines what form (e.g., PTO/SB/25, PTO/SB/26, PTO/AIA/25, or PTO/AIA/26) should be used. A web-based eTerminal Disclaimer may be filled out completely online using web-screens. An eTerminal Disclaimer that meets all requirements is auto-processed and approved immediately upon submission. For more information about eTerminal Disclaimers, refer to www.uspto.gov/patents/apply/applying-online/eterminal-disclaimer.
+
+Claims 1-19 are provisionally rejected on the ground of nonstatutory double patenting as being unpatentable over claims 1, 1, 3, 2, 4, 8, 9, 1, 11, 11, 13, 12, 14, 18, 19, 19, 20, 22, and 26 of copending Application No. 18/826,409 (hereinafter Reference Application). 
+
+Regarding claim 1, the Reference Application teaches a dependency identifier circuit, comprising a store instruction queue comprising a plurality of entries;
+the dependency identifier circuit configured to:
+detect a load instruction in a front end of an instruction processing circuit of a processor device, wherein the load instruction comprises:
+a single load address register number mapped to a load physical register number; and
+a load immediate value;
+determine whether a first one or more entries of the store instruction queue store the load physical register number and the load immediate value; and
+responsive to determining that the first one or more entries of the store instruction queue store the load physical register number and the load immediate value:
+select an entry of the first one or more entries; and 
+establish a dependency between the load instruction and a store instruction corresponding to the selected entry (see claim 1 of Reference Application).
+
+Regarding claim 2, the Reference Application teaches the dependency identifier circuit of claim 1, further configured to, prior to detecting the load instruction: 
+detect the store instruction in the front end of the instruction processing circuit,
+wherein the store instruction comprises:
+a single store address register number mapped to a store physical register number; and
+a store immediate value; and
+write the store physical register number, the store immediate value, and an age indicator in the entry of the first one or more entries (see claim 1 of Reference Application).
+
+Regarding claim 3, the Reference Application teaches the dependency identifier circuit of claim 2, wherein the age indicator comprises one of a reorder buffer index of the store instruction and a store unit identifier of the store instruction (see claim 3 of Reference Application).
+
+Regarding claim 4, the Reference Application teaches the dependency identifier circuit of claim 1, further configured to:
+determine that execution of the store instruction has been initiated by the instruction processing circuit; and
+responsive to determining that execution of the store instruction has been initiated, invalidate the entry of the store instruction queue corresponding to the store instruction (see claim 2 of Reference Application).
+
+Regarding claim 5, the Reference Application teaches the dependency identifier circuit of claim 1, further configured to:
+determine that a pipeline flush has been initiated by the instruction processing circuit; and
+responsive to determining that the pipeline flush has been initiated, selectively invalidate a second one or more entries of the store instruction queue based on corresponding one or more age indicators of the second one or more entries (see claim 4 of Reference Application).
+
+Regarding claim 6, the Reference Application teaches the dependency identifier circuit of claim 1, configured to determine whether the first one or more entries of the store instruction queue store the load physical register number and the load immediate value in response to a determination that no prior occurrence of a read-after-write (RAW) hazard occurred as a result of out-of-order execution of the store instruction and the load instruction (see claim 8 of Reference Application).
+
+Regarding claim 7, the Reference Application teaches the dependency identifier circuit of claim 1, integrated into a device selected from the group consisting of: a set top box; an entertainment unit; a navigation device; a communications device; a fixed location data unit; a mobile location data unit; a global positioning system (GPS) device; a mobile phone; a cellular phone; a smart phone; a session initiation protocol (SIP) phone; a tablet; a phablet; a server; a computer; a portable computer; a mobile computing device; a wearable computing device; a desktop computer; a personal digital assistant (PDA); a monitor; a computer monitor; a television; a tuner; a radio; a satellite radio; a music player; a digital music player; a portable music player; a digital video player; a video player; a digital video disc (DVD) player; a portable digital video player; an automobile; a vehicle component; avionics systems; a drone; and a multicopter (see claim 9 of Reference Application).
+
+Regarding claim 8, the claim is rejected for the same reasons as claim 1, using claim 1 of the reference Application.
+
+Regarding claims 9-14, the claims are rejected for the same reasons as claims 1-6, using claims 11, 11, 13, 12, 14, and 18 of the Reference Application, respectively.
+
+Regarding claims 15-19, the claims are rejected for the same reasons as claims 1-2 and 4-6, using claims 19, 19, 20, 22, and 26 of the Reference Application, respectively
+
+This is a provisional nonstatutory double patenting rejection.
+
+Claim Rejections - 35 USC § 102
+The following is a quotation of the appropriate paragraphs of 35 U.S.C. 102 that form the basis for the rejections under this section made in this Office action:
+A person shall be entitled to a patent unless –
+
+(a)(1) the claimed invention was patented, described in a printed publication, or in public use, on sale, or otherwise available to the public before the effective filing date of the claimed invention.
+
+(a)(2) the claimed invention was described in a patent issued under section 151, or in an application for patent published or deemed published under section 122(b), in which the patent or application, as the case may be, names another inventor and was effectively filed before the effective filing date of the claimed invention.
+
+
+Claims 1-4, 7-12, and 15-17 FILLIN \* MERGEFORMAT are rejected under 35 U.S.C. 102(a)(1)/(a)(2) as being anticipated by O’Bleness et al. (US 8918625 B1).
+
+Regarding claim 1, O’Bleness teaches a dependency identifier circuit, comprising a store instruction queue comprising a plurality of entries (Figs. 1-2, Col. 5, lines 16-19, and Col. 6, lines 13-16: Dependency Tracking Unit 101 consists of dependency tracking structure 200 comprising a plurality of entries and holds store information. Dependency tracking unit as the dependency identifier circuit and the dependency tracking structure as the store instruction queue);
+the dependency identifier circuit configured to:
+detect a load instruction in the front end of the instruction processing circuit (Figs. 1 and 3, Col. 9, lines 48-51 and 59-61: Elements 101, 103-104, and 107-110 as the front end of the instruction processing circuit, where dependency tracking unit 101 is part of the front end. The load instruction detected is compared to a previously executed store instruction), wherein the load instruction comprises:
+a single load address register number mapped to a load physical register number (Col, 5, lines 6-11 and Col. 10, lines 15-24: Comparisons are done between a store instruction physical register number and a load instruction physical register number, therefore the load instructions executed comprise of the load physical register number. Load instructions are given physical register locations after the instruction is processed in the rename unit 107, therefore the register number provided by the load instruction prior to the rename unit as the load address register number); and
+a load immediate value (Col. 10, lines 15-24: Comparisons are done between a store immediate and a load immediate, therefore the load instructions executed comprise of the load physical register number);
+determine whether a first one or more entries of the store instruction queue store the load physical register number and the load immediate value (Col. 10, lines 15-24: A determination can be made by comparing one or more address operands such as comparing the base register (i.e., Src Register ID 204) and the immediate offset (i.e., immediate 205) to the load base register and load immediate offset); and
+responsive to determining that the first one or more entries of the store instruction queue store the load physical register number and the load immediate value:
+select an entry of the first one or more entries; and
+establish a dependency between the load instruction and a store instruction corresponding to the selected entry (Figs. 2-3 and Col. 10, lines 25-29: When a dependency is found, the entry of the store instruction establishes a dependency by initializing the dependent load vector 201 of the entry selected).
+
+Regarding claim 2, O’Bleness teaches the dependency identifier circuit of claim 1, further configured to, prior to detecting the load instruction:
+detect a store instruction in a front end of the instruction processing circuit (Figs. 1 and 3, Col. 9, lines 48-51: Elements 101, 103-104, and 107-110 as the front end of the instruction processing circuit, where dependency tracking unit 101 is part of the front end), wherein the store instruction comprises:
+a single store address register number mapped to a store physical register number (Figs. 1 and 2, Col, 5, lines 6-11, and Col 6, lines 58-61: Tracking structure 200 stores a physical register file ID (i.e., src register ID 204) of a store instruction, therefore the store instructions executed comprise of the store physical register number. Store instructions are given physical register locations after the instruction is processed in the rename unit 107, therefore the register number provided by the store instruction prior to the rename unit as the store address register number); and
+a store immediate value (Fig. 2 and Col. 7, lines 6-11: Tracking structure 200 stores an immediate value in the immediate field 205, therefore the store instructions executed comprise of the store immediate value); and
+write the store physical register number, the store immediate value, and an age indicator in an entry of the plurality of entries of the store instruction queue (Fig. 2, Col. 6, lines 47-63, and Col. 7, lines 6-11: Src Register ID 204 and immediate 206 are stored together as an entry in the dependency tracking unit. Src Register ID 204 as the physical register number. Entries may also store the reorder buffer index in Uop ID 203. Uop ID as the age indicator as the reorder buffer index indicates the age of an instruction when the reorder buffer index is compared to with other store instruction reorder buffer indexes. Additionally, paragraphs [0020, 0034] of the specification indicates that a reorder buffer index is an age indicator).
+
+Regarding claim 3, O’Bleness teaches the dependency identifier circuit of claim 1, wherein the age indicator comprises one of a reorder buffer index of the store instruction and a store unit identifier of the store instruction (Col. 6, lines 47-50: Uop ID 203 contains the reorder buffer index of the store instruction).  
+
+Regarding claim 4, O’Bleness teaches the dependency identifier circuit of claim 1, wherein the dependency identifier circuit is further configured to: 
+determine that execution of the store instruction has been initiated by the instruction processing circuit; and 
+responsive to determining that execution of the store instruction has been initiated, invalidate the entry of the store instruction queue corresponding to the store instruction (Col. 6, lines 41-46: When a store is scheduled for execution, the entry corresponding to the store instruction is invalidated).
+
+Regarding claim 7, O’Bleness teaches the processor device of claim 1, integrated into a device selected from the group consisting of: a set top box; an entertainment unit; a navigation device; a communications device; a fixed location data unit; a mobile location data unit; a global positioning system (GPS) device; a mobile phone; a cellular phone; a smart phone; a session initiation protocol (SIP) phone; a tablet; a phablet; a server; a computer; a portable computer; a mobile computing device; a wearable computing device; a desktop computer; a personal digital assistant (PDA); a monitor; a computer monitor; a television; a tuner; a radio; a satellite radio; a music player; a digital music player; a portable music player; a digital video player; a video player; a digital video disc (DVD) player; a portable digital video player; an automobile; a vehicle component; avionics systems; a drone; and a multicopter (Col. 12, lines 41-53: The processor described is implemented in a computer as the specification describes implementing the described systems in computer hardware). 
+
+Regarding claim 8, the claim recites a dependency identifier circuit similar to the dependency identifier circuit of claim 1. Therefore the claim is rejected on the same premises. 
+
+Regarding claims 9-12, the claims recite a method similar to the dependency identifier circuit of claims 1-4, respectively. Therefore the claims are rejected on the same premises. 
+
+Regarding claim 15, the claim is mostly rejected for the same reasons as claim 1. O’Bleness also teaches a non-transitory computer-readable medium, having stored thereon computer-executable instructions (Col 12, lines 41-53: “This can include at least one computer-readable medium embodying a program operable to cause one or more data processing apparatus to perform operations described”; in other words, the program contains computer-executable instructions to perform the operations as mentioned in the specification). 
+
+Regarding claims 16-17 the claims recite a non-transitory computer-readable medium similar to the processor device of claims 3-4, respectively. Therefore the claims are rejected on the same premises. 
+Claim Rejections - 35 USC § 103
+The following is a quotation of 35 U.S.C. 103 which forms the basis for all obviousness rejections set forth in this Office action:
+A patent for a claimed invention may not be obtained, notwithstanding that the claimed invention is not identically disclosed as set forth in section 102, if the differences between the claimed invention and the prior art are such that the claimed invention as a whole would have been obvious before the effective filing date of the claimed invention to a person having ordinary skill in the art to which the claimed invention pertains. Patentability shall not be negated by the manner in which the invention was made.
+
+Claims 5, 13, and 18  FILLIN \* MERGEFORMAT are rejected under 35 U.S.C. 103 as being unpatentable over O’Bleness et al. (US 8918625 B1) in view of Ayub et al. (US 20170351522 A1).
+
+Regarding claim 5, O’Bleness teaches the processor device of claim 1.
+O’Bleness does not teach that the dependency identifier circuit is further configured to determine that a pipeline flush has been initiated by the instruction processing circuit and in response to determining that the pipeline flush has been initiated, selectively invalidate a second one or more entries of the store instruction queue based on corresponding one or more age indicators of the second one or more entries.  
+Ayub teaches a dependency identifier circuit (Fig. 3 and [0071]: Load-hit-store table as the dependency identifier circuit) is configured to determine that a pipeline flush has been initiated by the instruction processing circuit and in response to determining that the pipeline flush has been initiated (Fig. 7 and [0071]: see Step 710), selectively invalidate a second one or more entries of the store instruction queue based on corresponding one or more age indicators of the second one or more entries (Figs 3 and 7, [0071]: “generating (708), within the entry for the particular store instruction in the load-hit-store table (302), an indication of invalidity”).  
+It would have been obvious to one of ordinary skill in the art before the effective filing date to have combined the teachings of O’Bleness with the teachings of Ayub to have invalidated the store entries after a flush. One of ordinary skill would recognize that store entries, being executed out-of-order, may not be valid in the case that a flush occurs. Therefore, it’s important to invalidate the entries to maintain memory consistency.
+
+Regarding claim 13, the claim recites a method similar to the processor device of claim 4. Therefore, the claim is rejected on the same premises. 
+
+Regarding claim 18, the claim recites a non-transitory computer-readable medium similar to the processor device of claim 4. Therefore, the claim is rejected on the same premises.
+
+Allowable Subject Matter
+Claim 6, 14, and 19 are objected to as being dependent upon a rejected base claim, but would be allowable, over the prior art, if rewritten in independent form including all of the limitations of the base claim and any intervening claims.
+
+The following is a statement of reasons for the indication of allowable subject matter: 
+Claims 6, 14, and 19 recite, among other things, the dependency identifier circuit configured to determine whether the first one or more entries of the store instruction queue store the load physical register number and the load immediate value in response to a determination that no prior occurrence of a read-after-write (RAW) hazard occurred as a result of out-of-order execution of the store instruction and the load instruction.
+The closest prior art, O’Bleness et al. (US 8918625 B1), fails to explicitly teach that the dependency identifier circuit is to store the load physical register number and the load immediate value in response to a determination that no prior occurrence of a read-after-write (RAW) hazard occurred as a result of out-of-order execution of the store instruction and the load instruction. O’Bleness stores the load physical register number and the load immediate value, but does not take into account on whether or not a prior occurrence of a RAW hazard has occurred.
+In the art, tracking instructions that causes a RAW hazard to occur is a common technique to maintain program order in out-of-order instruction execution (for example, see Wright in pertinent art section). However, it’s not common to specifically store both the load physical register number and load immediate value when identifying that no prior RAW hazard has occurred. Based on the configuration including that the dependency identifier circuit is “configured to determine whether the first one or more entries of the store instruction queue store the load physical register number and the load immediate value in response to a determination that no prior occurrence of a read-after-write (RAW) hazard occurred as a result of out-of-order execution of the store instruction and the load instruction”, the combination of features is considered to be allowable. 
+
+Conclusion
+The prior art made of record and not relied upon is considered pertinent to applicant's disclosure. 
+US 10838729 B1: Al-Otoom et al. teaches a load-store predictor, which determines whether a destination register of a load instruction and a source register of a store instruction match.
+US 7600097 B1: Wright et al. teaches to detect RAW hazards between objection identifiers and offsets of load and store instructions.
+Any inquiry concerning this communication or earlier communications from the examiner should be directed to FILLIN "Examiner name" \* MERGEFORMATEMILIO ALCANTARA-RAMOS whose telephone number is FILLIN "Phone number" \* MERGEFORMAT(571)272-4211. The examiner can normally be reached FILLIN "Work Schedule?" \* MERGEFORMATMon-Fri 8:30-5:00 PST.
+Examiner interviews are available via telephone, in-person, and video conferencing using a USPTO supplied web-based collaboration tool. To schedule an interview, applicant is encouraged to use the USPTO Automated Interview Request (AIR) at http://www.uspto.gov/interviewpractice.
+If attempts to reach the examiner by telephone are unsuccessful, the examiner’s supervisor, FILLIN "SPE Name?" \* MERGEFORMATJyoti Mehta can be reached at FILLIN "SPE Phone?" \* MERGEFORMAT(571)270-3995. The fax phone number for the organization where this application or proceeding is assigned is 571-273-8300.
+Information regarding the status of published or unpublished applications may be obtained from Patent Center. Unpublished application information in Patent Center is available to registered users. To file and manage patent submissions in Patent Center, visit: https://patentcenter.uspto.gov. Visit https://www.uspto.gov/patents/apply/patent-center for more information about Patent Center and https://www.uspto.gov/patents/docx for information about filing in DOCX format. For additional questions, contact the Electronic Business Center (EBC) at 866-217-9197 (toll-free). If you would like assistance from a USPTO Customer Service Representative, call 800-786-9199 (IN USA OR CANADA) or 571-272-1000.
+/E.A./Examiner, Art Unit 2183 
+
+
+
+/JYOTI MEHTA/ Supervisory Patent Examiner, Art Unit 2183 

@@ -1,0 +1,198 @@
+
+DETAILED ACTION
+The present application, filed on or after March 16, 2013, is being examined under the first inventor to file provisions of the AIA.
+Claims 1-20 have been examined.
+
+Priority
+Applicant’s claim for the benefit of a prior-filed application under 35 U.S.C. 119(a)-(e) or under 35 U.S.C. 120, 121, 365(c), or 386(c) is acknowledged. The instant application claims priority to U.S. Application 19/273,567 (now US Patent 12,596,673) filed July 18, 2025, which claims priority to US Provisional Application 63/673,459, filed July 19, 2024. 
+
+Information Disclosure Statement
+The Applicant's submission of the Information Disclosure Statement dated February 7, 2026 is acknowledged by the Examiner and the cited references have been considered in the examination of the claims now pending. A copy of the PTOL-1449 initialed and dated by the Examiner is attached to the instant office action. 
+
+Drawings
+The drawings are objected to because of the following informalities.
+The figures fail to include reference character 114, which is mentioned in the written description. The figures therefore fail to comply with 37 CFR 1.84(p)(5), which states, “Reference characters not mentioned in the description shall not appear in the drawings. Reference characters mentioned in the description must appear in the drawings.” (emphasis added) 
+Corrected drawing sheets in compliance with 37 CFR 1.121(d) are required in reply to the Office action to avoid abandonment of the application. Any amended replacement drawing sheet should include all of the figures appearing on the immediate prior version of the sheet, even if only one figure is being amended. The figure or figure number of an amended drawing should not be labeled as “amended.” If a drawing figure is to be canceled, the appropriate figure must be removed from the replacement sheet, and where necessary, the remaining figures must be renumbered and appropriate changes made to the brief description of the several views of the drawings for consistency. Additional replacement sheets may be necessary to show the renumbering of the remaining figures. Each drawing sheet submitted after the filing date of an application must be labeled in the top margin as either “Replacement Sheet” or “New Sheet” pursuant to 37 CFR 1.121(d). If the changes are not accepted by the examiner, the Applicant will be notified and informed of any required corrective action in the next Office action. The objection to the drawings will not be held in abeyance.
+
+Claim Rejections - 35 USC § 112
+The following is a quotation of 35 U.S.C. 112(b):
+(b) CONCLUSION.—The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the inventor or a joint inventor regards as the invention.
+
+
+The following is a quotation of 35 U.S.C. 112 (pre-AIA), second paragraph:
+The specification shall conclude with one or more claims particularly pointing out and distinctly claiming the subject matter which the applicant regards as his invention.
+
+
+Claims 1-15 are rejected under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), second paragraph, as being indefinite for failing to particularly point out and distinctly claim the subject matter which the inventor or a joint inventor, or for pre-AIA the Applicant regards as the invention.
+Claim 1 recites, at line 16, “storing at each processing element, a result.” This limitation is ambiguous. The limitation could refer to either “each processing element in the processing array,” or “each processing element within the patch region.” For purposes of examination, this limitation is interpreted as, “storing at each processing element within the patch region, a result.”
+Claims 2-15 are rejected as depending from rejected base claims and failing to cure the indefiniteness of those base claims.
+
+Claim Rejections - 35 USC § 103
+The following is a quotation of 35 U.S.C. 103 which forms the basis for all obviousness rejections set forth in this Office action:
+A patent for a claimed invention may not be obtained, notwithstanding that the claimed invention is not identically disclosed as set forth in section 102, if the differences between the claimed invention and the prior art are such that the claimed invention as a whole would have been obvious before the effective filing date of the claimed invention to a person having ordinary skill in the art to which the claimed invention pertains. Patentability shall not be negated by the manner in which the invention was made.
+
+Claims 1-4, 7, 12, 13, and 16-20 are rejected under 35 U.S.C. 103 as being unpatentable over NPL “On upercomputing with Systolic/Wavefront Array Processors,” by Kung (hereinafter referred to as “Kung”) in view of US Publication No. 2022/0374288 by Kibardin et al. (hereinafter referred to as “Kibardin”). 
+Regarding claim 1, Kung discloses:
+a method for directional operand distribution and execution within a processing array of an integrated circuit comprising a plurality of processing elements arranged in a two-dimensional topology, the method comprising (Kung discloses, at Figure 19 and related description, a 2D array of processing elements.): 
+…designating…an origin processing element (Kung discloses, at Figure 19 and related description, processing starts with PE (1,1), which discloses designating an origin element.); 
+broadcasting, from the origin processing element, operand data … in a directionally constrained propagation pattern such that …(Kung discloses, at Figure 19 and related description, computation activity propagates to neighboring PEs, which discloses being directionally constrained.): 
+propagation of the operand data between adjacent processing elements occurs with a deterministic inter-element latency (Kung discloses, at Figure 19 and related description, computation activity propagates according to a fixed unit of time, i.e., Δ.), and 
+an arrival time of the operand data at each processing element … is a function of a topological distance between the processing element and the origin processing element (Kung discloses, at Figure 19 and related description, computation activity propagates according to the propagation and arithmetic operation times.); 
+triggering, at each processing element…, execution of a multiply-accumulate operation in response to receipt of the operand data (Kung discloses, at § VI.A.1. on p. 878, that operations are executed only when the operands are available. As disclosed at Figure 19 and related description, the operations can be multiply and accumulate.); and 
+storing, at each processing element, a result of the multiply-accumulate operation in a local accumulation storage structure (Kung discloses, at Figure 22 and related description, I/O buffers, which discloses storing input and output, i.e., operands and results.), 
+wherein …operand propagation is restricted …and does not require global broadcast across the processing array (Kung discloses, at Figure 19 and related description, propagating operands to the nearest neighbors, which does not require global broadcast.).
+Kung does not explicitly disclose defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elements, the aforementioned defining and triggering are within the patch region, the patch region is spatially confined relative to the processing array, and the aforementioned propagating is to the selected subset of processing elements.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elements (Kibardin discloses, at Figure 36 and related description, defining subsets of PEs to which various kernels are mapped, which discloses restricting propagation and processing to the respective subsets. Kibardin also discloses, at Figure 1 and related description, a placement server, which is understood to perform the placement operations, including defining the subsets, i.e., regions.); 
+designating PEs within the patch region and the patch region is spatially confined relative to the processing array such that propagation is to the selected subset of processing elements (Kibardin discloses, at Figure 14 and related description, a transmitting PE transmits data to neighboring PEs. Such transmission is limited to specific PEs, i.e., those that have the same color, or virtual channel. This discloses restricting transmission to the selected subset.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption.
+
+Regarding claim 2, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+the deterministic inter-element latency corresponds to a Manhattan distance between the origin processing element and each respective processing element within the patch region, such that operand data propagates outward from the origin processing element in a wavefront pattern across rows and columns of the patch region (Kung discloses, at Figure 19 and related description, the time it takes to reach any given PE is a function of the number of horizontal and vertical hops needed to get there from the originating PE, i.e., the Manhattan distance.).
+
+Regarding claim 3, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung does not explicitly disclose propagation of the operand data between adjacent processing elements is restricted in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+propagation of the operand data between adjacent processing elements is restricted in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region (Kibardin discloses, at Figure 36 and related description, allocating specific regions to specific kernels specified by the number of PEs in the row and column directions.. This discloses restricting data transmission in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve power consumption by preventing data from being transmitted to PEs that do not need the data.
+
+Regarding claim 4, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+staging the operand data …at one or more processing elements to temporally align arrival of the operand data with availability of a source operand for the multiply-accumulate operation (Kung discloses, at § V.C. on page 878, using delay to ensure that transfers are synchronized, which discloses staging operand data to temporally align operands for the multiply-accumulate operation.).
+Kung does not explicitly disclose using a patch-local first-in-first-out (FIFO) buffer.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+delay buffers and FIFOs (Kibardin discloses, at Figure 46C and related region specific buffers. Kibardin also discloses, at ¶ [0731, FIFOs.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include region specific buffers and implementing the buffers using FIFOs, because distributing memory among the regions improves efficiency by reducing transmission and access delays, and FIFOs are ubiquitous as simple and efficient buffer structures.
+
+Regarding claim 7, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+generating, at one or more processing elements …feedback data responsive to execution of the multiply-accumulate operation (Kung discloses, at § VI.A. on pp.878- 879, generating and propagating feedback information on a distinct pathway.), and 
+propagating the feedback data from the one or more processing elements to the origin processing element along a feedback pathway that is distinct from a propagation pathway used for broadcasting the operand data (Kung discloses, at § VI.A. on pp.878- 879, generating and propagating feedback information on a distinct pathway.).
+Kung does not explicitly disclose a patch region.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+a patch region comprising a selected subset of the plurality of processing elements (Kibardin discloses, at Figure 36 and related description, defining subsets of PEs to which various kernels are mapped, which discloses restricting propagation and processing to the respective subsets.). 
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption.
+
+Regarding claim 12, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+determining a …cycle count value that defines a number of execution cycles allocated for operand propagation and multiply-accumulate execution…, wherein the …cycle count value is computed as a function of at least …size and …depth (Kung discloses, at Figure 19 and related description, that the cycle count is a function of the number of PEs, i.e., the size of the array.).
+Kung does not explicitly disclose the aforementioned cycle count is for the patch. 
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+propagation of the operand data between adjacent processing elements is restricted in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region (Kibardin discloses, at Figure 36 and related description, allocating specific regions to specific kernels specified by the number of PEs in the row and column directions.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve power consumption by preventing data from being transmitted to PEs that do not need the data.
+
+Regarding claim 13, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung does not explicitly disclose defining a second patch region comprising a second subset of the plurality of processing elements, and forwarding operand data or intermediate accumulation results from the patch region to the second patch region to execute a patch-chained sequence of multiply-accumulate operations without storing the operand data or the intermediate accumulation results to off-array memory.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+defining a second patch region comprising a second subset of the plurality of processing elements, and forwarding operand data or intermediate accumulation results from the patch region to the second patch region to execute a patch-chained sequence of multiply-accumulate operations without storing the operand data or the intermediate accumulation results to off-array memory (Kibardin discloses, at Figure 39, multiple regions and communicating data between the regions, which discloses doing so without storing the data to off-array memory.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption. 
+
+Regarding claim 16, Kung discloses: 
+a system comprising: an integrated circuit including a processing array comprising a plurality of processing elements arranged in a two-dimensional topology (Kung discloses, at Figure 19 and related description, a 2D array of processing elements.); 
+a configuration controller operable to …designate an origin processing element within the patch region (Kung discloses, at Figure 19 and related description, processing starts with PE (1,1), which discloses designating an origin element.); 
+an interconnect fabric coupling the plurality of processing elements, the interconnect fabric configured to propagate operand data from the origin processing element to other processing elements …in a directionally constrained propagation pattern such that propagation between adjacent processing elements occurs with a deterministic inter-element latency (Kung discloses, at Figure 19 and related description, computation activity propagates to neighboring PEs, which discloses being an interconnect fabric and being directionally constrained. Kung also discloses, at Figure 19 and related description, computation activity propagates according to a fixed unit of time, i.e., Δ.); 
+a multiply-accumulate unit within each processing element …, the multiply-accumulate unit configured to execute a multiply-accumulate operation in response to receipt of the operand data (Kung discloses, at § VII.B. and Figure 22 and related description, performing multiply and accumulation and storing the results, which discloses a multiply and accumulate unit and accumulation storage structure. Kung also discloses, at § VI.A.1. on p. 878, that operations are executed only when the operands are available.); and 
+a local accumulation storage structure within each processing element configured to store a result of the multiply-accumulate operation, wherein an arrival time of the operand data at each processing element … is a function of a topological distance between the processing element and the origin processing element, and wherein propagation of the operand data … without requiring global broadcast across the processing array (Kung discloses, at § VII.B. and Figure 22 and related description, performing multiply and accumulation and storing the results, which discloses a multiply and accumulate unit and accumulation storage structure. Kung discloses, at Figure 19 and related description, computation activity propagates according to the propagation and arithmetic operation times, which discloses being a function of topological distance. Kung also discloses, at Figure 19 and related description, propagating operands to the nearest neighbors, which does not require global broadcast. .).
+Kung does not explicitly disclose defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elementsthe patch region is spatially confined relative to the processing array, and the aforementioned propagating is to the selected subset of processing elements.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elements (Kibardin discloses, at Figure 36 and related description, defining subsets of PEs to which various kernels are mapped, which discloses restricting propagation and processing to the respective subsets. Kibardin also discloses, at Figure 1 and related description, a placement server, which is understood to perform the placement operations, including defining the subsets, i.e., regions.); 
+designating PEs within the patch region and the patch region is spatially confined relative to the processing array such that propagation is to the selected subset of processing elements (Kibardin discloses, at Figure 14 and related description, a transmitting PE transmits data to neighboring PEs. Such transmission is limited to specific PEs, i.e., those that have the same color, or virtual channel. This discloses restricting transmission to the selected subset.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption.
+
+Regarding claim 17, Kung, as modified, discloses the elements of claim 16, as discussed above. Kung also discloses:
+the deterministic inter-element latency corresponds to a Manhattan distance between the origin processing element and each respective processing element within the patch region, such that operand data propagates outward from the origin processing element in a wavefront pattern across rows and columns of the patch region (Kung discloses, at Figure 19 and related description, the time it takes to reach any given PE is a function of the number of horizontal and vertical hops needed to get there from the originating PE, i.e., the Manhattan distance.).
+
+Regarding claim 18, Kung, as modified, discloses the elements of claim 16, as discussed above. Kung also discloses:
+Kung does not explicitly disclose the configuration controller is further operable to define a directional wall configuration parameter that restricts propagation of the operand data between adjacent processing elements in one or more cardinal directions within the patch region.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+propagation of the operand data between adjacent processing elements is restricted in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region (Kibardin discloses, at Figure 36 and related description, allocating specific regions to specific kernels specified by the number of PEs in the row and column directions.. This discloses restricting data transmission in one or more cardinal directions according to a directional wall configuration parameter that defines active propagation boundaries within the patch region.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve power consumption by preventing data from being transmitted to PEs that do not need the data.
+
+Regarding claim 19, Kung, as modified, discloses the elements of claim 16, as discussed above. Kung also discloses:
+each processing element … further comprises … first-in-first-out (FIFO) buffer configured to stage received operand data and temporally align execution of the multiply-accumulate operation with availability of a source operand (Kung discloses, at § V.C. on page 878, using delay to ensure that transfers are synchronized, which discloses staging operand data to temporally align operands for the multiply-accumulate operation.).
+Kung does not explicitly disclose using a patch-local first-in-first-out (FIFO) buffer.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+delay buffers and FIFOs (Kibardin discloses, at Figure 46C and related region specific buffers. Kibardin also discloses, at ¶ [0731, FIFOs.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include region specific buffers and implementing the buffers using FIFOs, because distributing memory among the regions improves efficiency by reducing transmission and access delays, and FIFOs are ubiquitous as simple and efficient buffer structures.
+
+Regarding claim 20, Kung discloses:
+a method for spatially distributing operand data within a processing array of an integrated circuit comprising a plurality of processing elements arranged in a two-dimensional topology, the method comprising (Kung discloses, at Figure 19 and related description, a 2D array of processing elements.): 
+…designating …an origin processing element (Kung discloses, at Figure 19 and related description, processing starts with PE (1,1), which discloses designating an origin element.); 
+broadcasting operand data from the origin processing element …in a directionally constrained propagation pattern such that …(Kung discloses, at Figure 19 and related description, computation activity propagates to neighboring PEs, which discloses being directionally constrained.): 
+propagation of the operand data between adjacent processing elements occurs with a deterministic inter-element latency (Kung discloses, at Figure 19 and related description, computation activity propagates according to a fixed unit of time, i.e., Δ.); and 
+an arrival time of the operand data at each processing element …is a function of a topological distance between the processing element and the origin processing element (Kung discloses, at Figure 19 and related description, computation activity propagates according to the propagation and arithmetic operation times.); 
+storing, at each of one or more processing elements …the operand data in local memory of the respective processing element without performing a multiply-accumulate operation on the operand data (Kung discloses, at Figure 22 and related description, I/O buffers, which discloses storing input and output, i.e., operands. Doing so does not require performing a multiply and accumulate operation on the operand data), 
+wherein propagation of the operand data … does not require global broadcast across the processing array (Kung discloses, at Figure 19 and related description, propagating operands to the nearest neighbors, which does not require global broadcast.).
+Kung does not explicitly disclose defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elements, the aforementioned defining is within the patch region, the patch region is spatially confined relative to the processing array, and the aforementioned propagating is to the selected subset of processing elements.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+defining, by a configuration controller, a patch region comprising a selected subset of the plurality of processing elements (Kibardin discloses, at Figure 36 and related description, defining subsets of PEs to which various kernels are mapped, which discloses restricting propagation and processing to the respective subsets. Kibardin also discloses, at Figure 1 and related description, a placement server, which is understood to perform the placement operations, including defining the subsets, i.e., regions.); 
+designating PEs within the patch region and the patch region is spatially confined relative to the processing array such that propagation is to the selected subset of processing elements (Kibardin discloses, at Figure 14 and related description, a transmitting PE transmits data to neighboring PEs. Such transmission is limited to specific PEs, i.e., those that have the same color, or virtual channel. This discloses restricting transmission to the selected subset.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption. 
+
+Claim 5 is rejected under 35 U.S.C. 103 as being unpatentable over Kung in view of Kibardin in view of US Publication No. 2013/0024666 by Lee et al. (hereinafter referred to as “Lee”)
+Regarding claim 5, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+storing the result of the multiply-accumulate operation comprises writing the result… (Kung discloses, at Figure 19 and related description, performing multiply and accumulate operations, which discloses storing results.).
+Kung does not explicitly disclose the aforementioned storing is into a ping-pong buffer comprising a first result register and a second result register that are alternately selected for storing successive multiply-accumulate results.
+However, in the same field of endeavor (e.g., processing) Lee discloses:
+ping-pong registers (Lee discloses, at Figure 1 and related description, ping-pong registers.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include ping-pong registers, as taught by Lee, for storing results in order to improve efficiency and power consumption. See Lee, ¶ [0004].
+
+Claim 6 is rejected under 35 U.S.C. 103 as being unpatentable over Kung in view of Kibardin in view of US Publication No. 2024/0220448 by Mei et al. (hereinafter referred to as “Mei”).
+Regarding claim 6, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung also discloses:
+inserting, during propagation of the operand data or execution of the multiply-accumulate operation, a programmable pause interval having a duration defined by a pause count value… (Kung discloses, at § VI.A-B. on pp.878- 879, using separators to synchronize data flow, which discloses inserting, during propagation of the operand data or execution of the multiply-accumulate operation, a programmable pause interval having a duration defined by a pause count value.). 
+Kung does not explicitly disclose the aforementioned pause count is stored in a control register.
+However, in the same field of endeavor (e.g., processing) Mei discloses:
+storing configuration information in a control register (Mei discloses, at ¶ [0309], controlling processor operation using information stored in a control register.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include control registers, as disclosed by Mei, in order to provide a simple and efficient mechanism to locate and utilize control information.
+
+Claim 8 is rejected under 35 U.S.C. 103 as being unpatentable over Kung in view of Kibardin in view of US Publication No. 2022/0207358 by Nimmagadda et al. (hereinafter referred to as “Nimmagadda”).
+Regarding claim 8, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung does not explicitly disclose applying a zero-point correction to the operand data or to the result of the multiply-accumulate operation using a zero-point adjustment value stored in a programmable register, wherein the zero-point adjustment value corresponds to an asymmetric quantization parameter associated with the operand data.
+However, in the same field of endeavor (e.g., processing) Nimmagadda discloses:
+storing zero-point values in local memory (Nimmagadda discloses, at ¶ [0011], storing quantization parameters, including zero-point values, in local memory. Storing implicitly discloses applying the parameters. As disclosed at ¶ [0012], memory encompasses registers.) 
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include using zero-point values in quantization, as disclosed by Nimmagadda, in order to improve performance by enabling faster computation and lower power consumption due to reduced precision operands.
+
+Claim 9 is rejected under 35 U.S.C. 103 as being unpatentable over Kung in view of Kibardin in view of US Publication No. 2019/0018815 by Fleming et al. (hereinafter referred to as “Fleming”). 
+Regarding claim 9, Kung, as modified, discloses the elements of claim 1, as discussed above. Kung does not explicitly disclose the patch region comprises an irregular or sparse shape formed by configuring at least one processing element within the patch region in a data-passing mode that forwards the operand data to a downstream processing element while disabling execution of the multiply-accumulate operation at the at least one processing element.
+However, in the same field of endeavor (e.g., PE arrays) Kibardin discloses:
+patch regions having various shapes (Kibardin discloses, at Figure 36, regions of various shapes.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include forming subsets and related features, as disclosed by Kibardin, in order to improve utilization and power consumption. Dividing the array into subsets improves utilization allows PEs that might otherwise be unused by a kernel to work on other kernels. Also, limiting the transmission of data to only those PEs that will actually use it improves, i.e., reduces, power consumption.
+However, in the same field of endeavor (e.g., processing) Fleming discloses:
+bypassing elements by forwarding data to downstream elements (Fleming discloses, at ¶ [0228], forwarding data to downstream elements using bypass routes. This would result in sparse or irregular shaped partitions due to disabling the bypassed elements.).
+It would have been obvious to a person having ordinary skill in the art before the effective filing date of the claimed invention to modify Kung to include bypassing nodes, as disclosed by Fleming, in order to efficiently implement sparse matrix algebra. Id.
+
+Allowable Subject Matter
+Claims 10, 11, 14, and 15 would be allowable if rewritten to overcome the rejection(s) under 35 U.S.C. 112(b) or 35 U.S.C. 112 (pre-AIA), 2nd paragraph, set forth in this Office action and to include all of the limitations of the base claim and any intervening claims.
+
+Conclusion
+The following prior art made of record and not relied upon is considered pertinent to Applicant’s disclosure.
+US 20210150770 by Appu discloses bypassing elements in an array based on sparsity.
+US 20220413924 by Parra discloses bypassing sparse operations.
+US 20120079340 by Gunnam discloses ping-pong buffer for outputs.
+US 20190102179 by Fleming discloses configuring subsets of PEs. 
+US 20210019591 by Venkatesh discloses splitting an array of PEs into groups.
+US 20240078182 by Foley discloses subarrays. 
+US 11625453 by Meyer discloses subarrays. 
+US 11422773 by Volpe discloses subarrays. 
+US 20250292354 by Fu discloses selective broadcast. 
+US 20220366010 by Simpson discloses Manhattan distance, MACs, dataflow.
+US 20240020265 by Fu discloses Manhattan distance, predetermined latency. 
+US 20190057060 by Nicol discloses Manhattan distance, clusters of PEs. 
+US 20180181503 by Nicol discloses Manhattan distance, FIFOs, sleep mode.
+US 20170364473 by Singh discloses Manhattan distance, cycle counters, clusters.
+US 20170083313 by Sankaralingam discloses Manhattan distance, dataflow.
+US 20250307345 by Greig discloses Manhattan distance, MAC, dataflow.
+US 11500802 by Xu discloses wavefront shifting.
+US 20250390723 by Fortkort discloses quantization parameters including zero-point.
+US 20230139347 by Bondarenko discloses quantization parameters including zero-point.
+US 20220100575 by Lee discloses virtual groups of PEs.
+NPL_Firuzan discloses reconfiguring a data flow accelerator into subsets. 
+NPL_Zhang discloses different shaped subsets.
+
+Any inquiry concerning this communication or earlier communications from the examiner should be directed to FILLIN "Examiner name" \* MERGEFORMATSHAWN DOMAN whose telephone number is FILLIN "Phone number" \* MERGEFORMAT(571)270-5677. The examiner can normally be reached on FILLIN "Work schedule?" \* MERGEFORMATMonday through Friday 8:30am-6pm Eastern Time.
+If attempts to reach the examiner by telephone are unsuccessful, the examiner’s supervisor, Jyoti Mehta can be reached on FILLIN "SPE Phone?" \* MERGEFORMAT571-270-3995. The fax phone number for the organization where this application or proceeding is assigned is 571-273-8300.
+Information regarding the status of published or unpublished applications may be obtained from Patent Center. Unpublished application information in Patent Center is available to registered users. To file and manage patent submissions in Patent Center, visit: https://patentcenter.uspto.gov. Visit https://www.uspto.gov/patents/apply/patent-center for more information about Patent Center and https://www.uspto.gov/patents/docx for information about filing in DOCX format. For additional questions, contact the Electronic Business Center (EBC) at 866-217-9197 (toll-free). If you would like assistance from a USPTO Customer Service Representative, call 800-786-9199 (IN USA OR CANADA) or 571-272-1000.
+
+/SHAWN DOMAN/Primary Examiner, Art Unit 2183 
+
+
+
+
+
+
+
+

@@ -57,14 +57,19 @@ def draft_response(
     claim_texts: dict[int, str] | None = None,
     mpep_context: dict[int, str] | None = None,
     llm: LLMClient | None = None,
+    data_class=None,
 ) -> ResponseDraft:
     """Produce a per-claim response draft.
 
     ``claim_texts`` and ``mpep_context`` supply the retrieved context per claim number; when
     omitted, placeholders are used (the model will report INSUFFICIENT_CONTEXT for missing parts).
+    ``data_class`` controls the compliance routing guard (defaults to CLIENT).
     """
+    from src.config.data_classification import DataClass
+
     claim_texts = claim_texts or {}
     mpep_context = mpep_context or {}
+    dc = data_class if data_class is not None else DataClass.CLIENT
     llm = llm or LLMClient()
 
     arguments: list[ResponseArgument] = []
@@ -76,11 +81,11 @@ def draft_response(
 
         if strategy in ("argue", "both"):
             arguments.append(
-                _argue(llm, rejection, claim_text, refs, mpep_context)
+                _argue(llm, rejection, claim_text, refs, mpep_context, dc)
             )
         if strategy in ("amend", "both"):
             arguments.append(
-                _amend(llm, rejection, claim_text, refs)
+                _amend(llm, rejection, claim_text, refs, dc)
             )
 
     return ResponseDraft(
@@ -91,7 +96,7 @@ def draft_response(
     )
 
 
-def _argue(llm, rejection, claim_text, refs, mpep_context) -> ResponseArgument:
+def _argue(llm, rejection, claim_text, refs, mpep_context, data_class=None) -> ResponseArgument:
     prompt = DRAFT_RESPONSE_ARGUMENT
     mpep = mpep_context.get(rejection.claim_number, "")
     mpep_block = f"<mpep>\n{mpep}\n</mpep>" if mpep else "<mpep>(none retrieved)</mpep>"
@@ -103,7 +108,7 @@ def _argue(llm, rejection, claim_text, refs, mpep_context) -> ResponseArgument:
         reference_blocks=refs,
         mpep_blocks=mpep_block,
     )
-    data = llm.complete_json(prompt.system, user)
+    data = llm.complete_json(prompt.system, user, data_class=data_class)
     return ResponseArgument(
         claim_number=rejection.claim_number,
         rejection_basis=rejection.rejection_basis,
@@ -114,7 +119,7 @@ def _argue(llm, rejection, claim_text, refs, mpep_context) -> ResponseArgument:
     )
 
 
-def _amend(llm, rejection, claim_text, refs) -> ResponseArgument:
+def _amend(llm, rejection, claim_text, refs, data_class=None) -> ResponseArgument:
     prompt = SUGGEST_AMENDMENTS
     user = prompt.render(
         claim_number=rejection.claim_number,
@@ -122,7 +127,7 @@ def _amend(llm, rejection, claim_text, refs) -> ResponseArgument:
         specification_support="(specification not retrieved)",
         reference_blocks=refs,
     )
-    data = llm.complete_json(prompt.system, user)
+    data = llm.complete_json(prompt.system, user, data_class=data_class)
     return ResponseArgument(
         claim_number=rejection.claim_number,
         rejection_basis=rejection.rejection_basis,

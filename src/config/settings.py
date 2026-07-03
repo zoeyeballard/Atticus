@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     gemini_generation_model: str = Field(default="gemini-2.5-flash")
     gemini_verification_model: str = Field(default="gemini-2.5-flash-lite")
 
+    # Provider tier — determines whether the provider may train on inputs (compliance guard).
+    # Conservative default: 'free' (blocks CLIENT/PRIVILEGED data from training-enabled tiers).
+    llm_tier: str = Field(default="free", description="free | paid | api | enterprise")
+
     # --- Database ---
     database_url: str = Field(
         default="postgresql://atticus:atticus_dev@localhost:5432/atticus",

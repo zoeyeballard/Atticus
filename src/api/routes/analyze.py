@@ -7,9 +7,11 @@ import logging
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, model_validator
 
+from src.config.data_classification import DataClass
 from src.data import office_action_parser
 from src.data.uspto_client import USPTOClient, USPTOError
 from src.db.repositories import AuditEvent, get_repository
+from src.generation.llm_client import DataClassificationError
 from src.models.schemas import OfficeActionAnalysis, VerificationReport
 from src.verification import hallucination_detector
 
@@ -58,14 +60,32 @@ def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
             status = 404 if "No office action" in msg else 502
             raise HTTPException(status, f"USPTO fetch failed: {exc}") from exc
 
-    analysis = office_action_parser.parse(text, application_number=req.application_number)
+    # Published applications are PUBLIC data; anything else is treated as CLIENT for the routing
+    # guard (a training-enabled provider tier will refuse CLIENT data).
+    data_class = DataClass.PUBLIC if publication_verified else DataClass.CLIENT
+    try:
+        analysis = office_action_parser.parse(
+            text, application_number=req.application_number, data_class=data_class
+        )
+        verification = hallucination_detector.verify_output(
+            analysis.raw_text or text, data_class=data_class
+        )
+    except DataClassificationError as exc:
+        raise HTTPException(
+            403,
+            {
+                "error": {
+                    "code": "PROVIDER_NOT_PERMITTED_FOR_CLIENT_DATA",
+                    "message": str(exc),
+                    "suggestion": "Switch to a no-training provider in Settings "
+                    "(Anthropic, or Gemini paid tier) before analyzing client data.",
+                }
+            },
+        ) from exc
 
     repo = get_repository()
     analysis_id = repo.save_analysis(analysis, publication_verified=publication_verified)
     repo.append_audit(analysis_id, AuditEvent(step="generated", payload={"source": "analyze"}))
-
-    # Verify the structured analysis text (sources passed in would tighten this further).
-    verification = hallucination_detector.verify_output(analysis.raw_text or text)
     repo.append_audit(
         analysis_id,
         AuditEvent(step="verified", payload={"confidence": verification.overall_confidence}),

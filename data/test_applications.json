@@ -210,5 +210,60 @@
     "oa_text_file": "data/sample_office_actions/19025078_oa.txt",
     "oa_chars": 52117,
     "latest_oa_code": "CTNF"
+  },
+  {
+    "application_number": "19551719",
+    "art_unit": "2183",
+    "examiner": "DOMAN, SHAWN",
+    "latest_oa_code": "CTNF",
+    "rejection_type": "non-final",
+    "oa_text_file": "data/sample_office_actions/19551719_oa.txt",
+    "oa_chars": 38224,
+    "held_out": true,
+    "ground_truth": "pending"
+  },
+  {
+    "application_number": "19439169",
+    "art_unit": "2183",
+    "examiner": "HUISMAN, DAVID J",
+    "latest_oa_code": "CTNF",
+    "rejection_type": "non-final",
+    "oa_text_file": "data/sample_office_actions/19439169_oa.txt",
+    "oa_chars": 24013,
+    "held_out": true,
+    "ground_truth": "pending"
+  },
+  {
+    "application_number": "19290425",
+    "art_unit": "2183",
+    "examiner": "HUISMAN, DAVID J",
+    "latest_oa_code": "CTNF",
+    "rejection_type": "non-final",
+    "oa_text_file": "data/sample_office_actions/19290425_oa.txt",
+    "oa_chars": 35319,
+    "held_out": true,
+    "ground_truth": "pending"
+  },
+  {
+    "application_number": "19211434",
+    "art_unit": "2183",
+    "examiner": "ALCANTARA-RAMOS, EMILIO",
+    "latest_oa_code": "CTNF",
+    "rejection_type": "non-final",
+    "oa_text_file": "data/sample_office_actions/19211434_oa.txt",
+    "oa_chars": 37500,
+    "held_out": true,
+    "ground_truth": "pending"
+  },
+  {
+    "application_number": "19170096",
+    "art_unit": "2183",
+    "examiner": "SUN, MICHAEL",
+    "latest_oa_code": "CTNF",
+    "rejection_type": "non-final",
+    "oa_text_file": "data/sample_office_actions/19170096_oa.txt",
+    "oa_chars": 49948,
+    "held_out": true,
+    "ground_truth": "pending"
   }
 ]

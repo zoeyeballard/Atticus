@@ -1,0 +1,274 @@
+
+Notice of Pre-AIA or AIA Status
+The present application, filed on or after March 16, 2013, is being examined under the first inventor to file provisions of the AIA.
+DETAILED ACTION
+Status of the Application
+This Office Action is in response to Applicant’s Continuation filed on 4/04/2025.
+Claims 1-20 are pending for this examination.
+
+Information Disclosure Statement
+The information disclosure statements (IDSs) submitted on 4/04/2025; and 5/08/2025 are in compliance with the provisions of 37 CFR 1.97. Accordingly, the information disclosure statements are being considered by the examiner.
+
+Obvious-Type Double Patenting
+The nonstatutory double patenting rejection is based on a judicially created doctrine grounded in public policy (a policy reflected in the statute) so as to prevent the unjustified or improper timewise extension of the “right to exclude” granted by a patent and to prevent possible harassment by multiple assignees. A nonstatutory double patenting rejection is appropriate where the conflicting claims are not identical, but at least one examined application claim is not patentably distinct from the reference claim(s) because the examined application claim is either anticipated by, or would have been obvious over, the reference claim(s). See, e.g., In re Berg, 140 F.3d 1428, 46 USPQ2d 1226 (Fed. Cir. 1998); In re Goodman, 11 F.3d 1046, 29 USPQ2d 2010 (Fed. Cir. 1993); In re Longi, 759 F.2d 887, 225 USPQ 645 (Fed. Cir. 1985); In re Van Ornum, 686 F.2d 937, 214 USPQ 761 (CCPA 1982); In re Vogel, 422 F.2d 438, 164 USPQ 619 (CCPA 1970); In re Thorington, 418 F.2d 528, 163 USPQ 644 (CCPA 1969).
+A timely filed terminal disclaimer in compliance with 37 CFR 1.321(c) or 1.321(d) may be used to overcome an actual or provisional rejection based on nonstatutory double patenting provided the reference application or patent either is shown to be commonly owned with the examined application, or claims an invention made as a result of activities undertaken within the scope of a joint research agreement. See MPEP § 717.02 for applications subject to examination under the first inventor to file provisions of the AIA as explained in MPEP § 2159. See MPEP § 2146 et seq. for applications not subject to examination under the first inventor to file provisions of the AIA. A terminal disclaimer must be signed in compliance with 37 CFR 1.321(b). 
+The filing of a terminal disclaimer by itself is not a complete reply to a nonstatutory double patenting (NSDP) rejection. A complete reply requires that the terminal disclaimer be accompanied by a reply requesting reconsideration of the prior Office action. Even where the NSDP rejection is provisional the reply must be complete. See MPEP § 804, subsection I.B.1. For a reply to a non-final Office action, see 37 CFR 1.111(a). For a reply to final Office action, see 37 CFR 1.113(c). A request for reconsideration while not provided for in 37 CFR 1.113(c) may be filed after final for consideration. See MPEP §§ 706.07(e) and 714.13.
+The USPTO Internet website contains terminal disclaimer forms which may be used. Please visit www.uspto.gov/patent/patents-forms. The actual filing date of the application in which the form is filed determines what form (e.g., PTO/SB/25, PTO/SB/26, PTO/AIA/25, or PTO/AIA/26) should be used. A web-based eTerminal Disclaimer may be filled out completely online using web-screens. An eTerminal Disclaimer that meets all requirements is auto-processed and approved immediately upon submission. For more information about eTerminal Disclaimers, refer to www.uspto.gov/patents/apply/applying-online/eterminal-disclaimer.
+
+Claims 1, 8, 15-16 and 20 are rejected on the ground of nonstatutory double patenting as being unpatentable over claims 1, 3, 4, 6, 14-15, and 20 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471). Although the claims at issue are not identical, they are not patentably distinct from each other because claims 1, 8, 15-16 and 20 of instant Application, respectively contains every element of claims 1, 3, 4, 6, 14-15 and 20 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471), as listed below, with differences between the claims underlined, and as such the instant claims are anticipated by the already patented claims of U.S. Patent No. 12,293,229 (parent application no. 17/900,471):
+Claims
+Instant Claims (rearranged for better side-by-side comparison)
+Claims
+U.S. Patent No. 12,293,229 (parent application no. 17/900,471)
+Independent claim 1
+An artificial intelligence (AI) accelerator device, comprising: 
+a processing element array, comprising: 
+a plurality of columns of processing element circuits; and 
+a plurality of rows of processing element circuits; and 
+a plurality of accumulator buffers associated with the processing element array, 
+wherein the plurality of accumulator buffers are associated with respective subsets of columns of the plurality of columns of processing element circuits.
+Independent claim 1 with dependent claims 3, 4, and 6
+1. An artificial intelligence (AI) accelerator device, comprising: 
+a processing element array, comprising: 
+a plurality of columns of processing element circuits; and 
+a plurality of rows of processing element circuits; 
+a plurality of weight buffers associated with the processing element array, 
+wherein the plurality of weight buffers are associated with respective subsets of columns of the plurality of columns of processing element circuits of the processing element array; and 
+a weight buffer multiplexer circuit coupled with each weight buffer of the plurality of weight buffers.
+3. The AI accelerator device of claim 1, further comprising: 
+a plurality of activation buffers associated with the processing element array, 
+
+wherein the plurality of activation buffers are associated with respective subsets of rows of the plurality of rows of processing element circuits of the processing element array. 
+4. The AI accelerator device of claim 3, further comprising: 
+an activation buffer multiplexer circuit coupled with the plurality of activation buffers; and a distributor circuit coupled with the activation buffer multiplexer circuit. 
+6. The AI accelerator device of claim 4, further comprising: 
+a plurality of accumulator buffers associated with the processing element array, 
+wherein the plurality of accumulator buffers are associated with a respective subset of columns of the plurality of columns of processing element circuits of the processing element array.
+Analysis 
+As seen above, the instant independent claim 1 is a broader version of the already allowed claim combination of 1, 3, 4, and 6 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471), i.e. the instant claim has the same elements but without the weight buffer, multiplexers, and activation buffer as seen in U.S. Patent No. 12,293,229 (parent application no. 17/900,471). Thereby the instant claim being the broader claim would be anticipated by the claims of U.S. Patent No. 12,293,229 (parent application no. 17/900,471).
+Independent claim 8
+An artificial intelligence (AI) accelerator device, comprising: 
+
+a processing element array, comprising: 
+
+a plurality of columns of processing element circuits; and 
+
+a plurality of rows of processing element circuits; 
+
+a plurality of weight buffers associated with the processing element array, 
+
+wherein the plurality of weight buffers are associated with respective subsets of columns of the plurality of columns of processing element circuits.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a plurality of accumulator buffers associated with the processing element array; 
+
+Independent claim 1 with dependent claims 3, 4, and 6
+1. An artificial intelligence (AI) accelerator device, comprising: 
+a processing element array, comprising: 
+a plurality of columns of processing element circuits; and 
+a plurality of rows of processing element circuits; 
+a plurality of weight buffers associated with the processing element array, 
+wherein the plurality of weight buffers are associated with respective subsets of columns of the plurality of columns of processing element circuits of the processing element array; and 
+a weight buffer multiplexer circuit coupled with each weight buffer of the plurality of weight buffers.
+3. The AI accelerator device of claim 1, further comprising: 
+a plurality of activation buffers associated with the processing element array, 
+
+wherein the plurality of activation buffers are associated with respective subsets of rows of the plurality of rows of processing element circuits of the processing element array. 
+4. The AI accelerator device of claim 3, further comprising: 
+an activation buffer multiplexer circuit coupled with the plurality of activation buffers; and a distributor circuit coupled with the activation buffer multiplexer circuit. 
+6. The AI accelerator device of claim 4, further comprising: 
+a plurality of accumulator buffers associated with the processing element array, 
+wherein the plurality of accumulator buffers are associated with a respective subset of columns of the plurality of columns of processing element circuits of the processing element array.
+Analysis 
+As seen above, the instant independent claim 8 is a broader version of the already allowed claim combination of 1, 3, 4, and 6 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471), i.e. the instant claim has the same elements but without the weight buffer, multiplexers, and activation buffer as seen in U.S. Patent No. 12,293,229 (parent application no. 17/900,471). Thereby the instant claim being the broader claim would be anticipated by the claims of U.S. Patent No. 12,293,229 (parent application no. 17/900,471).
+Independent claim 15
+A method, comprising: 
+
+providing, by an artificial intelligence (AI) accelerator device, a plurality of weights to a plurality of weight buffers of the AI accelerator device; 
+
+providing, by the AI accelerator device and using the plurality of weight buffers, a plurality of subsets of the plurality of weights to respective columns of processing element circuits of a processing element array of the AI accelerator device; 
+
+providing, by the AI accelerator device, activation data to an activation buffer of the AI accelerator device; 
+
+
+providing, by the AI accelerator device and using the activation buffer, the activation data to a row of processing element circuits of the processing element array; 
+
+
+
+
+
+
+
+
+
+
+
+
+providing, by the AI accelerator device, a plurality of partial sums from the processing element array to respective accumulator buffers of a plurality of accumulator buffers of the AI accelerator device, 
+
+wherein the plurality of partial sums are based on a multiply and accumulate (MAC) operation performed by the processing element array on the plurality of weights and the activation data; and 
+
+providing, by the AI accelerator device, the plurality of partial sums from the respective accumulator buffers to peripheral circuitry of the AI accelerator device.
+Independent claim 14
+A method, comprising: 
+
+providing, by an artificial intelligence (AI) accelerator device, a plurality of weights to a plurality of weight buffers of the AI accelerator device; 
+
+providing, by the AI accelerator device and using the plurality of weight buffers, a plurality of subsets of the plurality of weights to respective columns of processing element circuits of a processing element array of the AI accelerator device;
+
+providing, by the AI accelerator device, activation data to a plurality of activation buffers of the AI accelerator device; 
+
+providing, by the AI accelerator device and using the plurality of activation buffers, a plurality of subsets of the activation data to a plurality of rows of processing element circuits of the processing element array, 
+
+wherein each subset of the activation data is provided, using a respective activation buffer of the plurality of activation buffers, to a respective row of the plurality of rows of processing element circuits; 
+
+providing, by the AI accelerator device, a plurality of partial sums from the processing element array to respective accumulator buffers of a plurality of accumulator buffers of the AI accelerator device, 
+
+wherein the plurality of partial sums are based on a multiply and accumulate (MAC) operation performed by the processing element array on the plurality of weights and the activation data; and 
+
+providing, by the AI accelerator device, the plurality of partial sums from the respective accumulator buffers to peripheral circuitry of the AI accelerator device.
+Analysis 
+As seen above, the instant independent claim 15 is a broader version of the already allowed claim 14 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471), where there is there are minor differences of an activation buffer (instant claims) vs. a plurality of activation buffers (U.S. Patent No. 12,293,229), and a limitation in U.S. Patent No. 12,293,229 that is not in the instant claims. Thereby the instant claim being the broader claim would be anticipated by the claims of U.S. Patent No. 12,293,229 (parent application no. 17/900,471).
+
+Likewise, the dependent claims 16 and 20 of the above independent claim 14 carry similar limitations to dependent claims 15 and 20 of U.S. Patent No. 12,293,229 (parent application no. 17/900,471) respectively.
+
+Claim Rejections - 35 U.S.C. § 103
+The following is a quotation of 35 U.S.C. 103 which forms the basis for all obviousness rejections set forth in this Office action:
+A patent for a claimed invention may not be obtained, notwithstanding that the claimed invention is not identically disclosed as set forth in section 102, if the differences between the claimed invention and the prior art are such that the claimed invention as a whole would have been obvious before the effective filing date of the claimed invention to a person having ordinary skill in the art to which the claimed invention pertains. Patentability shall not be negated by the manner in which the invention was made.
+
+Claims 1 and 6-7 are rejected under 35 U.S.C. 103 as being unpatentable over Meyer et al. (US 2023/0004384), herein referred to as Meyer ‘384, in view of Thorson et al. (US 2016/0342889), herein referred to as Thorson ‘889.
+Referring to claim 1, Meyer ‘384 teaches an artificial intelligence (AI) accelerator device (see Fig. 6, apparatus 600 comprising a neural network processor 602, the apparatus 600 as a part of a computer system providing compute services for data processing applications where a host device may operate a software application and communicate with apparatus 600 to make predictions based on computations with a model using a neural network processor, see Paragraph 0124, i.e. an AI accelerator apparatus), comprising: 
+a processing element array (see Fig. 1A, 4x4 systolic array 100A of processing elements PE), comprising: 
+a plurality of columns of processing element circuits (see Fig. 1A, columns 112, 114 of processing elements 112a-d, see Paragraph 0037); and 
+a plurality of rows of processing element circuits (see Fig. 1A, rows 110 or processing elements, see Paragraph 0037); and 
+a plurality of accumulator buffers (see Fig. 1B, where an aggregator 130 comprising a partial sum buffer 132; see Fig. 3, wherein each column of processing elements has an output dataset 0-y, where each column of processor elements can be similar to the column 120 with aggregator 130) associated with the processing element array (see Fig. 1B which shows a column 120 of processor elements PE 122a-h), 
+wherein the plurality of accumulator buffers are associated with respective subsets of columns of the plurality of columns of processing element circuits (see Fig. 3, wherein each column of processing elements has an output dataset 0-y; see Fig. 1B wherein a column of processor elements PE 122a-h has an aggregator 130 accumulating the partial sums for the column). 
+However, Meyer ‘384 teaches an example of a single aggregator with a partial sums buffer for a 1x8 processing element arrangement (see Fig. 1B) with implications that this would also be applicable to a MxN processing element arrangement (see Fig. 3) where the buffer is associated with subsets of columns of processing elements, but does not specifically show that there are a plurality of accumulator buffers where the plurality of accumulator buffers are associated with respective subsets of columns of processing elements as claimed.
+Thorson ‘889 teaches a matrix processor (see Fig. 2, matrix computation unit 212, where the matrix computation unit 212 is a general purpose matrix processor, see Paragraph 0033), where the matrix computation unit comprises a two-dimensional systolic array including multiple cells arranged in rows and columns (see Fig. 3, matrix computation unit architecture 300 with systolic array 306 comprising multiple cells, see Paragraph 0035), where value loaders are arranged for each row to send in activation inputs to the rows of the array (see Fig. 3, value loaders 302 with individual value loaders 312 per row, see Paragraphs 0036-0037) and weight fetched interface for sending in weight inputs to the columns of the array (see Paragraph 0036), where accumulator units store and accumulate each accumulated output from each column (see Fig. 3, accumulators 310 with individual accumulators per column of cells, see Paragraph 0041).
+Meyer ‘384 and Thorson ‘889 apply as analogous prior arts as both pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified Meyer ‘384 system as set forth above to specifically have a plurality of accumulators with one per column of processing elements for a MxN systolic array of processing elements, as taught by Thorson ‘889, as a person of ordinary skill in the art would be recognize that the 1x8 example with an aggregator and buffer in Meyer ‘384 Fig. 1B can be applied to multiple columns where a person of ordinary skill in the art would see and be motivated to apply this one accumulator per column of processing elements as seen in Thorson ‘889 as an accumulator per column allows for large scale parallelism of computations as well as column by column computations which is more efficient for performing matrix computation specifically dealing with multiplication operations.
+As to claim 6, Meyer ‘384 teaches the AI accelerator device of claim 1, wherein each of the plurality of accumulator buffers is configured to receive output data from a subset of the plurality of columns of processing element circuits (see Fig. 1B, wherein the aggregator 130 with partial sum buffer 132 is receiving the outputs from the column of processing elements 122a-h).
+As to claim 7, Meyer ‘384 teaches the AI accelerator device of claim 1, wherein a first accumulator buffer (see Fig. 1B, aggregator , of the plurality of accumulator buffers, is configured to receive output from a first column of processing element circuits of the plurality of columns of processing element circuits; and wherein a second accumulator buffer, of the plurality of accumulator buffers, is configured to receive output from a second column of processing element circuits of the plurality of columns of processing element circuits. 
+As to claim 7, Meyer ‘384 teaches the AI accelerator device of claim 1, wherein a first accumulator buffer (see Fig. 1B, where an aggregator 130 comprising a partial sum buffer 132), of the plurality of accumulator buffers (see Fig. 3, wherein each column of processing elements has an output dataset 0-y, where each column of processor elements can be similar to the column 120 with aggregator 130), is configured to receive output from a first column of processing element circuits of the plurality of columns of processing element circuits (see Fig. 1B, wherein the aggregator 130 with partial sum buffer 132 is receiving the outputs from the column of processing elements 122a-h); and wherein a second accumulator buffer, of the plurality of accumulator buffers, is configured to receive output from a second column of processing element circuits of the plurality of columns of processing element circuits (see Fig. 3, wherein each column of processing elements has an output dataset 0-y; see Fig. 1B wherein a column of processor elements PE 122a-h has an aggregator 130 accumulating the partial sums for the column). 
+However, Meyer ‘384 teaches an example of a single aggregator with a partial sums buffer for a 1x8 processing element arrangement (see Fig. 1B) with implications that this would also be applicable to a MxN processing element arrangement (see Fig. 3) where the buffer is associated with subsets of columns of processing elements, but does not specifically show that there are a plurality of accumulator buffers where the plurality of accumulator buffers are associated with respective subsets of columns of processing elements as claimed.
+Thorson ‘889 teaches a matrix processor (see Fig. 2, matrix computation unit 212, where the matrix computation unit 212 is a general purpose matrix processor, see Paragraph 0033), where the matrix computation unit comprises a two-dimensional systolic array including multiple cells arranged in rows and columns (see Fig. 3, matrix computation unit architecture 300 with systolic array 306 comprising multiple cells, see Paragraph 0035), where value loaders are arranged for each row to send in activation inputs to the rows of the array (see Fig. 3, value loaders 302 with individual value loaders 312 per row, see Paragraphs 0036-0037) and weight fetched interface for sending in weight inputs to the columns of the array (see Paragraph 0036), where accumulator units store and accumulate each accumulated output from each column (see Fig. 3, accumulators 310 with individual accumulators per column of cells, see Paragraph 0041).
+Meyer ‘384 and Thorson ‘889 apply as analogous prior arts as both pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified Meyer ‘384 system as set forth above to specifically have multiple accumulators with one per column of processing elements for a MxN systolic array of processing elements, as taught by Thorson ‘889, as a person of ordinary skill in the art would be recognize that the 1x8 example with an aggregator and buffer in Meyer ‘384 Fig. 1B can be applied to multiple columns where a person of ordinary skill in the art would see and be motivated to apply this one accumulator per column of processing elements as seen in Thorson ‘889 as an accumulator per column allows for large scale parallelism of computations as well as column by column computations which is more efficient for performing matrix computation specifically dealing with multiplication operations.
+
+
+Claims 2-4 are rejected under 35 U.S.C. 103 as being unpatentable over Meyer ‘384, in view of Thorson ‘889, and further in view of Nam (US 2020/0285605), herein referred to as Nam ‘605.
+As to claim 2, Meyer ‘384 and Thorson ‘889 ‘384 do not specifically teach the AI accelerator device of claim 1, further comprising: a single monolithic weight buffer associated with the plurality of columns of processing element circuits. 
+Nam ‘605 teaches a systolic array comprising multiple processing elements arranged in rows and columns (see Fig. 8, systolic array 850 comprising processing elements PE) with a column buffer and row buffer (see Fig. 8, column buffer 813 and row buffer 811) where column data can be weight data (see Paragraph 0043) and row data can be operational data (see Paragraph 0042).
+Meyer ‘384, Thorson ‘889, and Nam ‘605 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a monolithic column buffer for inputting weights to columns of processing elements, as taught by Nam ‘605, as a person of ordinary skill in the art would be motivated to utilize buffers in order to temporarily hold data to be output as buffers can hold data for specific output timings such that data can be loaded into the buffer before processing circuits need the data for execution of operations, where a monolithic buffer has the advantage of being only one hardware chip instead of multiple hardware chips which would reduce hardware costs in terms of number of hardware chips needed to perform the same operation per column of processing elements. 
+As to claim 3, Meyer ‘384 and Thorson ‘889 do not specifically teach the AI accelerator device of claim 1, further comprising: a single monolithic activation buffer associated with the plurality of rows of processing element circuits. 
+Nam ‘605 teaches a systolic array comprising multiple processing elements arranged in rows and columns (see Fig. 8, systolic array 850 comprising processing elements PE) with a column buffer and row buffer (see Fig. 8, column buffer 813 and row buffer 811) where column data can be weight data (see Paragraph 0043) and row data can be operational data (see Paragraph 0042).
+Meyer ‘384, Thorson ‘889, and Nam ‘605 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a monolithic row buffer for inputting operational data, i.e. activation data, to rows of processing elements, as taught by Nam ‘605, as a person of ordinary skill in the art would be motivated to utilize buffers in order to temporarily hold data to be output as buffers can hold data for specific output timings such that data can be loaded into the buffer before processing circuits need the data for execution of operations, where a monolithic buffer has the advantage of being only one hardware chip instead of multiple hardware chips which would reduce hardware costs in terms of number of hardware chips needed to perform the same operation per row of processing elements. 
+As to claim 4, Meyer ‘384 and Thorson ‘889 does not specifically teach the AI accelerator device of claim 3, wherein the single monolithic activation buffer is configured to provide input data to the plurality of rows of processing element circuits. 
+Nam ‘605 teaches a systolic array comprising multiple processing elements arranged in rows and columns (see Fig. 8, systolic array 850 comprising processing elements PE) with a column buffer and row buffer (see Fig. 8, column buffer 813 and row buffer 811) where column data can be weight data (see Paragraph 0043) and row data can be operational data (see Paragraph 0042).
+Meyer ‘384, Thorson ‘889, and Nam ‘605 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a monolithic row buffer for inputting operational data, i.e. activation data, to the plurality of rows of processing elements, as taught by Nam ‘605, as a person of ordinary skill in the art would be motivated to utilize buffers in order to temporarily hold data to be output as buffers can hold data for specific output timings such that data can be loaded into the buffer before processing circuits need the data for execution of operations, where a monolithic buffer has the advantage of being only one hardware chip instead of multiple hardware chips which would reduce hardware costs in terms of number of hardware chips needed to perform the same operation per row of processing elements. 
+
+
+Claims 8-12 are rejected under 35 U.S.C. 103 as being unpatentable over Meyer ‘384, in view of Thorson ‘889, and further in view of Phelps et al. (US 2018/0336164), herein referred to as Phelps ‘164.
+Referring to claim 8, Meyer ‘384 teaches an artificial intelligence (AI) accelerator device (see Fig. 6, apparatus 600 comprising a neural network processor 602, the apparatus 600 as a part of a computer system providing compute services for data processing applications where a host device may operate a software application and communicate with apparatus 600 to make predictions based on computations with a model using a neural network processor, see Paragraph 0124, i.e. an AI accelerator apparatus), comprising: 
+a processing element array (see Fig. 1A, 4x4 systolic array 100A of processing elements PE), comprising: 
+a plurality of columns of processing element circuits (see Fig. 1A, columns 112, 114 of processing elements 112a-d, see Paragraph 0037); and 
+a plurality of rows of processing element circuits (see Fig. 1A, rows 110 or processing elements, see Paragraph 0037);
+a plurality of accumulator buffers (see Fig. 1B, where an aggregator 130 comprising a partial sum buffer 132; see Fig. 3, wherein each column of processing elements has an output dataset 0-y, where each column of processor elements can be similar to the column 120 with aggregator 130) associated with the processing element array (see Fig. 1B which shows a column 120 of processor elements PE 122a-h); and 
+a plurality of weight buffers (see Fig. 2A, cached weight register 220, weight register, 206) associated with the processing element array (see Fig. 2A, which illustrates a processing element 200 for neural network computations, i.e. individual processing elements meaning each processing element has weight registers).
+However, Meyer ‘384 implies that a plurality of accumulator buffers can be used per column but does not explicitly show a plurality of accumulator buffers; and Meyer ‘384 teaches the weight data being input to weight registers within each processing element circuit, but does not specifically teach weight registers/buffers that are associated with respective subsets of columns of the plurality of columns of processing element circuits.
+Thorson ‘889 teaches a matrix processor (see Fig. 2, matrix computation unit 212, where the matrix computation unit 212 is a general purpose matrix processor, see Paragraph 0033), where the matrix computation unit comprises a two-dimensional systolic array including multiple cells arranged in rows and columns (see Fig. 3, matrix computation unit architecture 300 with systolic array 306 comprising multiple cells, see Paragraph 0035), where value loaders are arranged for each row to send in activation inputs to the rows of the array (see Fig. 3, value loaders 302 with individual value loaders 312 per row, see Paragraphs 0036-0037) and weight fetched interface for sending in weight inputs to the columns of the array (see Paragraph 0036), where accumulator units store and accumulate each accumulated output from each column (see Fig. 3, accumulators 310 with individual accumulators per column of cells, see Paragraph 0041).
+Meyer ‘384 and Thorson ‘889 apply as analogous prior arts as both pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified Meyer ‘384 system as set forth above to specifically have a plurality of accumulators with one per column of processing elements for a MxN systolic array of processing elements, as taught by Thorson ‘889, as a person of ordinary skill in the art would be recognize that the 1x8 example with an aggregator and buffer in Meyer ‘384 Fig. 1B can be applied to multiple columns where a person of ordinary skill in the art would see and be motivated to apply this one accumulator per column of processing elements as seen in Thorson ‘889 as an accumulator per column allows for large scale parallelism of computations as well as column by column computations which is more efficient for performing matrix computation specifically dealing with multiplication operations.
+Phelps ‘164 teaches a processing element array with multiple cells arranged in rows and columns (see Fig. 4, multi-cell matrix multiply unit 400 with cells 435a-d, shift chain 402) and two chains of weight shift registers per column (see Paragraph 0083, also see Fig. 3, weight shift FIFOs 305 with weight matrix register 325).
+Meyer ‘384, Thorson ‘889, and Phelps ‘164 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a two chains of weight shift registers/buffers associated with respective subsets of columns of the plurality of columns of processing elements, as taught by Phelps ‘164, as a person of ordinary skill in the art would be motivated to utilize weight registers/buffers per column as this would allow for the delivery of weights to the matrix multiply unit at twice the rate from vector register as matrix multiply units with only one chain of weight shift registers and sends the weight values to two points in the array to the matrix multiply unit at four times the rate from a vector register as matrix multiply units with only one chains of weight shift registers (see Paragraph 0021). 
+As to claim 9, Meyer ‘384 does not specifically teach the AI accelerator device of claim 8, wherein a first weight buffer, of the plurality of weight buffers, is configured to provide weights to a first column of processing element circuits of the plurality of columns of processing element circuits; and wherein a second weight buffer, of the plurality of weight buffers, is configured to provide weights to a second column of processing element circuits of the plurality of columns of processing element circuits. 
+Phelps ‘164 teaches a processing element array with multiple cells arranged in rows and columns (see Fig. 4, multi-cell matrix multiply unit 400 with cells 435a-d, shift chain 402) and two chains of weight shift registers per column (see Paragraph 0083, also see Fig. 3, weight shift FIFOs 305 with weight matrix register 325).
+Meyer ‘384, Thorson ‘889, and Phelps ‘164 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a two chains of weight shift registers/buffers associated with respective subsets of columns of the plurality of columns of processing elements where a first weight chain register provides first weights to a first column of processing elements and a second weight chain register provides second weights to a second column of processing elements, as taught by Phelps ‘164, as a person of ordinary skill in the art would be motivated to utilize weight registers/buffers per column as this would allow for the delivery of weights to the matrix multiply unit at twice the rate from vector register as matrix multiply units with only one chain of weight shift registers and sends the weight values to two points in the array to the matrix multiply unit at four times the rate from a vector register as matrix multiply units with only one chains of weight shift registers (see Paragraph 0021). 
+As to claim 10, Meyer ‘384 does not teach the AI accelerator device of claim 8, wherein each of the plurality of weight buffers is associated with an output from a subset of the plurality of columns of processing element circuits. 
+Phelps ‘164 teaches a processing element array with multiple cells arranged in rows and columns (see Fig. 4, multi-cell matrix multiply unit 400 with cells 435a-d, shift chain 402) and two chains of weight shift registers per column (see Paragraph 0083, also see Fig. 3, weight shift FIFOs 305 with weight matrix register 325) where each column has a partial sum output (see Fig. 4, partial sums output 410 and 412).
+Meyer ‘384, Thorson ‘889, and Phelps ‘164 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to have the plurality of weight buffers associated with an output from a subset of the plurality of columns, as taught by Phelps ‘164, as a person of ordinary skill in the art would be recognize that the outputs for each column of processing elements in Phelps ‘164 mirrors the outputs for each individual column of processing elements of Meyer ‘384, which means that the weight registers/buffers associated with a column would also be associated with the outputs of the column of processing elements. 
+As to claim 11, Meyer ‘384 does not teach the AI accelerator device of claim 8, wherein each of the plurality of weight buffers is configured to provide weights to a single column of processing element circuits of the plurality of columns of processing element circuits.
+Phelps ‘164 teaches a processing element array with multiple cells arranged in rows and columns (see Fig. 4, multi-cell matrix multiply unit 400 with cells 435a-d, shift chain 402) and two chains of weight shift registers per column (see Paragraph 0083, also see Fig. 3, weight shift FIFOs 305 with weight matrix register 325).
+Meyer ‘384, Thorson ‘889, and Phelps ‘164 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a two chains of weight shift registers/buffers per individual columns of the plurality of columns of processing elements, as taught by Phelps ‘164, as a person of ordinary skill in the art would be motivated to utilize weight registers/buffers per column as this would allow for the delivery of weights to the matrix multiply unit at twice the rate from vector register as matrix multiply units with only one chain of weight shift registers and sends the weight values to two points in the array to the matrix multiply unit at four times the rate from a vector register as matrix multiply units with only one chains of weight shift registers (see Paragraph 0021). 
+As to claim 12, Meyer ‘384 does not teach the AI accelerator device of claim 8, further comprising: a weight buffer multiplexer circuit coupled with the plurality of weight buffers. 
+Phelps ‘164 teaches a processing element array with multiple cells arranged in rows and columns (see Fig. 4, multi-cell matrix multiply unit 400 with cells 435a-d, shift chain 402) and two chains of weight shift registers per column (see Paragraph 0083, also see Fig. 3, weight shift FIFOs 305 with weight matrix register 325) where a multiplexer selects the weight of either weight shift register from a first shift chain 301 or second shift chain 302 (see Fig. 3, multiplexer 330, first shift chain 301, second shift chain 302, see Paragraph 0080).
+Meyer ‘384, Thorson ‘889, and Phelps ‘164 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384 and Thorson ‘889 system as set forth above to utilize a two chains of weight shift registers/buffers associated with respective subsets of columns of the plurality of columns of processing elements and have a multiplexer coupled with a plurality of weight shift registers to select the weight to output, as taught by Phelps ‘164, as a person of ordinary skill in the art would be motivated to utilize weight registers/buffers per column as this would allow for the delivery of weights to the matrix multiply unit at twice the rate from vector register as matrix multiply units with only one chain of weight shift registers and sends the weight values to two points in the array to the matrix multiply unit at four times the rate from a vector register as matrix multiply units with only one chains of weight shift registers (see Paragraph 0021). 
+
+
+Claim 13 is rejected under 35 U.S.C. 103 as being unpatentable over Meyer ‘384, in view of Thorson ‘889, and further in view of Phelps ‘164, and Nam ‘605.
+As to claim 13, Meyer ‘384, Thorson ‘889, and Phelps ‘164 do not specifically teach the AI accelerator device of claim 8, further comprising: a single monolithic activation buffer associated with the plurality of rows of processing element circuits. 
+Nam ‘605 teaches a systolic array comprising multiple processing elements arranged in rows and columns (see Fig. 8, systolic array 850 comprising processing elements PE) with a column buffer and row buffer (see Fig. 8, column buffer 813 and row buffer 811) where column data can be weight data (see Paragraph 0043) and row data can be operational data (see Paragraph 0042).
+Meyer ‘384, Thorson ‘889, Phelps ‘164 and Nam ‘605 apply as analogous prior arts as all of these arts pertain to the same field of endeavor of a processor with multiple processing elements arranged in rows and columns processing matrix operations using input data and weight data.
+Therefore, it would have been obvious to one of ordinary skill in the art before the effective filing date of the claimed invention to have modified the combination Meyer ‘384, Thorson ‘889, and Phelps ‘164 system as set forth above to utilize a monolithic row buffer for inputting operational data, i.e. activation data, to rows of processing elements, as taught by Nam ‘605, as a person of ordinary skill in the art would be motivated to utilize buffers in order to temporarily hold data to be output as buffers can hold data for specific output timings such that data can be loaded into the buffer before processing circuits need the data for execution of operations, where a monolithic buffer has the advantage of being only one hardware chip instead of multiple hardware chips which would reduce hardware costs in terms of number of hardware chips needed to perform the same operation per row of processing elements. 
+
+Allowable Subject Matter
+Claims 5 and 14 are objected to as being dependent upon a rejected base claim, but would be allowable if rewritten in independent form including all of the limitations of the base claim and any intervening claims.
+As to claim 5, Examiner finds that prior art does not specifically teach the AI accelerator device of claim 3, further comprising: a periphery circuit configured to provide output to the single monolithic activation buffer, wherein the plurality of accumulator buffers are configured to provide output to the periphery circuit. 
+As to claim 14, Examiner finds that prior art does not specifically teach the AI accelerator device of claim 13, further comprising: a periphery circuit configured to provide output to the single monolithic activation buffer, wherein the plurality of accumulator buffers are configured to provide output to the periphery circuit. 
+
+
+Claims 15-20 are indicated as allowable subject matter. 
+
+The following is a statement of reasons for the indication of allowable subject matter: 
+Prior art teaches systems and methods for having a matrix / grid / systolic array of processing elements or computational elements that are arranged into a plurality of rows and columns including the input / application of weight values to each column or each element in the matrix / array through a register or multiplexer connected to memory, however, the prior art does not fairly teach or suggest, individually or in combination, a method where an AI accelerator device provides a plurality of weights to a plurality of weight buffers, providing a plurality of subsets of the plurality of weights to respective columns of processing element circuits of a processing element array of the AI accelerator device, providing activation data to an activation buffer, providing the activation data to a row of processing element circuits of the processing element array, providing a plurality of partial sums from the processing element array to respective accumulator buffers, where the plurality of partial sums are based on a multiply and accumulate (MAC) operation performed by the processing element array using the plurality of weights and activation data, and providing the plurality of partial sums from the accumulator buffers to peripheral circuits of the AI accelerator device as claimed. More specifically, Examiner finds prior arts which use a singular buffer / memory for sending weight inputs to columns or rows of a matrix processor / array of processing elements and prior arts which teach a weight register associated with each individual element of a matrix processor / array of processing elements, but Examiner finds that prior art does not specifically teach the plurality of weight buffers associated with respective subsets of columns of the plurality of columns of processing element circuits of the processing element array and an activation buffer providing activation data to rows of processing element circuits of a processing element array as claimed. The prior art of record neither anticipates nor renders obvious the above recited combination.
+
+As allowable subject matter has been indicated, applicant's reply must either comply with all formal requirements or specifically traverse each requirement not complied with. See 37 CFR 1.111(b) and MPEP § 707.07(a).
+
+Relevant Prior Art
+The prior art made of record and not relied upon is considered pertinent to applicant's disclosure.
+Bannon et al. (US 2019/0026078) teach a matrix processor with multiple rows and columns of processing elements with a weight matrix inputting weight values and data input matrix to input data values for calculation and output to an output array.
+Vantrease et al. (US 11,275,997) teaches a neural network computational system with a plurality of processing elements in multiple rows and columns with a weight register associated with each processing element.
+
+Contact Information
+Any inquiry concerning this communication or earlier communications from the examiner should be directed to FILLIN "Examiner name" \* MERGEFORMATMICHAEL SUN whose telephone number is FILLIN "Phone number" \* MERGEFORMAT(571)270-1724. The examiner can normally be reached FILLIN "Work Schedule?" \* MERGEFORMATMonday-Friday 8am-4pm EST.
+Examiner interviews are available via telephone, in-person, and video conferencing using a USPTO supplied web-based collaboration tool. To schedule an interview, applicant is encouraged to use the USPTO Automated Interview Request (AIR) at http://www.uspto.gov/interviewpractice.
+If attempts to reach the examiner by telephone are unsuccessful, the examiner’s supervisor, FILLIN "SPE Name?" \* MERGEFORMATJyoti Mehta can be reached on FILLIN "SPE Phone?" \* MERGEFORMAT571-270-3995. The fax phone number for the organization where this application or proceeding is assigned is 571-273-8300.
+Information regarding the status of published or unpublished applications may be obtained from Patent Center. Unpublished application information in Patent Center is available to registered users. To file and manage patent submissions in Patent Center, visit: https://patentcenter.uspto.gov. Visit https://www.uspto.gov/patents/apply/patent-center for more information about Patent Center and https://www.uspto.gov/patents/docx for information about filing in DOCX format. For additional questions, contact the Electronic Business Center (EBC) at 866-217-9197 (toll-free). If you would like assistance from a USPTO Customer Service Representative, call 800-786-9199 (IN USA OR CANADA) or 571-272-1000.
+
+
+/MICHAEL SUN/Primary Examiner, Art Unit 2183 

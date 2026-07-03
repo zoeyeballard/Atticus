@@ -45,6 +45,44 @@ We report metrics both with the verification layer engaged and with it bypassed,
 much the decompose → citation-check → entailment pipeline reduces the hallucination rate. This is
 the central claim of the project and must be measured, not asserted.
 
+## Draft-level hallucination evaluation (`--mode draft`)
+
+Parse accuracy measures whether Atticus reads the office action correctly. The **draft** eval
+measures the harder, product-critical thing: whether the *generated response draft* makes claims it
+can back up. It scores the drafter's output, not the OA.
+
+**Pipeline** (`run_draft_evaluation`): for each application → full analysis → generate a response
+draft (`strategy=argue`) → decompose the draft into atomic assertions → classify each → verify the
+sourced ones.
+
+**Assertion classes:**
+- **SOURCED** — carries an inline `[Source: …]` citation.
+- **LEGAL** — a statement of law / MPEP procedure (not an independently checkable factual claim).
+- **ARGUMENT** — attorney-style reasoning (not independently verifiable).
+- **FACTUAL (unsourced)** — a factual disclosure claim (“X discloses …”) with **no** citation. Per
+  the grounding rules, a factual claim must carry a source; an unsourced one is a rule violation
+  even if it happens to be true.
+
+**Checks on each SOURCED assertion:**
+1. **Existence** — does the cited document exist? (USPTO search API)
+2. **Location** — does the cited location look valid (col/line for grants, ¶ for publications)?
+3. **Entailment** — does the cited passage actually support the assertion? (ENTAILS / CONTRADICTS /
+   NEUTRAL, via the verification model)
+
+**Strict definitions (report metrics):**
+- **Hallucination** = `fabricated document OR entailment CONTRADICTS`. These are the
+  malpractice-grade failures — a cited source that doesn't exist, or one that says the opposite.
+- **Review-needed** = `location invalid OR entailment NEUTRAL OR unsourced factual`. Not proven
+  wrong, but a practitioner must check before filing.
+- **Verified** = document exists, location plausible, passage entails the assertion.
+- Rates: `hallucination_rate = (fabricated + contradicts) / sourced`;
+  `review_rate = (neutral + location_invalid + factual_unsourced) / total`;
+  `verified_rate = verified / sourced`.
+
+Reports are written to `results/evaluations/draft_eval_<provider>_<timestamp>.json`. Entailment is
+the token-dominant step, so a per-app entailment budget bounds cost; runs degrade gracefully under
+provider rate limits (failed apps are recorded in the report's `errors` list, not crashed).
+
 ## Prompt versioning
 
 Every prompt in `src/generation/prompt_templates.py` is versioned. Evaluation results are recorded
