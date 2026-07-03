@@ -20,6 +20,7 @@ router = APIRouter(tags=["analyze"])
 class AnalyzeRequest(BaseModel):
     application_number: str | None = None
     office_action_text: str | None = None
+    allow_unpublished: bool = False  # compliance override; requires authorization
 
     @model_validator(mode="after")
     def _one_of(self) -> "AnalyzeRequest":
@@ -37,9 +38,19 @@ class AnalyzeResponse(BaseModel):
 @router.post("/analyze", response_model=AnalyzeResponse)
 def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
     text = req.office_action_text
+    publication_verified = text is not None  # pasted text: publication status is the user's call
     if text is None:
         try:
             with USPTOClient() as client:
+                # Compliance guard: never index unpublished applications (35 U.S.C. 122(a)).
+                if not req.allow_unpublished and not client.is_published(req.application_number or ""):
+                    raise HTTPException(
+                        403,
+                        f"Application {req.application_number} does not appear to be published. "
+                        "Unpublished applications are confidential under 35 U.S.C. 122(a); "
+                        "Atticus only indexes published patent data.",
+                    )
+                publication_verified = True
                 text = client.get_office_action_text(req.application_number or "")
         except USPTOError as exc:
             # No-OA / bad-app-number cases surface as 404; auth/connectivity as 502.
@@ -50,7 +61,7 @@ def analyze(req: AnalyzeRequest) -> AnalyzeResponse:
     analysis = office_action_parser.parse(text, application_number=req.application_number)
 
     repo = get_repository()
-    analysis_id = repo.save_analysis(analysis)
+    analysis_id = repo.save_analysis(analysis, publication_verified=publication_verified)
     repo.append_audit(analysis_id, AuditEvent(step="generated", payload={"source": "analyze"}))
 
     # Verify the structured analysis text (sources passed in would tighten this further).

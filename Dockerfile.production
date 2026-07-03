@@ -1,0 +1,36 @@
+# Tier-2 single-image distribution: builds the React frontend and serves it from FastAPI,
+# so one `docker run` serves the complete app (UI + API) on a single port against an
+# external Postgres+pgvector.
+#
+#   docker build -f Dockerfile.production -t atticus:latest .
+#   docker run -p 8000:8000 --env-file .env atticus:latest
+#   # → http://localhost:8000
+
+# Stage 1: build the frontend
+FROM node:20-slim AS frontend
+WORKDIR /build
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build            # outputs to /build/dist
+
+# Stage 2: runtime
+FROM python:3.11-slim
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml ./
+RUN pip install --upgrade pip && pip install .
+
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+# Serve the built frontend from FastAPI (main.py mounts ./static when present).
+COPY --from=frontend /build/dist ./static/
+
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

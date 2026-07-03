@@ -194,6 +194,24 @@ class USPTOClient:
             return bag[0]
         return data if isinstance(data, dict) else {}
 
+    def is_published(self, application_number: str) -> bool:
+        """Whether an application has been published (or granted).
+
+        Only published applications and their documents may be stored/indexed — unpublished
+        applications are confidential under 35 U.S.C. 122(a) and 37 CFR 1.14(a). Publication is
+        signalled by a publication date/number, a granted patent number, or a status indicating
+        the case is published or patented.
+        """
+        meta = self.get_application(application_number).get("applicationMetaData", {})
+        if meta.get("earliestPublicationDate") or meta.get("earliestPublicationNumber"):
+            return True
+        if meta.get("publicationDateBag") or meta.get("publicationSequenceNumberBag"):
+            return True
+        if meta.get("patentNumber") or meta.get("grantDate"):
+            return True
+        status = (meta.get("applicationStatusDescriptionText") or "").lower()
+        return "patent" in status or "publish" in status
+
     def get_documents(self, application_number: str) -> list[dict[str, Any]]:
         """All documents in the file wrapper for an application (the ODP ``documentBag``)."""
         app = normalize_application_number(application_number)
@@ -296,12 +314,27 @@ class USPTOClient:
         return self._get_cached(_Endpoints.GRANT_FULL_TEXT.format(patent=normalized))
 
     def patent_exists(self, patent_number: str) -> bool:
-        """Cheap existence check used by the citation verifier."""
-        try:
-            self.get_patent_full_text(patent_number)
-            return True
-        except USPTOError:
+        """Existence check used by the citation verifier.
+
+        Uses the ODP search API (the grants full-text endpoint 403s with a standard key). A grant
+        number is matched on ``patentNumber``; an 11-digit publication number on
+        ``earliestPublicationNumber``. Returns False if neither matches (404 = no records).
+        """
+        digits = re.sub(r"[^0-9]", "", patent_number or "")
+        if not digits:
             return False
+        # Publication numbers are 11 digits (YYYY + 7); grant numbers are 7-8 digits.
+        if len(digits) >= 11:
+            queries = [f"applicationMetaData.earliestPublicationNumber:US{digits}*"]
+        else:
+            queries = [f"applicationMetaData.patentNumber:{digits}"]
+        for q in queries:
+            try:
+                if self.search_applications(q, limit=1):
+                    return True
+            except USPTOError:
+                continue  # 404 = no matching records
+        return False
 
 
 def _is_office_action(doc: dict[str, Any]) -> bool:

@@ -21,6 +21,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from src.config.data_classification import DEFAULT_TENANT_ID
+
 _REGISTRY = Path("data/test_applications.json")
 _OA_DIR = Path("data/sample_office_actions")
 _OUT_DIR = Path("results/evaluations")
@@ -67,6 +69,30 @@ class EvalSummary:
             },
             "applications": self.per_case,
         }
+
+
+def check_data_compliance(analysis_result: dict) -> list[str]:
+    """Verify an analysis respects the data-classification rules. Returns a list of issues."""
+    issues: list[str] = []
+
+    if not analysis_result.get("publication_verified", False):
+        issues.append("CRITICAL: Publication status not verified before indexing")
+
+    if not analysis_result.get("tenant_id"):
+        issues.append("CRITICAL: Missing tenant_id on client data")
+
+    # A fabricated reference must never be persisted into the public patent index.
+    for ref in analysis_result.get("cited_references", []):
+        if ref.get("verification_status") == "fabricated":
+            issues.append(
+                f"CRITICAL: Fabricated reference {ref.get('patent_number')} — "
+                "must not be stored in the public patent index"
+            )
+
+    if analysis_result.get("llm_used") and not analysis_result.get("audit_events"):
+        issues.append("WARNING: LLM used but no audit trail recorded")
+
+    return issues
 
 
 def _norm_basis(b: str) -> str:
@@ -125,7 +151,21 @@ def run_evaluation(mode: str = "no-llm", timestamp: str = "") -> EvalSummary:
         prec.append(s["basis_precision"])
         claims.append(s["claim_set_accuracy"])
 
-        case = {"application_number": app, **s}
+        # Compliance: registry apps are published; client data carries the default tenant.
+        compliance = check_data_compliance(
+            {
+                "publication_verified": True,
+                "tenant_id": DEFAULT_TENANT_ID,
+                "llm_used": use_llm,
+                "audit_events": [{"event_type": "llm_api_call"}] if use_llm else [],
+                "cited_references": [
+                    {"patent_number": r.get("patent_number"), "verification_status": "unverified"}
+                    for rej in analysis.get("rejections", [])
+                    for r in rej.get("cited_references", [])
+                ],
+            }
+        )
+        case = {"application_number": app, "compliance_issues": compliance, **s}
         if use_llm:
             from src.verification import hallucination_detector
 

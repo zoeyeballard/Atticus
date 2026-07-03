@@ -59,6 +59,12 @@ class Settings(BaseSettings):
         description="Cache the (stable) system prompt to cut input-token cost on repeated calls.",
     )
 
+    # --- Storage ---
+    storage_backend: str = Field(
+        default="postgres",
+        description="Vector/relational backend: 'postgres' (server) | 'sqlite' (desktop, reserved)",
+    )
+
     # --- App ---
     log_level: str = Field(default="INFO")
     audit_trail_enabled: bool = Field(default=True)
