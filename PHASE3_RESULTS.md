@@ -15,17 +15,29 @@
 - **Task 9:** `check_data_compliance()` in the eval harness; per-case issues in the report (clean).
 - Repository is tenant-isolated (no method returns another tenant's rows) with **hard delete**.
 
-### Part B — LLM integration ◐ (wired; execution blocked on credits)
-- **Task 4:** cost cap + prompt caching already in `LLMClient`; added `llm_audit_event()` —
-  **metadata-only** (model/tokens/cost/purpose, never prompt content).
-- CLI `verify` and `draft-response` subcommands added.
+### Part B — LLM integration ✅ (executed live via Google Gemini)
+- **Provider abstraction:** `LLMClient` is now provider-agnostic (`LLM_PROVIDER=anthropic|gemini`)
+  behind one interface — nothing downstream changed. Gemini uses `gemini-2.5-flash` (generation) and
+  `gemini-2.5-flash-lite` (verification); thinking is disabled for deterministic structured output.
+- **Task 4:** cost cap + prompt caching in `LLMClient`; `llm_audit_event()` is **metadata-only**
+  (provider/model/tokens/cost/purpose — never prompt content).
+- **Task 5 (ran):** `run_evaluation.py --mode full` over all 5 apps via Gemini →
+  **100%** rejection-type/basis/claim accuracy, **0.0% hallucination rate** (target <5%).
+- **Task 6 (ran):** verification pipeline (decompose → citation existence via USPTO search →
+  entailment) executes on real content; 0 fabricated across the set.
+- **Task 7 (ran):** response drafting produces grounded arguments with inline
+  `[Source: US9,876,543B2, col. 4, lines 23-45]` citations (confidence 0.9). The drafter now feeds
+  the LLM-extracted limitation mappings + cited passages so arguments are grounded; without that
+  context the model correctly returns `INSUFFICIENT_CONTEXT` instead of fabricating.
 - **Fix (important):** `patent_exists()` used the ODP grants full-text endpoint, which **403s**
   with a standard key — so it was marking every real cited patent as "fabricated". Rewrote it to
   use the ODP **search API** (`patentNumber` / `earliestPublicationNumber`); verified against real
-  grants, real publications, and fakes.
-- **Blocked:** Tasks 5–7 (LLM-enriched analysis, verification on LLM output, drafting) need
-  Anthropic credits (account balance is $0 — calls return "credit balance too low"). Everything is
-  wired; run `python scripts/run_evaluation.py --mode full` once credits exist.
+  grants, publications, and fakes.
+- CLI `verify` and `draft-response` subcommands added; `scripts/validate_gemini.py` confirms the key.
+- **Note on the metric:** eval `--mode full` verifies the office action's own citations (all real →
+  0% fabricated). The more probing hallucination test is on *generated drafts* — the drafter emits
+  `[Source: …]` citations that the entailment/existence checks can score; wiring that into the eval
+  loop is the next refinement.
 
 ### Part C — UI ✅ (builds clean; end-to-end verified offline)
 - Full React app per the design system: dark sidebar + 5 views (New Analysis, Analysis Overview
@@ -54,10 +66,13 @@
 37 backend tests pass (added budget, rejection-type, and analyses-API integration tests).
 Frontend has no automated tests yet (would need a jsdom/vitest setup).
 
-## Remaining blocker (not a code defect)
-- **Anthropic credits** ($0 balance) → Part B execution (Tasks 5–7) and live draft generation.
-  Everything else — Parts A, C, D and the whole offline pipeline — is verified end-to-end.
-  (The earlier `npm` blocker is resolved: Node 20 + npm installed, frontend builds and serves.)
+## Blockers — all cleared
+- The LLM path now runs on **Google Gemini** (free tier) instead of Anthropic, so Part B executes
+  end-to-end. Anthropic remains available by setting `LLM_PROVIDER=anthropic` once credits exist.
+- The earlier `npm` blocker is resolved (Node 20 + npm installed; frontend builds and serves).
+- **Compliance caveat (built into the policy):** the Gemini **free tier may train on inputs**, so it
+  is used only for **public** patent data. Real **client** work product must use a no-training tier
+  (Anthropic API, paid Gemini, or Vertex AI) — see `docs/data-handling-policy.md`.
 
 ## Reproduce
 ```bash

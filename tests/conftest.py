@@ -1,6 +1,14 @@
 """Shared pytest fixtures."""
 
-import pytest
+import os
+
+# Keep the test suite hermetic: force every LLM provider to look unconfigured so no test makes a
+# live API call (the pipeline degrades to deterministic/offline paths). Env vars override .env,
+# and this runs before src.config.get_settings() is first called during collection.
+os.environ["ANTHROPIC_API_KEY"] = ""
+os.environ["GEMINI_API_KEY"] = ""
+
+import pytest  # noqa: E402
 
 
 @pytest.fixture

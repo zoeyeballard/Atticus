@@ -22,13 +22,31 @@ logger = logging.getLogger(__name__)
 
 
 def _reference_blocks(rejection: ClaimRejection) -> str:
-    blocks = []
+    # Fold in passages from both the cited references and the examiner's limitation mappings
+    # (the LLM analysis extracts "col. 4, lines 23-45"-style passages into the mappings).
+    passages_by_ref: dict[str, list[str]] = {}
     for ref in rejection.cited_references:
-        passages = "\n".join(ref.relevant_passages) or "(no passages provided)"
-        blocks.append(
-            f'<cited_reference ref="{ref.patent_number}">\n{passages}\n</cited_reference>'
-        )
+        passages_by_ref.setdefault(ref.patent_number, []).extend(ref.relevant_passages)
+    for m in rejection.limitation_mappings:
+        if m.mapped_to_reference and m.reference_passage:
+            passages_by_ref.setdefault(m.mapped_to_reference, []).append(
+                f"{m.reference_passage} — mapped to: {m.limitation_text}"
+            )
+    blocks = []
+    for ref, passages in passages_by_ref.items():
+        body = "\n".join(dict.fromkeys(passages)) or "(no passages provided)"
+        blocks.append(f'<cited_reference ref="{ref}">\n{body}\n</cited_reference>')
     return "\n".join(blocks) or "<cited_reference>(none)</cited_reference>"
+
+
+def _claim_context(rejection: ClaimRejection) -> str:
+    """The claim limitations the examiner mapped (used when the full claim text isn't retrieved)."""
+    lims = [m.limitation_text for m in rejection.limitation_mappings if m.limitation_text]
+    if not lims:
+        return "(claim text not retrieved)"
+    return "Claim limitations at issue (as identified by the examiner):\n" + "\n".join(
+        f"- {t}" for t in lims
+    )
 
 
 def draft_response(
@@ -51,7 +69,9 @@ def draft_response(
 
     arguments: list[ResponseArgument] = []
     for rejection in analysis.rejections:
-        claim_text = claim_texts.get(rejection.claim_number, "(claim text not retrieved)")
+        # Prefer explicitly retrieved claim text; otherwise fall back to the examiner's mapped
+        # limitations from the (LLM-enriched) analysis so the model has grounded content.
+        claim_text = claim_texts.get(rejection.claim_number) or _claim_context(rejection)
         refs = _reference_blocks(rejection)
 
         if strategy in ("argue", "both"):

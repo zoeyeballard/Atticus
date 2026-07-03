@@ -43,14 +43,22 @@ mitigates this by:
 - The ODP API only serves published data, so this is also enforced at the source.
 
 ## AI API Data Handling
-- All LLM calls use the Anthropic Messages API (`src/generation/llm_client.py`), never consumer chat.
-- Anthropic's API terms state that API inputs are not used for model training by default.
-- **Production/enterprise:** obtain a Zero Data Retention (ZDR) agreement from Anthropic so inputs
-  are not logged server-side.
-- Client-specific content in prompts is classified as CLIENT data.
-- System prompts and public context (MPEP, published patents) are PUBLIC data.
-- The audit trail records LLM-call **metadata** (model, token counts, cost, purpose) — **not** raw
-  prompt content in production, since prompts may contain privileged material.
+- All LLM calls go through `src/generation/llm_client.py` (never a consumer chat product). The
+  provider is selectable via `LLM_PROVIDER` (`anthropic` | `gemini`).
+- **Provider training terms differ — this is a privilege-critical distinction:**
+  - **Anthropic Messages API:** does not use API inputs for model training by default.
+  - **Google Gemini API — free tier:** Google **may use prompts/outputs to improve its products**
+    (and human reviewers may see them). The **paid tier / Vertex AI** does **not** train on inputs.
+- **Consequence for Atticus:**
+  - Using the Gemini **free tier is acceptable only for PUBLIC data** (published patents/OAs, MPEP)
+    — which is what the prototype processes (all test OAs are published applications).
+  - **Do NOT send CLIENT/PRIVILEGED work product through the Gemini free tier** — per *Heppner*,
+    that could destroy privilege. For any real client data, use the Anthropic API, a paid/no-training
+    Gemini tier, or Vertex AI, ideally with Zero Data Retention.
+- Client-specific content in prompts is classified as CLIENT data; system prompts and public
+  context (MPEP, published patents) are PUBLIC.
+- The audit trail records LLM-call **metadata** (provider, model, token counts, cost, purpose) —
+  **not** raw prompt content in production, since prompts may contain privileged material.
 
 ## Encryption at Rest (requirement)
 Client data (`analyses`, `response_drafts`, `audit_events`) must be encrypted at rest before any

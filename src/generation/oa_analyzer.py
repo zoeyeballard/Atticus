@@ -48,7 +48,9 @@ def structure_office_action(
         office_action_text=text,
         known_references=_format_known_references(known_refs),
     )
-    data = llm.complete_json(prompt.system, user, max_tokens=4096)
+    # Large office actions produce large structured output; give room to avoid truncation
+    # (on overflow the caller degrades to the deterministic scaffold, preserving accuracy).
+    data = llm.complete_json(prompt.system, user, max_tokens=8192)
 
     rejections = _build_rejections(data.get("rejections", []), known_numbers)
     objections = list(data.get("objections", [])) + scaffold.objections

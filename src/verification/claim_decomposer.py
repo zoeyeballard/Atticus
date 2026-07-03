@@ -31,7 +31,7 @@ def decompose(text: str, llm: LLMClient | None = None) -> list[dict]:
     llm = llm or LLMClient()
     try:
         prompt = DECOMPOSE_CLAIMS
-        data = llm.complete_json(prompt.system, prompt.render(text=text), max_tokens=2048)
+        data = llm.complete_json(prompt.system, prompt.render(text=text), max_tokens=8192)
         if isinstance(data, list):
             return data
         if isinstance(data, dict) and "claims" in data:

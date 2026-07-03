@@ -24,8 +24,19 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    # --- LLM provider selection ---
+    llm_provider: str = Field(
+        default="anthropic",
+        description="Which LLM provider to use: 'anthropic' | 'gemini'",
+    )
+
     # --- Anthropic ---
     anthropic_api_key: str = Field(default="", description="Anthropic Claude API key")
+
+    # --- Google Gemini ---
+    gemini_api_key: str = Field(default="", description="Google Gemini API key")
+    gemini_generation_model: str = Field(default="gemini-2.5-flash")
+    gemini_verification_model: str = Field(default="gemini-2.5-flash-lite")
 
     # --- Database ---
     database_url: str = Field(
@@ -73,6 +84,17 @@ class Settings(BaseSettings):
     @property
     def anthropic_configured(self) -> bool:
         return bool(self.anthropic_api_key)
+
+    @property
+    def gemini_configured(self) -> bool:
+        return bool(self.gemini_api_key)
+
+    @property
+    def llm_configured(self) -> bool:
+        """Whether the *active* provider has a key."""
+        if self.llm_provider == "gemini":
+            return self.gemini_configured
+        return self.anthropic_configured
 
     @property
     def uspto_configured(self) -> bool:
