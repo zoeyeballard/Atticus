@@ -1,27 +1,38 @@
-// Thin API client for the Atticus backend.
-const BASE = "/api/v1";
+// API client for the Atticus backend. Base URL is injected at runtime so the same build works
+// for the web app, single-image server, and (later) the desktop sidecar.
+const API_BASE = import.meta.env.VITE_API_URL || "";
+const PREFIX = `${API_BASE}/api/v1`;
 
-async function post(path, body) {
-  const resp = await fetch(`${BASE}${path}`, {
-    method: "POST",
+async function req(path, options = {}) {
+  const res = await fetch(`${PREFIX}${path}`, {
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    ...options,
   });
-  if (!resp.ok) throw new Error(`${resp.status}: ${await resp.text()}`);
-  return resp.json();
-}
-
-async function get(path) {
-  const resp = await fetch(`${BASE}${path}`);
-  if (!resp.ok) throw new Error(`${resp.status}: ${await resp.text()}`);
-  return resp.json();
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      message = body.error?.message || body.detail?.error?.message || body.detail || message;
+    } catch {
+      /* non-JSON error */
+    }
+    throw new Error(message);
+  }
+  return res.json();
 }
 
 export const api = {
-  health: () => get("/health"),
-  analyze: (payload) => post("/analyze", payload),
-  draftResponse: (payload) => post("/draft-response", payload),
-  searchPriorArt: (payload) => post("/search-prior-art", payload),
-  verifyClaim: (payload) => post("/verify-claim", payload),
-  auditTrail: (analysisId) => get(`/audit-trail/${analysisId}`),
+  health: () => req("/health"),
+  analyze: (payload) => req("/analyze", { method: "POST", body: JSON.stringify(payload) }),
+  listAnalyses: (limit = 20) => req(`/analyses?limit=${limit}`),
+  getAnalysis: (id) => req(`/analyses/${id}`),
+  deleteAnalysis: (id) => req(`/analyses/${id}`, { method: "DELETE" }),
+  createDraft: (id, strategy) =>
+    req(`/analyses/${id}/draft`, { method: "POST", body: JSON.stringify({ strategy }) }),
+  getDraft: (id) => req(`/analyses/${id}/draft`),
+  saveDraft: (id, draft) =>
+    req(`/analyses/${id}/draft`, { method: "PUT", body: JSON.stringify(draft) }),
+  getSource: (id, ref) => req(`/analyses/${id}/sources/${encodeURIComponent(ref)}`),
+  exportAnalysisUrl: (id) => `${PREFIX}/analyses/${id}/export`,
+  exportDraftUrl: (id) => `${PREFIX}/analyses/${id}/draft/export`,
 };

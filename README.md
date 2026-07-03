@@ -69,6 +69,19 @@ docker compose up --build
 # Frontend on http://localhost:3000
 ```
 
+Single-image (Tier 2 — UI + API in one container against an external Postgres):
+
+```bash
+docker build -f Dockerfile.production -t atticus:latest .
+docker run -p 8000:8000 --env-file .env atticus:latest   # → http://localhost:8000
+```
+
+Frontend dev server (React + Vite):
+
+```bash
+cd frontend && npm install && npm run dev   # → http://localhost:3000 (proxies /api to :8000)
+```
+
 Local development without Docker:
 
 ```bash
