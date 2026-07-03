@@ -27,7 +27,7 @@
   Anthropic credits (account balance is $0 — calls return "credit balance too low"). Everything is
   wired; run `python scripts/run_evaluation.py --mode full` once credits exist.
 
-### Part C — UI ◐ (built; needs `npm` build verification)
+### Part C — UI ✅ (builds clean; end-to-end verified offline)
 - Full React app per the design system: dark sidebar + 5 views (New Analysis, Analysis Overview
   with collapsible rejection cards + claim-mapping table, slide-out Source Viewer, Response Draft
   editor with strategy selector + Export to Word, Settings). Professional palette + Merriweather/
@@ -36,10 +36,12 @@
 - **Task 16 (API):** `src/api/routes/analyses.py` — list/get/delete analyses, create/get/save draft,
   source lookup, and `.docx` export for analysis + draft (`src/generation/docx_export.py`).
   Consistent `{error:{code,message,suggestion}}` envelope. **Tested** (offline integration tests).
-- **Caveat:** `npm` is unavailable in the build environment, so the React files were written and the
-  import graph verified, but `npm install && npm run build` has **not** been run here. Run it locally
-  to confirm the bundle builds. The draft editor uses styled textareas (not Tiptap) to keep deps
-  minimal — swapping in a rich-text editor is a drop-in enhancement.
+- **Verified:** installed Node 20 + npm and ran `npm install && npm run build` — **builds clean**
+  (47 modules, no errors). Copied the build to `./static` and served it via `Dockerfile.production`'s
+  path (`main.py` static mount): one port serves the SPA, API, SPA fallback, and assets. Exercised
+  the full UI data-flow against the running server offline — analyze (paste) → list → get →
+  `.docx` export (valid OOXML, 37 KB) → source lookup → hard delete → 404. The draft editor uses
+  styled textareas (not Tiptap) to keep deps minimal — a rich-text editor is a drop-in enhancement.
 
 ### Part D — Packaging ✅ (done + verified)
 - **Task 18:** storage abstraction (`src/db/backends.py`: `VectorBackend`/`StorageBackend` +
@@ -52,9 +54,10 @@
 37 backend tests pass (added budget, rejection-type, and analyses-API integration tests).
 Frontend has no automated tests yet (would need a jsdom/vitest setup).
 
-## Two blockers (neither is a code defect)
-1. **Anthropic credits** ($0 balance) → Part B execution (Tasks 5–7) and live draft generation.
-2. **No `npm`** in this environment → Part C build verification.
+## Remaining blocker (not a code defect)
+- **Anthropic credits** ($0 balance) → Part B execution (Tasks 5–7) and live draft generation.
+  Everything else — Parts A, C, D and the whole offline pipeline — is verified end-to-end.
+  (The earlier `npm` blocker is resolved: Node 20 + npm installed, frontend builds and serves.)
 
 ## Reproduce
 ```bash
