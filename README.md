@@ -145,6 +145,10 @@ cd frontend && npm test          # 14 frontend (vitest) tests
 python scripts/run_evaluation.py --mode no-llm                    # parse-only baseline
 python scripts/run_evaluation.py --mode full                     # LLM analysis eval
 python scripts/run_evaluation.py --mode draft --strategy argue   # draft-level hallucination eval
+# Gemini free tier caps generation at ~20 requests/day — for a populated result on the free
+# tier, run one frugal app first (≈3 calls) before any other LLM use that day:
+python scripts/run_evaluation.py --mode draft --limit 1 --max-rejections 1 --max-entailment 1
+# Or use a paid Gemini tier / Anthropic key for the full 10-app run.
 python scripts/compare_evaluations.py A.json B.json              # side-by-side provider/model
 
 # Independent ground truth (human annotation)

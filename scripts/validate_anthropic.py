@@ -24,9 +24,14 @@ def main() -> int:
     if not get_settings().anthropic_configured:
         print("ANTHROPIC_API_KEY is not set in .env.")  # noqa: T201
         return 1
+    from src.config.data_classification import DataClass
+
     client = LLMClient()
     try:
-        resp = client.verify("You are a connectivity test.", "Reply with exactly: OK", max_tokens=10)
+        resp = client.verify(
+            "You are a connectivity test.", "Reply with exactly: OK", max_tokens=10,
+            data_class=DataClass.PUBLIC,
+        )
     except Exception as exc:  # noqa: BLE001
         msg = str(exc)
         print(f"FAILED: {type(exc).__name__}: {msg[:300]}")  # noqa: T201

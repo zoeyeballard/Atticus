@@ -44,11 +44,14 @@ def main() -> None:
     parser.add_argument("--mode", choices=["no-llm", "full", "draft"], default="no-llm")
     parser.add_argument("--strategy", choices=["argue", "amend", "both"], default="argue")
     parser.add_argument("--limit", type=int, default=None, help="Max apps (draft mode)")
+    parser.add_argument("--max-rejections", type=int, default=0,
+                        help="Cap drafted rejections per app to bound LLM calls (0 = no cap)")
     args = parser.parse_args()
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     if args.mode == "draft":
-        report = run_draft_evaluation(strategy=args.strategy, timestamp=timestamp, limit=args.limit)
+        report = run_draft_evaluation(strategy=args.strategy, timestamp=timestamp, limit=args.limit,
+                                      max_rejections=args.max_rejections)
         _print_draft_table(report)
         print(f"\nSaved: results/evaluations/draft_eval_{report['provider']}_{timestamp}.json")  # noqa: T201
         return

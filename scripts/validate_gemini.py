@@ -25,8 +25,12 @@ def main() -> int:
     client.verification_model = s.gemini_verification_model
     client._api_key = s.gemini_api_key
     client._client = None
+    from src.config.data_classification import DataClass
+
     try:
-        resp = client.verify("You are a connectivity test.", "Reply with exactly: OK")
+        resp = client.verify(
+            "You are a connectivity test.", "Reply with exactly: OK", data_class=DataClass.PUBLIC
+        )
     except Exception as exc:  # noqa: BLE001
         print(f"FAILED: {type(exc).__name__}: {str(exc)[:300]}")  # noqa: T201
         return 2

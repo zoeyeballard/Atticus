@@ -227,7 +227,7 @@ def _classify_assertion(text: str) -> str:
     return "argument"
 
 
-def _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment) -> dict:
+def _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment, max_rejections=0) -> dict:
     """Generate + score one application's draft. Returns a counts dict. May raise (e.g. 429)."""
     from src.data import office_action_parser
     from src.generation.response_drafter import draft_response
@@ -239,6 +239,9 @@ def _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment) -> dic
         oa.read_text(encoding="utf-8"), application_number=app, use_llm=True,
         rejection_type=entry.get("rejection_type"), data_class=DataClass.PUBLIC,
     )
+    # Cap the number of drafted rejections to bound LLM-call volume (free-tier quota).
+    if max_rejections and len(analysis.rejections) > max_rejections:
+        analysis = analysis.model_copy(update={"rejections": analysis.rejections[:max_rejections]})
     draft = draft_response(analysis, app, strategy=strategy, llm=llm, data_class=DataClass.PUBLIC)
     draft_text = "\n".join(a.argument_text for a in draft.arguments if a.argument_text)
 
@@ -288,7 +291,8 @@ def _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment) -> dic
 
 
 def run_draft_evaluation(
-    strategy: str = "argue", timestamp: str = "", limit: int | None = None, max_entailment: int = 6
+    strategy: str = "argue", timestamp: str = "", limit: int | None = None, max_entailment: int = 6,
+    max_rejections: int = 0,
 ) -> dict:
     """Generate response drafts and score their assertions (existence / location / entailment).
 
@@ -323,7 +327,9 @@ def run_draft_evaluation(
             if not oa.exists():
                 continue
             try:
-                counts = _eval_one_draft(app, oa, entry, uspto, llm, strategy, max_entailment)
+                counts = _eval_one_draft(
+                    app, oa, entry, uspto, llm, strategy, max_entailment, max_rejections
+                )
             except Exception as exc:  # noqa: BLE001 — e.g. provider rate limit (429): record + continue
                 errors.append(f"{app}: {type(exc).__name__}: {str(exc)[:140]}")
                 continue

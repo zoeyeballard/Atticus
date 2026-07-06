@@ -140,7 +140,6 @@ class LLMClient:
 
     # -- unified completion ------------------------------------------------------------------
 
-    @retry(reraise=True, stop=stop_after_attempt(4), wait=wait_exponential(min=1, max=30))
     def complete(
         self,
         system: str,
@@ -155,17 +154,23 @@ class LLMClient:
         """Single completion. Defaults to the generation model. Dispatches by provider.
 
         ``data_class`` defaults to CLIENT (conservative): callers working on public data must pass
-        ``DataClass.PUBLIC`` explicitly. The compliance guard runs before any network call.
+        ``DataClass.PUBLIC`` explicitly. The compliance and budget guards run before any network
+        call and are *not* retried; only the provider request is retried (with enough backoff to
+        cross a free-tier per-minute rate-limit window).
         """
         self._check_data_class(data_class)
         model = model or self.generation_model
         self._check_budget()
-        if self.provider == "gemini":
-            resp = self._complete_gemini(system, user, model, max_tokens, temperature, json_mode)
-        else:
-            resp = self._complete_anthropic(system, user, model, max_tokens, temperature)
+        resp = self._dispatch(system, user, model, max_tokens, temperature, json_mode)
         self._check_budget()
         return resp
+
+    # Retry the network call itself — long enough to cross a ~60s RPM window on the free tier.
+    @retry(reraise=True, stop=stop_after_attempt(6), wait=wait_exponential(min=2, max=60))
+    def _dispatch(self, system, user, model, max_tokens, temperature, json_mode) -> LLMResponse:
+        if self.provider == "gemini":
+            return self._complete_gemini(system, user, model, max_tokens, temperature, json_mode)
+        return self._complete_anthropic(system, user, model, max_tokens, temperature)
 
     def _complete_anthropic(self, system, user, model, max_tokens, temperature) -> LLMResponse:
         system_param: object = system
