@@ -15,30 +15,37 @@ const BASIS_LABEL = {
 export default function RejectionCard({ basis, claims, references, mappings, onViewSource }) {
   const [open, setOpen] = useState(false);
   return (
-    <article className="rounded border border-borderc bg-white">
+    <article className="rounded-sm border border-borderc bg-bgWhite overflow-hidden">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-start justify-between px-4 py-3 text-left"
+        className="row-hover flex w-full items-start justify-between px-5 py-4 text-left"
       >
         <div>
-          <div className="font-medium">
+          <div className="font-serif text-[15px] text-textPrimary">
             §{basis} — {BASIS_LABEL[basis] || "Rejection"}
           </div>
-          <div className="text-sm text-textSecondary mt-0.5">
+          <div className="text-sm text-textSecondary mt-1 doc">
             Claims {claims.join(", ")}
-            {references.length > 0 && <> · {references.join(", ")}</>}
+            {references.length > 0 && (
+              <> · <span className="font-mono text-[13px]">{references.join(", ")}</span></>
+            )}
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4 pl-4 shrink-0">
           <VerificationBadge status="verified" />
-          <span className="text-textSecondary text-sm">{open ? "▲" : "▾"}</span>
+          <span
+            className="text-textSecondary text-xs transition-transform duration-300 ease-elegant"
+            style={{ transform: open ? "rotate(180deg)" : "none" }}
+          >
+            ▾
+          </span>
         </div>
       </button>
 
       {open && (
-        <div className="border-t border-borderc px-4 py-3">
+        <div className="animate-reveal border-t border-borderc px-5 py-4">
           {mappings.length === 0 && (
-            <p className="text-sm text-textSecondary">
+            <p className="text-sm text-textSecondary doc">
               Deterministic parse identified this rejection; claim-by-claim mappings appear when
               AI-assisted analysis is enabled.
             </p>

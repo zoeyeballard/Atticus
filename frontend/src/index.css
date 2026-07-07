@@ -1,22 +1,167 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #fafaf9;
-  --text-primary: #1c1917;
-  --accent: #1e40af;
+  --bg-primary: #faf8f4;
+  --text-primary: #1c2420;
+  --accent: #2b5940;
+  --ease-elegant: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 15px;
+@layer base {
+  html {
+    /* Smooth, calm scrolling for long patent documents. */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: "Libre Baskerville", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Interactive elements ease their color/border changes rather than snapping. */
+  a, button, input, textarea, select, [role="button"] {
+    transition:
+      color 220ms var(--ease-elegant),
+      background-color 220ms var(--ease-elegant),
+      border-color 220ms var(--ease-elegant),
+      box-shadow 220ms var(--ease-elegant),
+      opacity 220ms var(--ease-elegant),
+      transform 220ms var(--ease-elegant);
+  }
+
+  ::selection {
+    background: #e8f0eb; /* accentSubtle */
+    color: #1c2420;
+  }
 }
 
-h1, h2, h3, .font-display {
-  font-family: "Merriweather", Georgia, serif;
+@layer components {
+  /* Long-form legal text: serif "document" face with generous leading. */
+  .doc {
+    font-family: "Source Serif 4", Georgia, serif;
+    line-height: 1.75;
+  }
+
+  /* --- Elegant buttons ------------------------------------------------------
+     A faint highlight follows the cursor (position via --gx/--gy set in JS),
+     fading in on hover — luxurious but restrained, never a loud gradient. */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 2px;
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 320ms var(--ease-elegant);
+    background: radial-gradient(
+      120px circle at var(--gx, 50%) var(--gy, 50%),
+      var(--btn-glow, rgba(255, 255, 255, 0.16)),
+      transparent 60%
+    );
+  }
+  .btn:hover::before {
+    opacity: 1;
+  }
+  .btn:active {
+    transform: translateY(0.5px);
+  }
+  .btn:focus-visible {
+    outline: 2px solid #2b5940;
+    outline-offset: 2px;
+  }
+
+  .btn-primary {
+    background-color: #2b5940;
+    color: #fff;
+    --btn-glow: rgba(232, 240, 235, 0.28);
+  }
+  .btn-primary:hover {
+    background-color: #1e3f2d;
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #1c2420;
+    border: 1px solid #d4cfc6;
+    --btn-glow: rgba(43, 89, 64, 0.1);
+  }
+  .btn-secondary:hover {
+    border-color: #2b5940;
+    color: #2b5940;
+  }
+
+  /* Rows/cards that respond to hover with a calm background shift, not a swap. */
+  .row-hover {
+    transition: background-color 220ms var(--ease-elegant);
+  }
+  .row-hover:hover {
+    background-color: #f0ece4;
+  }
+}
+
+@layer utilities {
+  /* Content revealed on expand: a gentle fade + settle, not a jarring pop. */
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+  }
+  .animate-reveal {
+    animation: reveal 260ms var(--ease-elegant);
+  }
+
+  /* Slide-in panel (Source Viewer) from the right edge. */
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  .animate-slide-in {
+    animation: slide-in 300ms var(--ease-elegant);
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-fade-in {
+    animation: fade-in 240ms var(--ease-elegant);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

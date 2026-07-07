@@ -24,42 +24,55 @@ export default function SourceViewer({ analysisId, reference, onClose }) {
 
   return (
     <div className="fixed inset-0 z-40" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-sidebar/25 animate-fade-in" />
       <aside
-        className="absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-xl border-l border-borderc overflow-y-auto"
+        className="animate-slide-in absolute right-0 top-0 h-full w-full max-w-xl bg-bgPrimary border-l border-borderc overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex items-center justify-between px-5 py-4 border-b border-borderc">
+        <header className="flex items-start justify-between px-7 py-5 border-b border-borderc bg-bgWhite">
           <div>
-            <h3 className="font-display text-lg">Source: {reference}</h3>
-            <p className="text-xs text-textSecondary">Cited reference</p>
+            <h3 className="font-serif text-lg">Source: <span className="font-mono text-base">{reference}</span></h3>
+            <p className="text-[11px] uppercase tracking-wide text-textSecondary mt-1">Cited reference</p>
           </div>
-          <button onClick={onClose} className="text-textSecondary hover:text-textPrimary text-xl">×</button>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="text-textSecondary hover:text-accent text-2xl leading-none transition-colors duration-200 ease-elegant"
+          >
+            ×
+          </button>
         </header>
 
-        <div className="px-5 py-4 space-y-4">
+        <div className="px-7 py-6 space-y-6">
           {error && <p className="text-unverified text-sm">{error}</p>}
           {!data && !error && <p className="text-textSecondary text-sm">Loading source…</p>}
           {data && (
             <>
               <div>
-                <div className="text-xs uppercase text-textSecondary mb-1">Cited passages</div>
+                <div className="text-[11px] uppercase tracking-[0.14em] text-textSecondary mb-2">
+                  Cited passages
+                </div>
                 {(data.relevant_passages || []).length === 0 && (
-                  <p className="text-sm text-textSecondary">
+                  <p className="text-sm text-textSecondary doc">
                     The examiner did not cite a specific passage for this reference.
                   </p>
                 )}
                 {(data.relevant_passages || []).map((p, i) => (
-                  <pre key={i} className="whitespace-pre-wrap font-mono text-sm bg-bgSecondary p-3 rounded mb-2">
+                  <blockquote
+                    key={i}
+                    className="doc whitespace-pre-wrap text-[15px] bg-bgWhite border-l-2 border-accent/40 px-4 py-3 mb-3 rounded-sm"
+                  >
                     {p}
-                  </pre>
+                  </blockquote>
                 ))}
               </div>
-              <div>
-                <div className="text-xs uppercase text-textSecondary mb-1">Verification</div>
+              <div className="border-t border-borderc pt-5">
+                <div className="text-[11px] uppercase tracking-[0.14em] text-textSecondary mb-2">
+                  Verification
+                </div>
                 <VerificationBadge status={data.verified ? "verified" : "unsupported"} />
                 {data.verification_details && (
-                  <p className="text-sm mt-1 text-textSecondary">{data.verification_details}</p>
+                  <p className="text-sm mt-2 text-textSecondary doc">{data.verification_details}</p>
                 )}
               </div>
             </>

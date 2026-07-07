@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { api } from "../api/client.js";
+import Button from "../components/common/Button.jsx";
 import RejectionCard from "../components/analysis/RejectionCard.jsx";
 import SourceViewer from "../components/verification/SourceViewer.jsx";
 
@@ -42,28 +43,33 @@ export default function AnalysisPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-8">
-      <header className="border-b border-borderc pb-4 mb-6">
-        <h1 className="text-xl font-display">
-          Application {analysis.application_number} — {analysis.rejection_type} rejection
+    <div className="mx-auto max-w-4xl px-8 py-10">
+      <header className="mb-8">
+        <h1 className="font-serif text-2xl leading-snug">
+          Application {analysis.application_number}
         </h1>
-        <p className="text-sm text-textSecondary mt-1">
-          Art Unit {analysis.art_unit || "—"} · Examiner {analysis.examiner_name || "—"}
+        <p className="text-sm text-textSecondary mt-2 doc">
+          {analysis.rejection_type} rejection · Art Unit {analysis.art_unit || "—"} · Examiner{" "}
+          {analysis.examiner_name || "—"}
         </p>
-        <div className="flex gap-2 mt-4">
-          <Link to={`/analysis/${id}/draft`} className="rounded bg-accent px-4 py-2 text-sm text-white hover:bg-accentHover">
-            Draft Response
-          </Link>
-          <a href={api.exportAnalysisUrl(id)} className="rounded border border-borderc px-4 py-2 text-sm hover:bg-bgSecondary">
+        {/* Thin legal-document rule rather than a heavy border. */}
+        <hr className="mt-5 border-0 border-t border-borderc" />
+        <div className="flex gap-3 mt-5">
+          <Button as={Link} to={`/analysis/${id}/draft`}>Draft Response</Button>
+          <Button variant="secondary" as="a" href={api.exportAnalysisUrl(id)}>
             Export Analysis
-          </a>
-          <button onClick={deleteAnalysis} className="rounded border border-borderc px-4 py-2 text-sm text-unverified hover:bg-bgSecondary">
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={deleteAnalysis}
+            className="!text-unverified hover:!border-unverified hover:!text-unverified"
+          >
             Delete
-          </button>
+          </Button>
         </div>
       </header>
 
-      <h2 className="text-sm uppercase tracking-wide text-textSecondary mb-3">Rejections</h2>
+      <h2 className="text-[11px] uppercase tracking-[0.18em] text-textSecondary mb-4">Rejections</h2>
       <div className="space-y-3">
         {Object.keys(groups).length === 0 && (
           <p className="text-sm text-textSecondary">No rejections were parsed from this office action.</p>

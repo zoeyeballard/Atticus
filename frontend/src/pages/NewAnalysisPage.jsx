@@ -2,8 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { api } from "../api/client.js";
+import Button from "../components/common/Button.jsx";
 
 const STEPS = ["Fetching from USPTO…", "Parsing office action…", "Verifying references…", "Analysis complete"];
+
+const inputCls =
+  "w-full rounded-sm border border-borderc bg-bgWhite px-3 py-2 font-mono text-[13px] " +
+  "outline-none transition-colors duration-200 ease-elegant " +
+  "focus:border-accent focus:ring-1 focus:ring-accent/30";
 
 export default function NewAnalysisPage() {
   const [appNo, setAppNo] = useState("");
@@ -34,51 +40,55 @@ export default function NewAnalysisPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-xl font-display mb-1">Analyze an Office Action</h1>
-      <p className="text-textSecondary text-sm mb-8">
+    <div className="mx-auto max-w-2xl px-8 py-16">
+      <h1 className="font-serif text-2xl mb-2">Analyze an Office Action</h1>
+      <p className="text-textSecondary text-sm mb-10 doc">
         Enter a published application number, or paste the office action text.
       </p>
 
       {busy && (
-        <div className="mb-6 rounded border border-borderc bg-bgSecondary p-4 text-sm">
-          <span className="inline-block h-2 w-2 rounded-full bg-accent animate-pulse mr-2" />
-          {STEPS[step]}
+        <div className="mb-8 rounded-sm border border-borderc bg-accentSubtle/60 px-4 py-3 text-sm flex items-center">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-pulse mr-3" />
+          <span className="text-textPrimary">{STEPS[step]}</span>
         </div>
       )}
 
-      <form onSubmit={submitNumber} className="rounded border border-borderc bg-white p-5 mb-6">
-        <label className="block text-sm font-medium mb-2">Application number</label>
-        <div className="flex gap-2">
+      <form onSubmit={submitNumber} className="rounded-sm border border-borderc bg-bgWhite p-6 mb-6">
+        <label className="block text-xs uppercase tracking-wide text-textSecondary mb-2">
+          Application number
+        </label>
+        <div className="flex gap-3">
           <input
             value={appNo}
             onChange={(e) => setAppNo(e.target.value)}
             placeholder="19531961"
-            className="flex-1 rounded border border-borderc px-3 py-2 font-mono"
+            className={`flex-1 ${inputCls}`}
           />
-          <button disabled={busy} className="rounded bg-accent px-4 py-2 text-white hover:bg-accentHover disabled:opacity-50">
-            Analyze
-          </button>
+          <Button disabled={busy} type="submit">Analyze</Button>
         </div>
       </form>
 
-      <div className="text-center text-xs text-textSecondary my-4">— or —</div>
+      <div className="text-center text-[11px] uppercase tracking-[0.2em] text-textSecondary my-6">
+        — or —
+      </div>
 
       <form
         onSubmit={(e) => { e.preventDefault(); if (text.trim()) run({ office_action_text: text }); }}
-        className="rounded border border-borderc bg-white p-5"
+        className="rounded-sm border border-borderc bg-bgWhite p-6"
       >
-        <label className="block text-sm font-medium mb-2">Paste office action text</label>
+        <label className="block text-xs uppercase tracking-wide text-textSecondary mb-2">
+          Paste office action text
+        </label>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={10}
           placeholder="Paste the full office action text here…"
-          className="w-full rounded border border-borderc px-3 py-2 font-mono text-sm"
+          className={inputCls}
         />
-        <button disabled={busy} className="mt-3 rounded bg-accent px-4 py-2 text-white hover:bg-accentHover disabled:opacity-50">
-          Analyze
-        </button>
+        <div className="mt-4">
+          <Button disabled={busy} type="submit">Analyze</Button>
+        </div>
       </form>
     </div>
   );

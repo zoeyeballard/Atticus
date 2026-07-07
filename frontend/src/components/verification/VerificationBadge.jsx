@@ -19,9 +19,13 @@ export default function VerificationBadge({ status, confidence }) {
     key = confidence >= 0.8 ? "verified" : confidence >= 0.5 ? "partial" : "unsupported";
   }
   const s = STATES[key] || STATES.unverifiable;
+  // Quiet footnote marker: a 6px dot + a small, letter-spaced label — never a loud badge.
   return (
-    <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${s.text}`} title={s.tip}>
-      <span className={`inline-block h-2 w-2 rounded-full ${s.dot}`} />
+    <span
+      className={`inline-flex items-center gap-1.5 text-[11px] tracking-wide ${s.text}`}
+      title={s.tip}
+    >
+      <span className={`inline-block h-1.5 w-1.5 rounded-full ${s.dot}`} />
       {s.label}
     </span>
   );

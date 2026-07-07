@@ -10,7 +10,19 @@ import SettingsPage from "./pages/SettingsPage.jsx";
 export default function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#1C2420",
+            color: "#FAF8F4",
+            border: "1px solid #2B5940",
+            borderRadius: "2px",
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: "13px",
+          },
+        }}
+      />
       <div className="flex h-screen bg-bgPrimary text-textPrimary">
         <Sidebar />
         <MainContent>
