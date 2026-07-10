@@ -39,7 +39,7 @@ export default function DraftPage() {
           <h1 className="font-serif text-2xl">Response Draft</h1>
           <Link
             to={`/analysis/${id}`}
-            className="text-sm text-accent hover:text-accentHover transition-colors duration-200 ease-elegant"
+            className="link-quiet text-sm text-accent hover:text-accentHover"
           >
             ← Back to analysis
           </Link>

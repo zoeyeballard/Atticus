@@ -1,8 +1,16 @@
-import { useCallback } from "react";
+import { useCursorGlow } from "../../hooks/useCursorGlow.js";
 
-// A calm, luxurious button. A faint highlight tracks the cursor (via CSS custom props)
-// and fades in on hover — the motion is minimal and eased, never a loud gradient swap.
+// A calm, luxurious button. A faint highlight trails the cursor (via CSS custom props)
+// and fades in on hover; the motion is minimal and eased, never a hard swap.
 // `as="a"` renders an anchor (for download/nav links) with the same styling.
+//
+// NOTE: class names must appear as complete literals so Tailwind's content scan keeps
+// the styles in the build. Never construct them as `btn-${variant}`.
+const VARIANTS = {
+  primary: "btn btn-primary",
+  secondary: "btn btn-secondary",
+};
+
 export default function Button({
   variant = "primary",
   as: Tag = "button",
@@ -10,14 +18,8 @@ export default function Button({
   children,
   ...props
 }) {
-  const onMouseMove = useCallback((e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--gx", `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty("--gy", `${((e.clientY - r.top) / r.height) * 100}%`);
-  }, []);
-
-  const cls = `btn btn-${variant} px-4 py-2 text-sm ${className}`;
+  const onMouseMove = useCursorGlow();
+  const cls = `${VARIANTS[variant] || VARIANTS.primary} px-4 py-2 text-sm ${className}`;
   return (
     <Tag className={cls} onMouseMove={onMouseMove} {...props}>
       {children}

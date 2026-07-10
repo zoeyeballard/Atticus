@@ -3,31 +3,40 @@ import { api } from "../../api/client.js";
 import VerificationBadge from "./VerificationBadge.jsx";
 
 // Slide-out panel: the trust-building view. One click from an assertion to its source.
+// Closing plays the exit animation to completion before unmounting, so the
+// panel withdraws as gracefully as it arrived.
 export default function SourceViewer({ analysisId, reference, onClose }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (!reference) return;
     setData(null);
     setError(null);
+    setClosing(false);
     api.getSource(analysisId, reference).then((r) => setData(r.reference)).catch((e) => setError(e.message));
   }, [analysisId, reference]);
 
   useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && onClose();
+    const onKey = (e) => e.key === "Escape" && setClosing(true);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, []);
 
   if (!reference) return null;
 
+  const beginClose = () => setClosing(true);
+
   return (
-    <div className="fixed inset-0 z-40" onClick={onClose}>
-      <div className="absolute inset-0 bg-sidebar/25 animate-fade-in" />
+    <div className="fixed inset-0 z-40" onClick={beginClose}>
+      <div
+        className={`absolute inset-0 bg-sidebar/25 ${closing ? "animate-fade-out" : "animate-fade-in"}`}
+      />
       <aside
-        className="animate-slide-in absolute right-0 top-0 h-full w-full max-w-xl bg-bgPrimary border-l border-borderc overflow-y-auto"
+        className={`${closing ? "animate-slide-out" : "animate-slide-in"} absolute right-0 top-0 h-full w-full max-w-xl bg-bgPrimary border-l border-borderc overflow-y-auto`}
         onClick={(e) => e.stopPropagation()}
+        onAnimationEnd={() => closing && onClose()}
       >
         <header className="flex items-start justify-between px-7 py-5 border-b border-borderc bg-bgWhite">
           <div>
@@ -35,9 +44,9 @@ export default function SourceViewer({ analysisId, reference, onClose }) {
             <p className="text-[11px] uppercase tracking-wide text-textSecondary mt-1">Cited reference</p>
           </div>
           <button
-            onClick={onClose}
+            onClick={beginClose}
             aria-label="Close"
-            className="text-textSecondary hover:text-accent text-2xl leading-none transition-colors duration-200 ease-elegant"
+            className="text-textSecondary hover:text-accent text-2xl leading-none transition-colors duration-300 ease-elegant"
           >
             ×
           </button>

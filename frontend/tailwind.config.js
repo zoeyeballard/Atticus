@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
+  // Design-system classes that are toggled or composed at runtime; never purge them.
+  safelist: [
+    "btn", "btn-primary", "btn-secondary", "glow", "is-open", "link-quiet",
+    "nav-item", "is-active", "sidebar-surface", "rule-double",
+  ],
   theme: {
     extend: {
       colors: {

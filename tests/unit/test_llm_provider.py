@@ -1,6 +1,33 @@
 """Provider selection for the unified LLM client (no network)."""
 
-from src.generation.llm_client import LLMClient, Usage
+from src.generation.llm_client import LLMClient, Usage, _extract_json
+
+
+def test_extract_json_top_level_array():
+    # Decomposition prompts return arrays; must not be corrupted into "Extra data" errors.
+    text = '[\n  {"claim_text": "a", "claim_type": "citation"},\n  {"claim_text": "b", "claim_type": "factual_assertion"}\n]'
+    data = _extract_json(text)
+    assert isinstance(data, list) and len(data) == 2
+
+
+def test_extract_json_array_with_prose_and_fences():
+    text = 'Here you go:\n```json\n[{"claim_text": "x", "claim_type": "citation"}]\n```\nLet me know!'
+    data = _extract_json(text)
+    assert isinstance(data, list) and data[0]["claim_type"] == "citation"
+
+
+def test_extract_json_object_with_trailing_prose():
+    text = '{"rejections": []}\n\nI hope this helps.'
+    data = _extract_json(text)
+    assert data == {"rejections": []}
+
+
+def test_extract_json_salvages_truncated_array():
+    # A max_tokens truncation mid-element must yield the complete elements, not nothing.
+    text = '[{"claim_text": "a", "claim_type": "citation"}, {"claim_text": "b", "claim_type": "factual_assertion"}, {"claim_text": "unterminated'
+    data = _extract_json(text)
+    assert isinstance(data, list) and len(data) == 2
+    assert data[1]["claim_text"] == "b"
 
 
 def test_gemini_pricing_tracked():

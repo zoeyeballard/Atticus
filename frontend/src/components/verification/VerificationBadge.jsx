@@ -9,7 +9,7 @@ const STATES = {
   fabricated: { label: "Unverified", dot: "bg-unverified", text: "text-unverified",
     tip: "The cited source could not be found. Do not rely on this without checking." },
   unverifiable: { label: "N/A", dot: "bg-stone-400", text: "text-textSecondary",
-    tip: "Subjective judgment — no factual check is possible." },
+    tip: "Subjective judgment; no factual check is possible." },
 };
 
 // Accepts either a verification status string or a numeric confidence (0-1).

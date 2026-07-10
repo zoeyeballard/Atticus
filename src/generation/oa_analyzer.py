@@ -11,6 +11,7 @@ unverified objection rather than silently accepted.
 from __future__ import annotations
 
 import logging
+import re
 
 from src.config.data_classification import DataClass
 from src.data.office_action_parser import extract_cited_references, parse_scaffold
@@ -53,6 +54,12 @@ def structure_office_action(
     # Large office actions produce large structured output; give room to avoid truncation
     # (on overflow the caller degrades to the deterministic scaffold, preserving accuracy).
     data = llm.complete_json(prompt.system, user, max_tokens=8192, data_class=data_class)
+    if isinstance(data, list):
+        # Models occasionally wrap the object in an array, or return the rejections bare.
+        if len(data) == 1 and isinstance(data[0], dict) and "rejections" in data[0]:
+            data = data[0]
+        else:
+            data = {"rejections": data}
 
     rejections = _build_rejections(data.get("rejections", []), known_numbers)
     objections = list(data.get("objections", [])) + scaffold.objections
@@ -84,11 +91,13 @@ def _build_rejections(
             logger.warning("Skipping rejection with unknown basis: %r", raw.get("rejection_basis"))
             continue
 
+        # LLMs emit explicit JSON nulls for unknown fields; coerce them to "" so the
+        # required-str schema fields validate instead of dropping the whole analysis.
         mappings = [
             LimitationMapping(
-                limitation_text=m.get("limitation_text", ""),
-                mapped_to_reference=m.get("mapped_to_reference", ""),
-                reference_passage=m.get("reference_passage", ""),
+                limitation_text=m.get("limitation_text") or "",
+                mapped_to_reference=m.get("mapped_to_reference") or "",
+                reference_passage=m.get("reference_passage") or "",
                 examiner_reasoning=m.get("examiner_reasoning"),
                 source_span=m.get("source_span"),
             )
@@ -100,16 +109,16 @@ def _build_rejections(
 
         cited = [
             CitedReference(
-                patent_number=c.get("patent_number", ""),
-                relevant_passages=c.get("relevant_passages", []),
+                patent_number=c.get("patent_number") or "",
+                relevant_passages=[p for p in (c.get("relevant_passages") or []) if p],
             )
             for c in raw.get("cited_references", [])
-            if _normalize(c.get("patent_number", "")) in {_normalize(k) for k in known_numbers}
+            if _normalize(c.get("patent_number") or "") in {_normalize(k) for k in known_numbers}
         ]
 
         rejections.append(
             ClaimRejection(
-                claim_number=int(raw.get("claim_number", 0)),
+                claim_number=int(raw.get("claim_number") or 0),
                 rejection_basis=basis,
                 is_independent=bool(raw.get("is_independent", False)),
                 limitation_mappings=mappings,
@@ -120,4 +129,11 @@ def _build_rejections(
 
 
 def _normalize(number: str) -> str:
-    return number.replace(",", "").replace(" ", "").upper()
+    """Canonicalize a patent/publication number for comparison.
+
+    Examiners and LLMs write the same reference many ways — "US 2015/0039705",
+    "US2015/0039705 A1", "US 10,234,567 B2" — so drop everything but the
+    alphanumerics and any trailing kind code (A1/B2/…).
+    """
+    canon = re.sub(r"[^A-Z0-9]", "", number.upper())
+    return re.sub(r"(?<=\d)(A\d|B\d)$", "", canon)

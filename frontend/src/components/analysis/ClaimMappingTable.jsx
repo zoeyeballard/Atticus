@@ -18,7 +18,7 @@ export default function ClaimMappingTable({ mappings, onViewSource }) {
           <tr key={i} className="row-hover border-b border-borderc/50 align-top">
             <td className="py-2.5 pr-4 font-mono text-[13px] leading-relaxed">{m.limitation_text}</td>
             <td className="py-2.5 pr-4 text-textSecondary">
-              <span className="font-mono text-[13px]">{m.mapped_to_reference || "—"}</span>
+              <span className="font-mono text-[13px]">{m.mapped_to_reference || "–"}</span>
               {m.reference_passage ? (
                 <span className="text-textSecondary">, {m.reference_passage}</span>
               ) : ""}
@@ -28,7 +28,7 @@ export default function ClaimMappingTable({ mappings, onViewSource }) {
               {m.mapped_to_reference && onViewSource && (
                 <button
                   onClick={() => onViewSource(m.mapped_to_reference)}
-                  className="ml-3 text-xs text-accent hover:text-accentHover transition-colors duration-200 ease-elegant"
+                  className="link-quiet ml-3 text-xs text-accent hover:text-accentHover"
                 >
                   View ↗
                 </button>

@@ -41,10 +41,12 @@ export default function NewAnalysisPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-8 py-16">
+      <p className="text-[10px] uppercase tracking-[0.24em] text-gold mb-3">New Matter</p>
       <h1 className="font-serif text-2xl mb-2">Analyze an Office Action</h1>
-      <p className="text-textSecondary text-sm mb-10 doc">
+      <p className="text-textSecondary text-sm mb-5 doc">
         Enter a published application number, or paste the office action text.
       </p>
+      <hr className="rule-double mb-10" />
 
       {busy && (
         <div className="mb-8 rounded-sm border border-borderc bg-accentSubtle/60 px-4 py-3 text-sm flex items-center">
@@ -68,8 +70,10 @@ export default function NewAnalysisPage() {
         </div>
       </form>
 
-      <div className="text-center text-[11px] uppercase tracking-[0.2em] text-textSecondary my-6">
-        — or —
+      <div className="flex items-center gap-4 my-6" aria-hidden="true">
+        <span className="flex-1 border-t border-borderc" />
+        <span className="text-[11px] uppercase tracking-[0.2em] text-textSecondary">or</span>
+        <span className="flex-1 border-t border-borderc" />
       </div>
 
       <form

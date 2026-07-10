@@ -12,17 +12,32 @@ const BASIS_LABEL = {
 };
 
 // One rejection group (may be several claims sharing a basis). Collapsed by default.
+// The body stays mounted while the close transition plays, then unmounts —
+// so both opening and closing feel measured rather than abrupt.
 export default function RejectionCard({ basis, claims, references, mappings, onViewSource }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  function toggle() {
+    if (open) {
+      setOpen(false); // collapse-grid eases shut; unmount on transition end
+    } else {
+      setMounted(true);
+      requestAnimationFrame(() => setOpen(true));
+    }
+  }
+
   return (
     <article className="rounded-sm border border-borderc bg-bgWhite overflow-hidden">
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
+        aria-expanded={open}
         className="row-hover flex w-full items-start justify-between px-5 py-4 text-left"
       >
         <div>
           <div className="font-serif text-[15px] text-textPrimary">
-            §{basis} — {BASIS_LABEL[basis] || "Rejection"}
+            §{basis} <span className="text-textSecondary/70 px-0.5">·</span>{" "}
+            {BASIS_LABEL[basis] || "Rejection"}
           </div>
           <div className="text-sm text-textSecondary mt-1 doc">
             Claims {claims.join(", ")}
@@ -42,17 +57,26 @@ export default function RejectionCard({ basis, claims, references, mappings, onV
         </div>
       </button>
 
-      {open && (
-        <div className="animate-reveal border-t border-borderc px-5 py-4">
-          {mappings.length === 0 && (
-            <p className="text-sm text-textSecondary doc">
-              Deterministic parse identified this rejection; claim-by-claim mappings appear when
-              AI-assisted analysis is enabled.
-            </p>
-          )}
-          {mappings.length > 0 && (
-            <ClaimMappingTable mappings={mappings} onViewSource={onViewSource} />
-          )}
+      {mounted && (
+        <div
+          className={`collapse-grid ${open ? "is-open" : ""}`}
+          onTransitionEnd={(e) => {
+            if (e.propertyName === "grid-template-rows" && !open) setMounted(false);
+          }}
+        >
+          <div>
+            <div className="collapse-inner border-t border-borderc px-5 py-4">
+              {mappings.length === 0 && (
+                <p className="text-sm text-textSecondary doc">
+                  Deterministic parse identified this rejection; claim-by-claim mappings appear when
+                  AI-assisted analysis is enabled.
+                </p>
+              )}
+              {mappings.length > 0 && (
+                <ClaimMappingTable mappings={mappings} onViewSource={onViewSource} />
+              )}
+            </div>
+          </div>
         </div>
       )}
     </article>

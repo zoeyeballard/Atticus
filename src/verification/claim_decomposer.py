@@ -35,8 +35,15 @@ def decompose(text: str, llm: LLMClient | None = None, data_class=None) -> list[
     dc = data_class if data_class is not None else DataClass.CLIENT
     try:
         prompt = DECOMPOSE_CLAIMS
+        # Decomposition is a high-volume classification task → the cheap verification
+        # model, with a generous output budget (long analyses decompose into hundreds
+        # of claims and 8k tokens of JSON truncates mid-array).
         data = llm.complete_json(
-            prompt.system, prompt.render(text=text), max_tokens=8192, data_class=dc
+            prompt.system,
+            prompt.render(text=text),
+            model=llm.verification_model,
+            max_tokens=32768,
+            data_class=dc,
         )
         if isinstance(data, list):
             return data

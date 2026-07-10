@@ -21,6 +21,10 @@ export default function App() {
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "13px",
           },
+          // Icons in the house palette — forest green / muted burgundy,
+          // never the library defaults.
+          success: { iconTheme: { primary: "#2B5940", secondary: "#FAF8F4" } },
+          error: { iconTheme: { primary: "#7D3040", secondary: "#FAF8F4" } },
         }}
       />
       <div className="flex h-screen bg-bgPrimary text-textPrimary">

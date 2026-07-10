@@ -246,12 +246,52 @@ class LLMClient:
         )
 
 
-def _extract_json(text: str) -> dict:
-    """Pull a JSON object out of a model response, tolerating ```json fences."""
+def _extract_json(text: str) -> dict | list:
+    """Pull a JSON object *or array* out of a model response, tolerating ```json fences.
+
+    Top-level arrays matter: decomposition prompts return a JSON list, and slicing
+    from the first ``{`` to the last ``}`` would corrupt it ("Extra data" errors).
+    """
     fenced = re.search(r"```(?:json)?\s*(\{.*?\}|\[.*?\])\s*```", text, re.DOTALL)
-    candidate = fenced.group(1) if fenced else text
-    start = candidate.find("{")
-    end = candidate.rfind("}")
-    if start != -1 and end != -1:
-        candidate = candidate[start : end + 1]
-    return json.loads(candidate)
+    candidate = (fenced.group(1) if fenced else text).strip()
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        pass
+    # Fall back to decoding from the first JSON opener ({ or [), whichever comes first,
+    # ignoring any prose before/after the payload.
+    starts = [i for i in (candidate.find("{"), candidate.find("[")) if i != -1]
+    if not starts:
+        raise json.JSONDecodeError("No JSON payload found in response", candidate, 0)
+    trimmed = candidate[min(starts):]
+    try:
+        value, _ = json.JSONDecoder().raw_decode(trimmed)
+        return value
+    except json.JSONDecodeError:
+        # Last resort: the response was truncated mid-payload (max_tokens). For arrays,
+        # salvage every complete element rather than discarding the whole response.
+        salvaged = _salvage_array(trimmed)
+        if salvaged is not None:
+            return salvaged
+        raise
+
+
+def _salvage_array(text: str) -> list | None:
+    """Recover complete elements from a truncated top-level JSON array, else None."""
+    start = text.find("[")
+    if start == -1:
+        return None
+    decoder = json.JSONDecoder()
+    idx = start + 1
+    items: list = []
+    while idx < len(text):
+        while idx < len(text) and text[idx] in " \t\r\n,":
+            idx += 1
+        if idx >= len(text) or text[idx] == "]":
+            break
+        try:
+            item, idx = decoder.raw_decode(text, idx)
+        except json.JSONDecodeError:
+            break  # truncated element — keep what we have
+        items.append(item)
+    return items or None

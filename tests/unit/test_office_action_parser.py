@@ -24,6 +24,21 @@ def test_extracts_cited_references(sample_office_action):
     assert any("2019/0123456" in n for n in numbers)
 
 
+def test_extracts_pub_no_narrative_form():
+    # Real examiner phrasing: the number follows "US Pub. No." rather than "US" directly
+    # (found live on application 19531961 — the anticipation reference was missed).
+    text = (
+        "Claim(s) 21-24 is/are rejected under 35 U.S.C. 102(a)(1) as being anticipated by "
+        "Fink; Patrick W. et al. US Pub. No. 2014/0188459 (Fink)."
+    )
+    numbers = {r.patent_number for r in office_action_parser.extract_cited_references(text)}
+    assert "US2014/0188459" in numbers
+    rejections = office_action_parser.extract_rejections(text)
+    assert rejections and all(
+        c.patent_number == "US2014/0188459" for c in rejections[0].cited_references
+    )
+
+
 def test_rejection_type_bare_final_word_is_not_final():
     # Real non-final OAs contain the word "final" in after-final boilerplate; that must NOT
     # flip the type to final (the bug found scoring live OAs 19418983/19445647).

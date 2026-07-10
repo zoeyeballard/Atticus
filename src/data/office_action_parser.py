@@ -28,11 +28,13 @@ from src.models.schemas import (
 
 logger = logging.getLogger(__name__)
 
-# US patent / publication numbers, e.g. "US 10,234,567 B2", "US2020/0123456 A1", "6,123,456".
+# US patent / publication numbers, e.g. "US 10,234,567 B2", "US2020/0123456 A1", "6,123,456",
+# and the examiner-narrative form "US Pub. No. 2014/0188459". The number itself is captured in
+# group 1/2/3 so the stored reference is the canonical "US..." form without the "Pub. No." noise.
 _PATENT_RE = re.compile(
-    r"\bUS[\s-]?\d{4}/\d{6,7}\s?[A-Z]?\d?"  # publication
-    r"|\bUS[\s-]?[\d,]{7,12}\s?[A-Z]?\d?"  # grant with US prefix
-    r"|\b\d{1,2},\d{3},\d{3}\b",  # bare grant number
+    r"\bUS[\s-]?(?:Pub(?:lication)?\.?\s*No\.?\s*)?(\d{4}/\d{6,7})\s?[A-Z]?\d?"  # publication
+    r"|\bUS[\s-]?(?:Pat(?:ent)?\.?\s*No\.?\s*)?([\d,]{7,12})\s?[A-Z]?\d?"  # grant with US prefix
+    r"|\b(\d{1,2},\d{3},\d{3})\b",  # bare grant number
 )
 
 _APP_NO_RE = re.compile(r"Application\s+No\.?\s*[:#]?\s*([\d/,]{8,})", re.IGNORECASE)
@@ -85,10 +87,13 @@ def extract_cited_references(text: str) -> list[CitedReference]:
     seen: set[str] = set()
     refs: list[CitedReference] = []
     for match in _PATENT_RE.finditer(text):
-        raw = re.sub(r"\s+", "", match.group(0))
-        if raw in seen:
+        number = next(g for g in match.groups() if g)
+        raw = "US" + re.sub(r"\s+", "", number)
+        # Same reference may appear with and without comma grouping; dedupe canonically.
+        key = raw.replace(",", "")
+        if key in seen:
             continue
-        seen.add(raw)
+        seen.add(key)
         refs.append(CitedReference(patent_number=raw))
     return refs
 

@@ -49,8 +49,8 @@ export default function AnalysisPage() {
           Application {analysis.application_number}
         </h1>
         <p className="text-sm text-textSecondary mt-2 doc">
-          {analysis.rejection_type} rejection · Art Unit {analysis.art_unit || "—"} · Examiner{" "}
-          {analysis.examiner_name || "—"}
+          {analysis.rejection_type} rejection · Art Unit {analysis.art_unit || "–"} · Examiner{" "}
+          {analysis.examiner_name || "–"}
         </p>
         {/* Thin legal-document rule rather than a heavy border. */}
         <hr className="mt-5 border-0 border-t border-borderc" />

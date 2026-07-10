@@ -15,6 +15,8 @@
   html {
     /* Smooth, calm scrolling for long patent documents. */
     scroll-behavior: smooth;
+    /* Never let the UA render dark-mode (blue-tinted) native widgets. */
+    color-scheme: light;
   }
 
   body {
@@ -26,26 +28,82 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Native form controls (radios, checkboxes, progress) take the brand green,
+     not the browser's default blue. */
+  :root {
+    accent-color: var(--accent);
+  }
+
+  /* Replace the browser's blue focus ring everywhere with a quiet green one. */
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 1.5px solid rgba(43, 89, 64, 0.55);
+    outline-offset: 2px;
+  }
+
+  /* Chrome autofill paints inputs pale blue; repaint them ivory. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #fffdf9 inset;
+    -webkit-text-fill-color: #1c2420;
+    caret-color: #1c2420;
+  }
+
+  /* Thin, warm-stone scrollbars — furniture, not chrome. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d4cfc6 transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #d4cfc6;
+    border-radius: 4px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   h1, h2, h3, .font-serif {
     font-family: "Libre Baskerville", Georgia, serif;
     letter-spacing: -0.01em;
   }
 
-  /* Interactive elements ease their color/border changes rather than snapping. */
+  /* Interactive elements ease their color/border changes rather than snapping.
+     Durations are deliberately unhurried — considered, not snappy. */
   a, button, input, textarea, select, [role="button"] {
     transition:
-      color 220ms var(--ease-elegant),
-      background-color 220ms var(--ease-elegant),
-      border-color 220ms var(--ease-elegant),
-      box-shadow 220ms var(--ease-elegant),
-      opacity 220ms var(--ease-elegant),
-      transform 220ms var(--ease-elegant);
+      color 280ms var(--ease-elegant),
+      background-color 280ms var(--ease-elegant),
+      border-color 280ms var(--ease-elegant),
+      box-shadow 280ms var(--ease-elegant),
+      opacity 280ms var(--ease-elegant),
+      transform 280ms var(--ease-elegant);
   }
 
   ::selection {
     background: #e8f0eb; /* accentSubtle */
     color: #1c2420;
   }
+}
+
+/* Registered custom properties so the cursor-glow *position* itself is
+   interpolated — the light trails the cursor like a lamp being carried,
+   instead of teleporting under it. */
+@property --gx {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --gy {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
 }
 
 @layer components {
@@ -56,8 +114,9 @@
   }
 
   /* --- Elegant buttons ------------------------------------------------------
-     A faint highlight follows the cursor (position via --gx/--gy set in JS),
-     fading in on hover — luxurious but restrained, never a loud gradient. */
+     A faint warm highlight follows the cursor (position via --gx/--gy set in
+     JS), fading in on hover and *trailing* the pointer — luxurious but
+     restrained. Never a loud gradient, never a hard swap. */
   .btn {
     position: relative;
     overflow: hidden;
@@ -79,11 +138,14 @@
     inset: 0;
     z-index: -1;
     opacity: 0;
-    transition: opacity 320ms var(--ease-elegant);
+    transition:
+      opacity 420ms var(--ease-elegant),
+      --gx 200ms var(--ease-elegant),
+      --gy 200ms var(--ease-elegant);
     background: radial-gradient(
-      120px circle at var(--gx, 50%) var(--gy, 50%),
+      140px circle at var(--gx, 50%) var(--gy, 50%),
       var(--btn-glow, rgba(255, 255, 255, 0.16)),
-      transparent 60%
+      transparent 65%
     );
   }
   .btn:hover::before {
@@ -93,17 +155,26 @@
     transform: translateY(0.5px);
   }
   .btn:focus-visible {
-    outline: 2px solid #2b5940;
+    outline: 1.5px solid rgba(43, 89, 64, 0.55);
     outline-offset: 2px;
   }
 
   .btn-primary {
-    background-color: #2b5940;
-    color: #fff;
-    --btn-glow: rgba(232, 240, 235, 0.28);
+    /* Top-lit forest green: an "engraved" vertical gradient with a hairline inner
+       highlight, like light falling on a leather desk accessory. */
+    background-image: linear-gradient(180deg, #336349 0%, #2b5940 55%, #26503a 100%);
+    color: #fdfcf9;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+    --btn-glow: rgba(232, 240, 235, 0.3);
+    transition:
+      filter 280ms var(--ease-elegant),
+      box-shadow 280ms var(--ease-elegant),
+      transform 280ms var(--ease-elegant);
   }
   .btn-primary:hover {
-    background-color: #1e3f2d;
+    filter: brightness(0.96); /* the gradient deepens as one piece; the glow does the rest */
   }
   .btn-primary:disabled {
     opacity: 0.5;
@@ -114,19 +185,125 @@
     background-color: transparent;
     color: #1c2420;
     border: 1px solid #d4cfc6;
-    --btn-glow: rgba(43, 89, 64, 0.1);
+    --btn-glow: rgba(43, 89, 64, 0.09);
   }
   .btn-secondary:hover {
-    border-color: #2b5940;
+    border-color: rgba(43, 89, 64, 0.55);
     color: #2b5940;
+    background-color: rgba(232, 240, 235, 0.35);
   }
 
-  /* Rows/cards that respond to hover with a calm background shift, not a swap. */
+  /* Cursor glow for dark surfaces (sidebar links): same trailing-lamp gesture as .btn,
+     tuned for the green-black. Attach useCursorGlow's onMouseMove. */
+  .glow {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    transition:
+      opacity 420ms var(--ease-elegant),
+      --gx 200ms var(--ease-elegant),
+      --gy 200ms var(--ease-elegant);
+    background: radial-gradient(
+      110px circle at var(--gx, 50%) var(--gy, 50%),
+      rgba(232, 240, 235, 0.07),
+      transparent 65%
+    );
+  }
+  .glow:hover::before {
+    opacity: 1;
+  }
+
+  /* The sidebar surface: a barely-there vertical gradient so the green-black reads as
+     material (lamplight falling down a leather spine), not a flat fill. */
+  .sidebar-surface {
+    background-image: linear-gradient(180deg, #202a24 0%, #1c2420 40%, #181f1b 100%);
+  }
+
+  /* Legal-masthead double rule: the thick-thin pair used under journal titles. */
+  .rule-double {
+    border: 0;
+    border-top: 2px solid #1c2420;
+    position: relative;
+    margin: 0;
+  }
+  .rule-double::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 3px;
+    border-top: 1px solid #d4cfc6;
+  }
+
+  /* Sliding active indicator for sidebar navigation: a brass rule that grows in. */
+  .nav-item {
+    position: relative;
+  }
+  .nav-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 0;
+    width: 2px;
+    background: #8b7355; /* antique brass */
+    transform: translateY(-50%);
+    transition: height 320ms var(--ease-elegant);
+  }
+  .nav-item.is-active::before {
+    height: 60%;
+  }
+
+  /* Quiet text links: a hairline underline grows from the left on hover —
+     the footnote-reference gesture of a well-set legal document. */
+  .link-quiet {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 calc(100% - 1px);
+    transition:
+      background-size 360ms var(--ease-elegant),
+      color 280ms var(--ease-elegant);
+  }
+  .link-quiet:hover {
+    background-size: 100% 1px;
+  }
+
+  /* Rows/cards that respond to hover with a calm parchment wash, not a swap. */
   .row-hover {
-    transition: background-color 220ms var(--ease-elegant);
+    transition: background-color 300ms var(--ease-elegant);
   }
   .row-hover:hover {
-    background-color: #f0ece4;
+    background-color: rgba(240, 236, 228, 0.7);
+  }
+
+  /* Smooth expand/collapse: grid-rows interpolation gives a measured,
+     unhurried reveal with no JS height math. */
+  .collapse-grid {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 380ms var(--ease-elegant);
+  }
+  .collapse-grid.is-open {
+    grid-template-rows: 1fr;
+  }
+  .collapse-grid > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .collapse-inner {
+    opacity: 0;
+    transition: opacity 320ms var(--ease-elegant) 60ms;
+  }
+  .is-open .collapse-inner {
+    opacity: 1;
   }
 }
 
@@ -140,13 +317,21 @@
     animation: reveal 260ms var(--ease-elegant);
   }
 
-  /* Slide-in panel (Source Viewer) from the right edge. */
+  /* Slide-in panel (Source Viewer) from the right edge — and a matching,
+     equally unhurried exit so closing never feels like a hard cut. */
   @keyframes slide-in {
     from { opacity: 0; transform: translateX(16px); }
     to { opacity: 1; transform: none; }
   }
   .animate-slide-in {
-    animation: slide-in 300ms var(--ease-elegant);
+    animation: slide-in 340ms var(--ease-elegant);
+  }
+  @keyframes slide-out {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateX(16px); }
+  }
+  .animate-slide-out {
+    animation: slide-out 280ms var(--ease-elegant) forwards;
   }
 
   @keyframes fade-in {
@@ -154,7 +339,14 @@
     to { opacity: 1; }
   }
   .animate-fade-in {
-    animation: fade-in 240ms var(--ease-elegant);
+    animation: fade-in 280ms var(--ease-elegant);
+  }
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  .animate-fade-out {
+    animation: fade-out 280ms var(--ease-elegant) forwards;
   }
 }
 
