@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { api } from "../../api/client.js";
 import { useCursorGlow } from "../../hooks/useCursorGlow.js";
+import Mockingbird from "../common/Mockingbird.jsx";
 
 export default function Sidebar() {
   const [recent, setRecent] = useState([]);
@@ -26,11 +27,17 @@ export default function Sidebar() {
         <span className="font-serif text-bgPrimary text-[15px] tracking-[0.32em] uppercase">
           Atticus
         </span>
-        <p className="mt-2 mb-4 text-[11px] tracking-wide text-white/40">
+        <p className="mt-2 mb-4 pr-12 text-[11px] tracking-wide text-white/40">
           Office Action Assistant
         </p>
-        {/* Masthead rule, inverted for the dark surface. */}
+        {/* Masthead rule, inverted for the dark surface. The mockingbird mark
+            perches on the rule itself — its own perch is the layout's rule. */}
         <div className="border-t-2 border-white/25 relative">
+          <Mockingbird
+            perch={false}
+            aria-hidden="true"
+            className="absolute right-0 bottom-full h-7 w-auto text-bgPrimary/90"
+          />
           <div className="absolute inset-x-0 top-[3px] border-t border-white/10" />
         </div>
       </div>
