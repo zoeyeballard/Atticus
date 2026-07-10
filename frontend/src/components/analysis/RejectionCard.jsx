@@ -1,6 +1,7 @@
 import { useState } from "react";
 import VerificationBadge from "../verification/VerificationBadge.jsx";
 import ClaimMappingTable from "./ClaimMappingTable.jsx";
+import { ChevronDown } from "../common/Icons.jsx";
 
 const BASIS_LABEL = {
   "101": "Subject Matter Eligibility",
@@ -11,10 +12,18 @@ const BASIS_LABEL = {
   dp: "Double Patenting",
 };
 
-// One rejection group (may be several claims sharing a basis). Collapsed by default.
-// The body stays mounted while the close transition plays, then unmounts —
-// so both opening and closing feel measured rather than abrupt.
-export default function RejectionCard({ basis, claims, references, mappings, onViewSource }) {
+// One ground of rejection, set like a numbered section of a response brief: a hanging
+// roman numeral in the margin, hairline separation instead of a boxed card. The body
+// stays mounted while the close transition plays, then unmounts, so both opening and
+// closing feel measured rather than abrupt.
+export default function RejectionCard({
+  numeral,
+  basis,
+  claims,
+  references,
+  mappings,
+  onViewSource,
+}) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -28,57 +37,67 @@ export default function RejectionCard({ basis, claims, references, mappings, onV
   }
 
   return (
-    <article className="rounded-sm border border-borderc bg-bgWhite overflow-hidden">
-      <button
-        onClick={toggle}
-        aria-expanded={open}
-        className="row-hover flex w-full items-start justify-between px-5 py-4 text-left"
-      >
-        <div>
-          <div className="font-serif text-[15px] text-textPrimary">
-            §{basis} <span className="text-textSecondary/70 px-0.5">·</span>{" "}
-            {BASIS_LABEL[basis] || "Rejection"}
-          </div>
-          <div className="text-sm text-textSecondary mt-1 doc">
-            Claims {claims.join(", ")}
-            {references.length > 0 && (
-              <> · <span className="font-mono text-[13px]">{references.join(", ")}</span></>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-4 pl-4 shrink-0">
-          <VerificationBadge status="verified" />
-          <span
-            className="text-textSecondary text-xs transition-transform duration-300 ease-elegant"
-            style={{ transform: open ? "rotate(180deg)" : "none" }}
-          >
-            ▾
-          </span>
-        </div>
-      </button>
-
-      {mounted && (
-        <div
-          className={`collapse-grid ${open ? "is-open" : ""}`}
-          onTransitionEnd={(e) => {
-            if (e.propertyName === "grid-template-rows" && !open) setMounted(false);
-          }}
+    <section className="brief-section border-t border-borderc first:border-t-0">
+      <div className="brief-numeral select-none" aria-hidden="true">
+        {numeral ? `${numeral}.` : ""}
+      </div>
+      <div>
+        <button
+          onClick={toggle}
+          aria-expanded={open}
+          className="row-hover flex w-full items-start justify-between py-4 pr-2 text-left"
         >
           <div>
-            <div className="collapse-inner border-t border-borderc px-5 py-4">
-              {mappings.length === 0 && (
-                <p className="text-sm text-textSecondary doc">
-                  Deterministic parse identified this rejection; claim-by-claim mappings appear when
-                  AI-assisted analysis is enabled.
-                </p>
-              )}
-              {mappings.length > 0 && (
-                <ClaimMappingTable mappings={mappings} onViewSource={onViewSource} />
+            <div className="font-serif text-[15.5px] text-textPrimary">
+              §{basis} <span className="text-textSecondary/60 px-0.5">·</span>{" "}
+              {BASIS_LABEL[basis] || "Rejection"}
+            </div>
+            <div className="text-sm text-textSecondary mt-1 doc">
+              Claims {claims.join(", ")}
+              {references.length > 0 && (
+                <>
+                  {" "}over{" "}
+                  <span className="font-mono text-[12.5px] nums-tab">
+                    {references.join(", ")}
+                  </span>
+                </>
               )}
             </div>
           </div>
-        </div>
-      )}
-    </article>
+          <div className="flex items-center gap-4 pl-4 pt-1 shrink-0">
+            <VerificationBadge status="verified" />
+            <span
+              className="text-textSecondary transition-transform duration-300 ease-elegant"
+              style={{ transform: open ? "rotate(180deg)" : "none" }}
+            >
+              <ChevronDown />
+            </span>
+          </div>
+        </button>
+
+        {mounted && (
+          <div
+            className={`collapse-grid ${open ? "is-open" : ""}`}
+            onTransitionEnd={(e) => {
+              if (e.propertyName === "grid-template-rows" && !open) setMounted(false);
+            }}
+          >
+            <div>
+              <div className="collapse-inner pb-5 pr-2">
+                {mappings.length === 0 && (
+                  <p className="text-sm text-textSecondary doc">
+                    Deterministic parse identified this ground; the claim chart appears when
+                    AI-assisted analysis is enabled.
+                  </p>
+                )}
+                {mappings.length > 0 && (
+                  <ClaimMappingTable mappings={mappings} onViewSource={onViewSource} />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

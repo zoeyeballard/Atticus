@@ -10,30 +10,33 @@ export default function SettingsPage() {
   const yn = (v) => (health ? (v ? "Configured" : "Not configured") : "…");
 
   return (
-    <div className="mx-auto max-w-2xl px-8 py-12">
-      <h1 className="font-serif text-2xl mb-8">Settings</h1>
+    <div className="mx-auto max-w-2xl px-8 py-16">
+      <p className="text-[10px] uppercase tracking-[0.24em] text-gold mb-3">Chambers</p>
+      <h1 className="font-serif text-[27px] mb-2">Settings</h1>
+      <p className="text-textSecondary text-sm mb-5 doc">
+        How this installation is configured. Keys live server-side and are never entered here.
+      </p>
+      <hr className="rule-double mb-10" />
 
-      <Section title="Provider">
+      {/* Typographic sections separated by hairlines and whitespace, not boxed cards. */}
+      <Section title="Model Provider">
         <Row label="Active provider">{health?.llm_provider || "…"}</Row>
         <Row label="Generation model">{health?.generation_model || "…"}</Row>
         <Row label="Verification model">{health?.verification_model || "…"}</Row>
       </Section>
 
-      <Section title="API Configuration">
-        <Row label="USPTO API">{yn(health?.uspto_configured)}</Row>
+      <Section title="Connections">
+        <Row label="USPTO Open Data Portal">{yn(health?.uspto_configured)}</Row>
         <Row label="Gemini API">{yn(health?.gemini_configured)}</Row>
         <Row label="Anthropic API">{yn(health?.anthropic_configured)}</Row>
-        <p className="text-xs text-textSecondary mt-3 doc">
-          Keys are configured server-side in <code className="font-mono">.env</code>, never entered
-          or stored in the browser.
-        </p>
       </Section>
 
-      <Section title="Data &amp; Privacy">
-        <p className="text-sm text-textSecondary doc">
-          Client work product is tenant-isolated and never used to train any model. A routing guard
-          blocks client data from provider tiers that may train on inputs. Analyses can be
-          permanently deleted from the analysis view. See the data-handling policy for details.
+      <Section title="Confidentiality">
+        <p className="text-sm text-textSecondary doc max-w-[58ch]">
+          Client work product is tenant-isolated and never used to train any model. A routing
+          guard refuses to send client matter to a provider tier that may train on inputs.
+          Analyses can be permanently deleted from the analysis view; deletion also purges the
+          drafts and audit records beneath them.
         </p>
       </Section>
     </div>
@@ -42,8 +45,8 @@ export default function SettingsPage() {
 
 function Section({ title, children }) {
   return (
-    <section className="mb-6 rounded-sm border border-borderc bg-bgWhite p-6">
-      <h2 className="text-[11px] uppercase tracking-[0.18em] text-textSecondary mb-4">{title}</h2>
+    <section className="mb-9">
+      <h2 className="text-[11px] uppercase tracking-[0.18em] text-textSecondary mb-3">{title}</h2>
       {children}
     </section>
   );
@@ -51,9 +54,10 @@ function Section({ title, children }) {
 
 function Row({ label, children }) {
   return (
-    <div className="flex justify-between py-1.5 text-sm border-b border-borderc/40 last:border-0">
-      <span className="text-textSecondary">{label}</span>
-      <span className="font-medium font-mono text-[13px]">{children}</span>
+    <div className="leader-row py-1.5 text-sm">
+      <span className="text-textSecondary shrink-0">{label}</span>
+      <span className="leader-fill" aria-hidden="true" />
+      <span className="font-mono text-[12.5px] nums-tab">{children}</span>
     </div>
   );
 }

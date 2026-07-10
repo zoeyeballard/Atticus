@@ -22,7 +22,7 @@ export default function Sidebar() {
     }`;
 
   return (
-    <aside className="sidebar-surface flex w-64 flex-col text-white/80 border-r border-black/20">
+    <aside className="sidebar-surface sidebar-grain flex w-64 flex-col text-white/80 border-r border-black/20">
       <div className="px-6 pt-7 pb-5">
         <span className="font-serif text-bgPrimary text-[15px] tracking-[0.32em] uppercase">
           Atticus
@@ -65,10 +65,10 @@ export default function Sidebar() {
 
       <div className="px-3 flex-1 overflow-y-auto">
         <p className="px-4 mb-3 text-[10px] uppercase tracking-[0.18em] text-white/35">
-          Recent Analyses
+          Docket
         </p>
         {recent.length === 0 && (
-          <p className="px-4 text-xs text-white/35">No analyses yet.</p>
+          <p className="px-4 text-xs text-white/35">Nothing on the docket yet.</p>
         )}
         {recent.map((a) => (
           <Link

@@ -5,6 +5,8 @@ export default {
   safelist: [
     "btn", "btn-primary", "btn-secondary", "glow", "is-open", "link-quiet",
     "nav-item", "is-active", "sidebar-surface", "rule-double",
+    "doc", "nums-tab", "leader-row", "leader-fill", "brief-section", "brief-numeral",
+    "colophon", "sidebar-grain",
   ],
   theme: {
     extend: {

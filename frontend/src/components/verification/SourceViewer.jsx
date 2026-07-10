@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api/client.js";
 import VerificationBadge from "./VerificationBadge.jsx";
+import { Close } from "../common/Icons.jsx";
 
 // Slide-out panel: the trust-building view. One click from an assertion to its source.
 // Closing plays the exit animation to completion before unmounting, so the
@@ -46,9 +47,9 @@ export default function SourceViewer({ analysisId, reference, onClose }) {
           <button
             onClick={beginClose}
             aria-label="Close"
-            className="text-textSecondary hover:text-accent text-2xl leading-none transition-colors duration-300 ease-elegant"
+            className="text-textSecondary hover:text-accent p-1.5 transition-colors duration-300 ease-elegant"
           >
-            ×
+            <Close />
           </button>
         </header>
 

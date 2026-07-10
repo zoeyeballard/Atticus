@@ -9,7 +9,7 @@ const mappings = [
 describe("ClaimMappingTable", () => {
   it("renders a row per mapping", () => {
     render(<ClaimMappingTable mappings={mappings} />);
-    expect(screen.getByText("a priority queue")).toBeInTheDocument();
+    expect(screen.getByText(/a priority queue/)).toBeInTheDocument();
     expect(screen.getByText(/US11,345,678/)).toBeInTheDocument();
   });
 

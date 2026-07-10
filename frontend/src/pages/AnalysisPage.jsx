@@ -42,41 +42,61 @@ export default function AnalysisPage() {
     }
   }
 
+  const numerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+
   return (
     <div className="mx-auto max-w-4xl px-8 py-10">
-      <header className="mb-8">
-        <h1 className="font-serif text-2xl leading-snug">
-          Application {analysis.application_number}
-        </h1>
-        <p className="text-sm text-textSecondary mt-2 doc">
-          {analysis.rejection_type} rejection · Art Unit {analysis.art_unit || "–"} · Examiner{" "}
-          {analysis.examiner_name || "–"}
-        </p>
-        {/* Thin legal-document rule rather than a heavy border. */}
-        <hr className="mt-5 border-0 border-t border-borderc" />
-        <div className="flex gap-3 mt-5">
-          <Button as={Link} to={`/analysis/${id}/draft`}>Draft Response</Button>
-          <Button variant="secondary" as="a" href={api.exportAnalysisUrl(id)}>
-            Export Analysis
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={deleteAnalysis}
-            className="!text-unverified hover:!border-unverified hover:!text-unverified"
-          >
-            Delete
-          </Button>
+      {/* Header laid out like a filing: title left, caption block right with dotted
+          leaders carrying the eye from label to value. */}
+      <header className="mb-10 grid grid-cols-1 md:grid-cols-[1fr_260px] gap-8 items-start">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.24em] text-gold mb-3">
+            Office Action Analysis
+          </p>
+          <h1 className="font-serif text-[27px] leading-snug [text-wrap:balance]">
+            In re Application No.{" "}
+            <span className="nums-tab">{analysis.application_number}</span>
+          </h1>
+          <div className="flex gap-3 mt-6">
+            <Button as={Link} to={`/analysis/${id}/draft`}>Draft Response</Button>
+            <Button variant="secondary" as="a" href={api.exportAnalysisUrl(id)}>
+              Export Analysis
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={deleteAnalysis}
+              className="!text-unverified hover:!border-unverified hover:!text-unverified"
+            >
+              Delete
+            </Button>
+          </div>
         </div>
+
+        <aside className="border border-borderc bg-bgWhite px-4 py-4 text-[12.5px] nums-tab">
+          <CaptionRow label="Action">{analysis.rejection_type}</CaptionRow>
+          <CaptionRow label="Art Unit">{analysis.art_unit || "–"}</CaptionRow>
+          <CaptionRow label="Examiner">{analysis.examiner_name || "–"}</CaptionRow>
+          {analysis.mailing_date && (
+            <CaptionRow label="Mailed">{analysis.mailing_date}</CaptionRow>
+          )}
+        </aside>
       </header>
 
-      <h2 className="text-[11px] uppercase tracking-[0.18em] text-textSecondary mb-4">Rejections</h2>
-      <div className="space-y-3">
+      <hr className="rule-double mb-8" />
+
+      <h2 className="text-[11px] uppercase tracking-[0.18em] text-textSecondary mb-2">
+        Grounds of Rejection
+      </h2>
+      <div>
         {Object.keys(groups).length === 0 && (
-          <p className="text-sm text-textSecondary">No rejections were parsed from this office action.</p>
+          <p className="text-sm text-textSecondary doc mt-3">
+            No rejections were parsed from this office action.
+          </p>
         )}
-        {Object.entries(groups).map(([basis, g]) => (
+        {Object.entries(groups).map(([basis, g], i) => (
           <RejectionCard
             key={basis}
+            numeral={numerals[i] || String(i + 1)}
             basis={basis}
             claims={[...g.claims].sort((a, b) => a - b)}
             references={[...g.refs]}
@@ -87,6 +107,18 @@ export default function AnalysisPage() {
       </div>
 
       <SourceViewer analysisId={id} reference={sourceRef} onClose={() => setSourceRef(null)} />
+    </div>
+  );
+}
+
+function CaptionRow({ label, children }) {
+  return (
+    <div className="leader-row py-1">
+      <span className="text-[10px] uppercase tracking-[0.14em] text-textSecondary shrink-0">
+        {label}
+      </span>
+      <span className="leader-fill" aria-hidden="true" />
+      <span className="text-textPrimary text-right">{children}</span>
     </div>
   );
 }

@@ -17,12 +17,12 @@ describe("RejectionCard", () => {
     expect(screen.getByText(/Obviousness/)).toBeInTheDocument();
     expect(screen.getByText(/Claims 25, 26, 27/)).toBeInTheDocument();
     // Collapsed: the mapping table is not shown yet.
-    expect(screen.queryByText("a processor")).not.toBeInTheDocument();
+    expect(screen.queryByText(/a processor/)).not.toBeInTheDocument();
   });
 
   it("expands to reveal the claim mapping table on click", () => {
     render(<RejectionCard {...props} />);
     fireEvent.click(screen.getByRole("button"));
-    expect(screen.getByText("a processor")).toBeInTheDocument();
+    expect(screen.getByText(/a processor/)).toBeInTheDocument();
   });
 });

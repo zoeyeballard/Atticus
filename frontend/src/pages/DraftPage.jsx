@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { api } from "../api/client.js";
 import Button from "../components/common/Button.jsx";
 import VerificationBadge from "../components/verification/VerificationBadge.jsx";
+import { ArrowLeft } from "../components/common/Icons.jsx";
 
 const STRATEGIES = [
   ["argue", "Argue (distinguish over prior art)"],
@@ -36,12 +37,12 @@ export default function DraftPage() {
     <div className="mx-auto max-w-4xl px-8 py-10">
       <header className="mb-8 flex items-end justify-between">
         <div>
-          <h1 className="font-serif text-2xl">Response Draft</h1>
+          <h1 className="font-serif text-[27px]">Response Draft</h1>
           <Link
             to={`/analysis/${id}`}
-            className="link-quiet text-sm text-accent hover:text-accentHover"
+            className="link-quiet inline-flex items-center gap-1.5 text-sm text-accent hover:text-accentHover mt-1"
           >
-            ← Back to analysis
+            <ArrowLeft /> Back to the analysis
           </Link>
         </div>
         {draft && (
