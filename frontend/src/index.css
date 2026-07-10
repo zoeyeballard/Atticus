@@ -242,22 +242,25 @@
     border-top: 1px solid #d4cfc6;
   }
 
-  /* Sliding active indicator for sidebar navigation: a brass rule that grows in. */
+  /* Sliding active indicator for sidebar navigation: a brass rule that grows in.
+     Lives on ::after — ::before belongs to .glow's cursor light, and an element only
+     has one of each, so the two effects must not share a pseudo-element. */
   .nav-item {
     position: relative;
   }
-  .nav-item::before {
+  .nav-item::after {
     content: "";
     position: absolute;
     left: 0;
     top: 50%;
     height: 0;
     width: 2px;
+    opacity: 1;
     background: #8b7355; /* antique brass */
     transform: translateY(-50%);
     transition: height 320ms var(--ease-elegant);
   }
-  .nav-item.is-active::before {
+  .nav-item.is-active::after {
     height: 60%;
   }
 
