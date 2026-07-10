@@ -39,6 +39,18 @@ export default function Sidebar() {
         <Link to="/" className={navClass("/")} onMouseMove={onMouseMove}>
           New Analysis
         </Link>
+        <Link to="/search" className={navClass("/search")} onMouseMove={onMouseMove}>
+          <span className="flex items-center justify-between">
+            Prior Art Search
+            <span className="text-[9px] uppercase tracking-[0.14em] text-gold/80">soon</span>
+          </span>
+        </Link>
+        <Link to="/audit" className={navClass("/audit")} onMouseMove={onMouseMove}>
+          <span className="flex items-center justify-between">
+            Audit Trail
+            <span className="text-[9px] uppercase tracking-[0.14em] text-gold/80">soon</span>
+          </span>
+        </Link>
         <Link to="/settings" className={navClass("/settings")} onMouseMove={onMouseMove}>
           Settings
         </Link>

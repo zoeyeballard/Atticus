@@ -6,6 +6,7 @@ import NewAnalysisPage from "./pages/NewAnalysisPage.jsx";
 import AnalysisPage from "./pages/AnalysisPage.jsx";
 import DraftPage from "./pages/DraftPage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
+import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 export default function App() {
   return (
@@ -34,6 +35,36 @@ export default function App() {
             <Route path="/" element={<NewAnalysisPage />} />
             <Route path="/analysis/:id" element={<AnalysisPage />} />
             <Route path="/analysis/:id/draft" element={<DraftPage />} />
+            <Route
+              path="/search"
+              element={
+                <ComingSoonPage
+                  kicker="Research"
+                  title="Prior Art Search"
+                  description="Semantic search across indexed patents and MPEP guidance, tuned for claim language."
+                  points={[
+                    "Search by claim limitation, concept, or plain language; results ranked by relevance.",
+                    "Every result links to its source passage with section and paragraph provenance.",
+                    "Draws on the same verified corpus the analysis pipeline retrieves from.",
+                  ]}
+                />
+              }
+            />
+            <Route
+              path="/audit"
+              element={
+                <ComingSoonPage
+                  kicker="Provenance"
+                  title="Audit Trail"
+                  description="A complete record of what was retrieved, generated, verified, and flagged for each analysis."
+                  points={[
+                    "Every model call recorded with its purpose, token counts, and cost; never the privileged content.",
+                    "Retrieval and verification steps in order, so any conclusion can be traced to its evidence.",
+                    "Exportable for firm records and professional-responsibility review.",
+                  ]}
+                />
+              }
+            />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </MainContent>
