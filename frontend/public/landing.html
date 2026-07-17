@@ -9,21 +9,25 @@
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
-/* The night library: the working instrument's world after hours. A deliberately
-   single-theme page; the drama lives here so the tool itself can stay quiet. */
+/* The night library: the working instrument's world after hours. Single committed
+   theme; the drama lives here so the tool itself can stay quiet. */
 :root {
-  --night: #161d19;
-  --night-panel: #1c2420;
+  --night: #141a16;
+  --night-2: #182019;
+  --panel: #1c2420;
   --ivory: #faf8f4;
-  --parchment: #f0ece4;
+  --parchment: #f2eee6;
+  --parchment-2: #eae4d8;
   --ink: #1c2420;
   --ink-soft: #5a5f57;
   --brass: #8b7355;
-  --brass-bright: #b99b6b;
+  --brass-bright: #c2a165;
   --forest: #2b5940;
-  --forest-tint: #e8f0eb;
-  --hairline-dark: rgba(250, 248, 244, 0.16);
-  --hairline-light: #d4cfc6;
+  --forest-deep: #1e3f2d;
+  --verified: #4e8b6a;
+  --review: #b08d45;
+  --hair-d: rgba(250, 248, 244, 0.14);
+  --hair-l: #d4cfc6;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -43,33 +47,48 @@ body {
 
 .kicker {
   font-family: "Inter", system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.26em; text-transform: uppercase;
 }
 .mono { font-family: "JetBrains Mono", monospace; font-variant-numeric: lining-nums tabular-nums; }
-
 a { color: inherit; }
 a:focus-visible, button:focus-visible { outline: 1.5px solid var(--brass-bright); outline-offset: 3px; }
+
+/* Reading progress: a hairline of brass across the top. */
+#progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 100%;
+  background: linear-gradient(90deg, var(--brass), var(--brass-bright));
+  transform-origin: left; transform: scaleX(0); z-index: 50;
+}
 
 /* ---------- Hero ---------- */
 .hero {
   min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 6rem 1.5rem 5rem;
-  position: relative;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 6rem 1.5rem 5rem;
+  position: relative; overflow: hidden;
 }
+/* Lamplight: two ambient radial gradients drifting almost imperceptibly. The whole
+   room breathes; nothing on the page blinks. */
+.hero::before, .hero::after {
+  content: ""; position: absolute; inset: -30%;
+  pointer-events: none; z-index: 0;
+}
+.hero::before {
+  background: radial-gradient(46% 38% at 30% 26%, rgba(194, 161, 101, 0.13), transparent 70%);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+.hero::after {
+  background: radial-gradient(52% 44% at 72% 78%, rgba(43, 89, 64, 0.22), transparent 72%);
+  animation: drift-b 34s ease-in-out infinite alternate;
+}
+.hero > * { position: relative; z-index: 1; }
+
 .hero .kicker { color: var(--brass-bright); opacity: 0; animation: rise 900ms var(--ease) 200ms forwards; }
 
-.bird-wrap { margin: 2.2rem 0 0; opacity: 0; animation: settle 1100ms var(--ease) 500ms forwards; }
-.bird-wrap svg { height: 84px; width: auto; color: var(--ivory); display: block; }
+.bird-wrap { margin: 2.2rem 0 0; opacity: 0; animation: settle 1100ms var(--ease) 500ms forwards; will-change: transform; }
+.bird-wrap svg { height: 88px; width: auto; color: var(--ivory); display: block; }
 
-/* The masthead rule draws itself beneath the bird's feet. */
 .hero-rule { width: min(320px, 60vw); margin: 0 auto; }
 .hero-rule .r1, .hero-rule .r2 {
   display: block; height: 0; border-top: 2px solid var(--ivory);
@@ -81,26 +100,27 @@ a:focus-visible, button:focus-visible { outline: 1.5px solid var(--brass-bright)
 h1 {
   font-family: "Libre Baskerville", Georgia, serif;
   font-weight: 700;
-  font-size: clamp(40px, 7vw, 76px);
-  line-height: 1.12;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-  max-width: 15ch;
-  margin-top: 2.6rem;
+  font-size: clamp(42px, 7.2vw, 80px);
+  line-height: 1.1; letter-spacing: -0.01em;
+  text-wrap: balance; max-width: 15ch; margin-top: 2.6rem;
 }
-h1 .line { display: block; opacity: 0; transform: translateY(14px); animation: rise 950ms var(--ease) forwards; }
+h1 .line { display: block; opacity: 0; transform: translateY(16px); animation: rise 950ms var(--ease) forwards; }
 h1 .line:nth-child(1) { animation-delay: 1050ms; }
 h1 .line:nth-child(2) { animation-delay: 1200ms; }
-h1 em { font-style: italic; color: var(--brass-bright); }
+/* The one gradient allowed on type: candlelit ivory falling into brass. */
+h1 em {
+  font-style: italic;
+  background: linear-gradient(105deg, var(--ivory) 20%, var(--brass-bright) 78%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
 
 .hero p.sub {
-  max-width: 52ch;
-  margin-top: 1.8rem;
-  color: rgba(250, 248, 244, 0.75);
-  font-size: 18px;
+  max-width: 52ch; margin-top: 1.9rem;
+  color: rgba(250, 248, 244, 0.74); font-size: 18px;
   opacity: 0; animation: rise 900ms var(--ease) 1450ms forwards;
 }
-.cta-row { display: flex; gap: 1rem; margin-top: 2.6rem; flex-wrap: wrap; justify-content: center;
+.cta-row { display: flex; gap: 1rem; margin-top: 2.7rem; flex-wrap: wrap; justify-content: center;
   opacity: 0; animation: rise 900ms var(--ease) 1650ms forwards; }
 
 .btn {
@@ -108,9 +128,11 @@ h1 em { font-style: italic; color: var(--brass-bright); }
   display: inline-flex; align-items: center; gap: 0.5rem;
   font-family: "Inter", system-ui, sans-serif; font-size: 14px; font-weight: 500;
   letter-spacing: 0.02em; text-decoration: none; cursor: pointer;
-  padding: 0.72rem 1.4rem; border-radius: 2px;
-  transition: filter 280ms var(--ease), border-color 280ms var(--ease), color 280ms var(--ease);
+  padding: 0.74rem 1.45rem; border-radius: 2px;
+  transition: filter 280ms var(--ease), border-color 280ms var(--ease),
+    color 280ms var(--ease), transform 280ms var(--ease);
 }
+.btn:active { transform: translateY(0.5px); }
 .btn::before {
   content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
   transition: opacity 420ms var(--ease);
@@ -119,53 +141,130 @@ h1 em { font-style: italic; color: var(--brass-bright); }
 }
 .btn:hover::before { opacity: 1; }
 .btn-solid {
-  color: #fdfcf9;
-  background-image: linear-gradient(180deg, #336349 0%, #2b5940 55%, #26503a 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.18);
-  border: 0;
+  color: #fdfcf9; border: 0;
+  background-image: linear-gradient(180deg, #346a4d 0%, #2b5940 55%, #24503a 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2),
+    0 8px 28px -12px rgba(0, 0, 0, 0.55);
 }
-.btn-solid:hover { filter: brightness(1.05); }
-.btn-ghost { border: 1px solid var(--hairline-dark); color: rgba(250,248,244,0.85); }
+.btn-solid:hover { filter: brightness(1.06); }
+.btn-ghost { border: 1px solid var(--hair-d); color: rgba(250,248,244,0.85); }
 .btn-ghost:hover { border-color: var(--brass-bright); color: var(--brass-bright); }
 
 .scroll-hint {
   position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-  color: rgba(250,248,244,0.35); font-family: "Inter", sans-serif; font-size: 11px;
+  color: rgba(250,248,244,0.35);
+  font-family: "Inter", sans-serif; font-size: 11px;
   letter-spacing: 0.22em; text-transform: uppercase;
   opacity: 0; animation: rise 900ms var(--ease) 2100ms forwards;
 }
 
-/* ---------- The Method (printed page) ---------- */
-.method { background: var(--parchment); color: var(--ink); padding: 7rem 1.5rem; }
-.method-inner { max-width: 1020px; margin: 0 auto; }
-.method .kicker { color: var(--brass); }
-.method h2 {
+/* ---------- FIG. 1: the mark as a patent drawing ---------- */
+.figure { background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-2) 100%);
+  color: var(--ink); padding: 7.5rem 1.5rem; }
+.figure-inner { max-width: 1060px; margin: 0 auto; }
+.figure .kicker { color: var(--brass); }
+.figure h2 {
   font-family: "Libre Baskerville", Georgia, serif; font-weight: 700;
-  font-size: clamp(28px, 4vw, 42px); margin-top: 0.8rem; text-wrap: balance;
+  font-size: clamp(28px, 4vw, 44px); margin-top: 0.8rem; text-wrap: balance;
 }
-.rule-double { border: 0; border-top: 2px solid var(--ink); position: relative; margin: 1.6rem 0 3.4rem; }
-.rule-double::after { content: ""; position: absolute; inset: 3px 0 auto 0; border-top: 1px solid var(--hairline-light); }
+.rule-double { border: 0; border-top: 2px solid var(--ink); position: relative; margin: 1.6rem 0 3.6rem; }
+.rule-double::after { content: ""; position: absolute; inset: 3px 0 auto 0; border-top: 1px solid var(--hair-l); }
 
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
-@media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
-.step .numeral {
-  font-family: "Libre Baskerville", Georgia, serif; font-size: 30px; color: var(--brass);
-  line-height: 1;
+.fig-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; align-items: center; }
+@media (max-width: 880px) { .fig-grid { grid-template-columns: 1fr; } }
+
+.fig-plate { position: relative; }
+.fig-plate svg { width: 100%; height: auto; display: block; color: var(--ink); }
+.fig-caption {
+  margin-top: 1.2rem; text-align: center;
+  font-family: "Libre Baskerville", Georgia, serif; font-weight: 700;
+  font-size: 15px; letter-spacing: 0.12em;
 }
-.step h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 19px; margin: 0.9rem 0 0.6rem; }
-.step p { color: var(--ink-soft); font-size: 15.5px; }
+/* Leader lines draw themselves; numerals fade in after. */
+.fig-plate .lead { stroke-dasharray: 4 4; stroke-dashoffset: 160; }
+.fig-plate.in .lead { animation: dash 1200ms var(--ease) forwards; }
+.fig-plate .lead:nth-of-type(2) { animation-delay: 180ms; }
+.fig-plate .lead:nth-of-type(3) { animation-delay: 360ms; }
+.fig-plate .ref { opacity: 0; }
+.fig-plate.in .ref { animation: rise 700ms var(--ease) forwards; }
+.fig-plate.in .ref.r10 { animation-delay: 700ms; }
+.fig-plate.in .ref.r12 { animation-delay: 880ms; }
+.fig-plate.in .ref.r14 { animation-delay: 1060ms; }
 
-.leader { display: flex; align-items: baseline; gap: 0.7rem; margin-top: 1.1rem;
+.legend { list-style: none; }
+.legend li { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.4rem; padding: 1.35rem 0; }
+.legend li + li { border-top: 1px solid var(--hair-l); }
+.legend .num {
+  font-family: "Libre Baskerville", Georgia, serif; font-size: 21px; color: var(--brass);
+}
+.legend h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 18.5px; margin-bottom: 0.45rem; }
+.legend p { color: var(--ink-soft); font-size: 15.5px; }
+.legend .leader { display: flex; align-items: baseline; gap: 0.7rem; margin-top: 0.8rem;
   font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--ink-soft); }
-.leader .fill { flex: 1; border-bottom: 1px dotted #b9b2a6; transform: translateY(-3px); }
-.leader .val { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink); }
+.legend .leader .fill { flex: 1; border-bottom: 1px dotted #b9b2a6; transform: translateY(-3px); }
+.legend .leader .val { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink); }
 
-/* ---------- Doctrine (pull quote) ---------- */
-.doctrine { padding: 8rem 1.5rem; }
+/* ---------- Specimen: verification, demonstrated ---------- */
+.specimen { padding: 8rem 1.5rem; position: relative; overflow: hidden; }
+.specimen::before {
+  content: ""; position: absolute; inset: -20%;
+  background: radial-gradient(50% 40% at 78% 20%, rgba(43, 89, 64, 0.2), transparent 70%);
+  pointer-events: none;
+}
+.specimen-inner { max-width: 880px; margin: 0 auto; position: relative; }
+.specimen .kicker { color: var(--brass-bright); }
+.specimen h2 {
+  font-family: "Libre Baskerville", Georgia, serif; font-weight: 700; color: var(--ivory);
+  font-size: clamp(28px, 4vw, 44px); margin-top: 0.8rem; margin-bottom: 3rem; text-wrap: balance;
+}
+.oa-sheet {
+  background: var(--parchment); color: var(--ink);
+  padding: 3rem clamp(1.4rem, 5vw, 3.4rem);
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.65);
+  position: relative;
+}
+.oa-sheet::before {
+  content: "UNITED STATES PATENT AND TRADEMARK OFFICE";
+  display: block; text-align: center;
+  font-family: "Inter", sans-serif; font-size: 10px; letter-spacing: 0.22em;
+  color: var(--ink-soft); margin-bottom: 1.8rem;
+}
+.oa-sheet p { font-size: 16px; line-height: 1.9; }
+.oa-sheet p + p { margin-top: 1.2rem; }
+
+.cite {
+  position: relative; white-space: nowrap;
+  font-family: "JetBrains Mono", monospace; font-size: 0.82em;
+  padding-bottom: 1px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px; background-repeat: no-repeat; background-position: 0 100%;
+  transition: background-size 700ms var(--ease), color 400ms var(--ease);
+}
+.cite .stamp {
+  position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%) translateY(4px);
+  white-space: nowrap; pointer-events: none;
+  font-family: "Inter", sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 8px; border-radius: 2px;
+  opacity: 0; transition: opacity 500ms var(--ease), transform 500ms var(--ease);
+}
+.cite.ok.checked { color: var(--forest); background-size: 100% 1.5px; }
+.cite.ok .stamp { background: var(--forest); color: var(--ivory); }
+.cite.warn.checked { color: var(--review); background-size: 100% 1.5px; }
+.cite.warn .stamp { background: var(--review); color: var(--ivory); }
+.cite.checked .stamp { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.specimen .after {
+  margin-top: 2.2rem; color: rgba(250, 248, 244, 0.7); font-size: 15.5px; font-style: italic;
+  max-width: 60ch;
+}
+
+/* ---------- Doctrine ---------- */
+.doctrine { padding: 8.5rem 1.5rem; }
 .doctrine-inner { max-width: 800px; margin: 0 auto; }
 .doctrine blockquote {
   font-family: "Libre Baskerville", Georgia, serif;
-  font-size: clamp(24px, 3.4vw, 36px); line-height: 1.45; text-wrap: balance;
+  font-size: clamp(24px, 3.4vw, 37px); line-height: 1.45; text-wrap: balance;
 }
 .doctrine blockquote::first-letter {
   font-size: 3.1em; float: left; line-height: 0.85;
@@ -176,47 +275,72 @@ h1 em { font-style: italic; color: var(--brass-bright); }
   letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250,248,244,0.45);
 }
 
-/* ---------- Record (honest numbers) ---------- */
-.record { border-top: 1px solid var(--hairline-dark); border-bottom: 1px solid var(--hairline-dark);
-  padding: 3.4rem 1.5rem; }
+/* ---------- Record ---------- */
+.record { border-top: 1px solid var(--hair-d); border-bottom: 1px solid var(--hair-d);
+  padding: 3.6rem 1.5rem; background: var(--night-2); }
 .record-inner { max-width: 1020px; margin: 0 auto; display: grid;
   grid-template-columns: repeat(3, 1fr); gap: 2.5rem; text-align: center; }
 @media (max-width: 800px) { .record-inner { grid-template-columns: 1fr; } }
-.record .fig { font-family: "Libre Baskerville", Georgia, serif; font-size: 34px; color: var(--brass-bright); }
+.record .fig { font-family: "Libre Baskerville", Georgia, serif; font-size: 36px; color: var(--brass-bright); }
 .record .cap { font-family: "Inter", sans-serif; font-size: 12px; letter-spacing: 0.06em;
   color: rgba(250,248,244,0.6); margin-top: 0.5rem; }
 
 /* ---------- Colophon ---------- */
-.colophon { padding: 6rem 1.5rem 4rem; text-align: center; }
-.colophon svg { height: 56px; width: auto; color: var(--ivory); opacity: 0.9; margin-bottom: 1.8rem; }
-.colophon .close-line { font-style: italic; color: rgba(250,248,244,0.65); max-width: 46ch; margin: 0 auto; }
+.colophon { padding: 6.5rem 1.5rem 4rem; text-align: center; position: relative; overflow: hidden; }
+.colophon::before {
+  content: ""; position: absolute; inset: -30% -20% auto;
+  height: 120%;
+  background: radial-gradient(42% 50% at 50% 10%, rgba(194, 161, 101, 0.09), transparent 70%);
+  pointer-events: none;
+}
+.colophon > .reveal { position: relative; }
+.colophon svg { height: 58px; width: auto; color: var(--ivory); opacity: 0.92; margin-bottom: 1.9rem; }
+.colophon .close-line { font-style: italic; color: rgba(250,248,244,0.68); max-width: 46ch; margin: 0 auto; }
 .colophon .fine {
   margin-top: 2.6rem; font-family: "Inter", sans-serif; font-size: 11px;
   letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,248,244,0.35);
 }
-.colophon .cta-row { margin-top: 2.4rem; }
+.colophon .cta-row { margin-top: 2.5rem; opacity: 1; animation: none; }
 
-/* ---------- Reveals & motion ---------- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
+/* ---------- Motion primitives ---------- */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 950ms var(--ease), transform 950ms var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 120ms; }
+.reveal.d2 { transition-delay: 240ms; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes settle { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 @keyframes draw { to { transform: scaleX(1); } }
+@keyframes dash { to { stroke-dashoffset: 0; } }
+@keyframes drift-a {
+  from { transform: translate3d(-2.5%, -1.5%, 0) scale(1); }
+  to { transform: translate3d(2.5%, 2%, 0) scale(1.06); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+  to { transform: translate3d(-2%, -2%, 0) scale(1); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
   html { scroll-behavior: auto; }
   .reveal, .hero .kicker, .bird-wrap, .hero p.sub, .cta-row, .scroll-hint, h1 .line { opacity: 1; transform: none; }
+  .hero::before, .hero::after { animation: none; }
+  .cite.ok, .cite.warn { color: inherit; }
 }
 </style>
 </head>
 <body>
 
+<div id="progress" aria-hidden="true"></div>
+
 <section class="hero">
   <p class="kicker">Atticus · A drafting instrument for patent prosecution</p>
 
-  <div class="bird-wrap" aria-hidden="true">
+  <div class="bird-wrap" id="heroBird" aria-hidden="true">
     <svg viewBox="42 40 168 110">
       <path fill-rule="evenodd" fill="currentColor"
         d="M 46 71 C 56 68, 66 64, 74 60 C 80 50, 94 50, 100 58 C 104 63, 105 68, 105 72 C 119 76, 132 81, 143 88 C 161 73, 183 58, 198 47 C 204 43, 208 47, 204 52 C 190 66, 173 84, 159 97 C 155 107, 147 116, 137 122 C 128 128, 116 130.5, 106 129.5 C 90 127.5, 76 113, 69 97 C 67 90, 70 82, 72 76 C 62 74, 54 72.5, 46 71 Z M 88 62 a 2.8 2.8 0 1 0 0.1 0 Z M 113 91 C 123 87.5, 135 90, 142 97 C 135 102.5, 122 102, 114 97 C 111 95, 110 92, 113 91 Z" />
@@ -238,54 +362,113 @@ h1 em { font-style: italic; color: var(--brass-bright); }
 
   <div class="cta-row">
     <a class="btn btn-solid" href="/">Open Atticus</a>
-    <a class="btn btn-ghost" href="#method">Read the method</a>
+    <a class="btn btn-ghost" href="#fig1">Read the method</a>
   </div>
 
-  <div class="scroll-hint">The method</div>
+  <div class="scroll-hint">Fig. 1</div>
 </section>
 
-<section class="method" id="method">
-  <div class="method-inner">
+<section class="figure" id="fig1">
+  <div class="figure-inner">
     <div class="reveal">
-      <p class="kicker">The Method</p>
+      <p class="kicker">The Method, as a Drawing</p>
       <h2>Read. Verify. Draft. In that order, always.</h2>
       <hr class="rule-double" />
     </div>
 
-    <div class="steps">
-      <div class="step reveal">
-        <div class="numeral">I.</div>
-        <h3>Read the record</h3>
-        <p>
-          The office action is fetched from the USPTO and parsed into its grounds of
-          rejection, claim by claim, reference by reference. Structure first, so every
-          later step can be checked.
-        </p>
-        <div class="leader"><span>Grounds parsed</span><span class="fill"></span><span class="val">&sect;101 &middot; 102 &middot; 103 &middot; 112</span></div>
+    <div class="fig-grid">
+      <div class="fig-plate reveal" id="figPlate">
+        <svg viewBox="10 20 230 150" aria-label="FIG. 1: the Atticus mockingbird annotated as a patent drawing">
+          <path fill-rule="evenodd" fill="currentColor"
+            d="M 46 71 C 56 68, 66 64, 74 60 C 80 50, 94 50, 100 58 C 104 63, 105 68, 105 72 C 119 76, 132 81, 143 88 C 161 73, 183 58, 198 47 C 204 43, 208 47, 204 52 C 190 66, 173 84, 159 97 C 155 107, 147 116, 137 122 C 128 128, 116 130.5, 106 129.5 C 90 127.5, 76 113, 69 97 C 67 90, 70 82, 72 76 C 62 74, 54 72.5, 46 71 Z M 88 62 a 2.8 2.8 0 1 0 0.1 0 Z M 113 91 C 123 87.5, 135 90, 142 97 C 135 102.5, 122 102, 114 97 C 111 95, 110 92, 113 91 Z" />
+          <path stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"
+            d="M 100 128 L 97 148 M 111 129 L 111 148" />
+          <path stroke="currentColor" stroke-width="2.6" d="M 30 151 H 220" />
+          <path stroke="currentColor" stroke-width="1" opacity="0.55" d="M 30 157 H 220" />
+
+          <!-- Patent-drawing leader lines: dashed, from numeral to feature. -->
+          <path class="lead" stroke="currentColor" stroke-width="1" fill="none" d="M 36 38 C 52 42, 72 50, 86 58" />
+          <path class="lead" stroke="currentColor" stroke-width="1" fill="none" d="M 208 106 C 182 104, 152 100, 130 96" />
+          <path class="lead" stroke="currentColor" stroke-width="1" fill="none" d="M 226 70 C 216 76, 206 84, 196 92" />
+
+          <g font-family="Libre Baskerville, Georgia, serif" font-style="italic" font-size="13" fill="currentColor">
+            <text class="ref r10" x="24" y="36">10</text>
+            <text class="ref r12" x="212" y="111">12</text>
+            <text class="ref r14" x="228" y="66">14</text>
+          </g>
+        </svg>
+        <div class="fig-caption">FIG.&thinsp;1</div>
       </div>
 
-      <div class="step reveal">
-        <div class="numeral">II.</div>
-        <h3>Verify every citation</h3>
-        <p>
-          Each cited patent and publication is checked against USPTO records; each
-          characterization is tested against the passage it cites. What cannot be
-          confirmed is flagged before you ever see it.
-        </p>
-        <div class="leader"><span>Taken on the model&rsquo;s word</span><span class="fill"></span><span class="val">nothing</span></div>
-      </div>
-
-      <div class="step reveal">
-        <div class="numeral">III.</div>
-        <h3>Draft for review</h3>
-        <p>
-          Arguments arrive grounded, with inline sources you can open in one click.
-          Edit freely, then export a response to Word in filing form. You remain
-          counsel of record; Atticus remains the clerk.
-        </p>
-        <div class="leader"><span>Export</span><span class="fill"></span><span class="val">.docx</span></div>
-      </div>
+      <ol class="legend">
+        <li class="reveal">
+          <span class="num" aria-hidden="true">10</span>
+          <div>
+            <h3>The eye reads the record</h3>
+            <p>
+              The office action is fetched from the USPTO and parsed into its grounds of
+              rejection, claim by claim, reference by reference. Structure first, so every
+              later step can be checked.
+            </p>
+            <div class="leader"><span>Grounds parsed</span><span class="fill"></span><span class="val">&sect;101 &middot; 102 &middot; 103 &middot; 112</span></div>
+          </div>
+        </li>
+        <li class="reveal d1">
+          <span class="num" aria-hidden="true">12</span>
+          <div>
+            <h3>The wing-bar is the check</h3>
+            <p>
+              The mockingbird&rsquo;s white bar marks the wing; the verification pass marks
+              the draft. Every citation is confirmed against USPTO records, every
+              characterization tested against the passage it cites.
+            </p>
+            <div class="leader"><span>Taken on the model&rsquo;s word</span><span class="fill"></span><span class="val">nothing</span></div>
+          </div>
+        </li>
+        <li class="reveal d2">
+          <span class="num" aria-hidden="true">14</span>
+          <div>
+            <h3>The tail sets the course</h3>
+            <p>
+              Arguments arrive grounded, with inline sources you can open in one click.
+              Edit freely, then export a response in filing form. You remain counsel of
+              record; Atticus remains the clerk.
+            </p>
+            <div class="leader"><span>Export</span><span class="fill"></span><span class="val">.docx</span></div>
+          </div>
+        </li>
+      </ol>
     </div>
+  </div>
+</section>
+
+<section class="specimen">
+  <div class="specimen-inner">
+    <div class="reveal">
+      <p class="kicker">Exhibit A · Verification, Demonstrated</p>
+      <h2>Watch a rejection get checked.</h2>
+    </div>
+
+    <div class="oa-sheet reveal d1" id="oaSheet">
+      <p>
+        Claims 1&ndash;3 are rejected under 35 U.S.C. &sect;103 as being unpatentable over
+        Anderson <span class="cite ok" data-delay="0"><span class="stamp">Verified &middot; USPTO record</span>(US&nbsp;9,876,543)</span>
+        in view of Chen
+        <span class="cite ok" data-delay="700"><span class="stamp">Verified &middot; USPTO record</span>(US&nbsp;2019/0123456)</span>.
+      </p>
+      <p>
+        Anderson discloses &ldquo;a processor configured to handle interrupt requests using
+        a priority queue&rdquo;
+        <span class="cite ok" data-delay="1400"><span class="stamp">Verified &middot; col. 4, ll. 23&ndash;45</span>(col.&nbsp;4, lines&nbsp;23&ndash;45)</span>,
+        and, the Examiner asserts, teaches dynamic reordering of that queue
+        <span class="cite warn" data-delay="2100"><span class="stamp">Review &middot; passage does not say this</span>(col.&nbsp;7, line&nbsp;2)</span>.
+      </p>
+    </div>
+
+    <p class="after reveal d2">
+      Three citations confirmed against the record. One characterization the passage does
+      not support, flagged before it ever reached your draft. That is the whole product.
+    </p>
   </div>
 </section>
 
@@ -305,11 +488,11 @@ h1 em { font-style: italic; color: var(--brass-bright); }
       <div class="fig mono">655</div>
       <div class="cap">passages of MPEP guidance indexed for retrieval</div>
     </div>
-    <div class="reveal">
+    <div class="reveal d1">
       <div class="fig mono">0</div>
       <div class="cap">fabricated citations across evaluated office actions</div>
     </div>
-    <div class="reveal">
+    <div class="reveal d2">
       <div class="fig">every</div>
       <div class="cap">draft reviewed by an attorney before it is anything at all</div>
     </div>
@@ -329,7 +512,7 @@ h1 em { font-style: italic; color: var(--brass-bright); }
       Named for a lawyer who checked every fact twice, and a bird that repeats
       only what it has actually heard.
     </p>
-    <div class="cta-row" style="justify-content:center">
+    <div class="cta-row">
       <a class="btn btn-solid" href="/">Open Atticus</a>
     </div>
     <p class="fine">Working drafts for attorney review &middot; not legal advice</p>
@@ -340,7 +523,17 @@ h1 em { font-style: italic; color: var(--brass-bright); }
 (function () {
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Section reveals
+  // Reading progress hairline.
+  var bar = document.getElementById("progress");
+  function onScrollProgress() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    bar.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")";
+  }
+  document.addEventListener("scroll", onScrollProgress, { passive: true });
+  onScrollProgress();
+
+  // Section reveals.
   var items = document.querySelectorAll(".reveal");
   if (reduced || !("IntersectionObserver" in window)) {
     items.forEach(function (el) { el.classList.add("in"); });
@@ -349,11 +542,58 @@ h1 em { font-style: italic; color: var(--brass-bright); }
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
       });
-    }, { threshold: 0.18 });
+    }, { threshold: 0.16 });
     items.forEach(function (el) { io.observe(el); });
   }
 
-  // Cursor-trailing glow on buttons (same gesture as the instrument itself)
+  // FIG. 1 leader lines draw once the plate is in view.
+  var plate = document.getElementById("figPlate");
+  if (plate && !reduced && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { plate.classList.add("in"); obs.disconnect(); }
+      });
+    }, { threshold: 0.4 }).observe(plate);
+  } else if (plate) {
+    plate.classList.add("in");
+  }
+
+  // Exhibit A: citations get checked in sequence when the sheet is read.
+  var sheet = document.getElementById("oaSheet");
+  function runChecks() {
+    sheet.querySelectorAll(".cite").forEach(function (c) {
+      var d = reduced ? 0 : parseInt(c.getAttribute("data-delay") || "0", 10);
+      setTimeout(function () { c.classList.add("checked"); }, 500 + d);
+    });
+  }
+  if (sheet) {
+    if (reduced || !("IntersectionObserver" in window)) {
+      runChecks();
+    } else {
+      new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { runChecks(); obs.disconnect(); }
+        });
+      }, { threshold: 0.45 }).observe(sheet);
+    }
+  }
+
+  // The hero bird rises very slightly as the reader leaves the room (parallax, rAF).
+  var bird = document.getElementById("heroBird");
+  if (bird && !reduced) {
+    var ticking = false;
+    document.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var y = Math.min(window.scrollY, window.innerHeight);
+        bird.style.transform = "translateY(" + (-y * 0.08) + "px)";
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  // Cursor-trailing glow on buttons (the instrument's own gesture).
   document.querySelectorAll(".btn").forEach(function (el) {
     el.addEventListener("mousemove", function (e) {
       var r = el.getBoundingClientRect();
