@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Request access · Atticus</title>
+<meta name="description" content="Ask to be written to when Atticus opens its doors." />
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --night: #141a16;
+  --panel: #1c2420;
+  --ivory: #faf8f4;
+  --parchment: #f2eee6;
+  --ink: #1c2420;
+  --ink-soft: #5a5f57;
+  --brass: #8b7355;
+  --brass-bright: #c2a165;
+  --forest: #2b5940;
+  --hair-d: rgba(250, 248, 244, 0.14);
+  --hair-l: #d4cfc6;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--night);
+  color: var(--ivory);
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 17px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 4rem 1.5rem;
+  position: relative; overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: -30%; pointer-events: none;
+  background:
+    radial-gradient(42% 34% at 28% 22%, rgba(194, 161, 101, 0.11), transparent 70%),
+    radial-gradient(48% 40% at 74% 82%, rgba(43, 89, 64, 0.2), transparent 72%);
+}
+::selection { background: var(--forest); color: var(--ivory); }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible { outline: 1.5px solid var(--brass-bright); outline-offset: 3px; }
+
+.sheet {
+  position: relative; width: min(560px, 100%);
+  opacity: 0; transform: translateY(16px);
+  animation: rise 900ms var(--ease) 150ms forwards;
+}
+
+.kicker {
+  font-family: "Inter", system-ui, sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.26em; text-transform: uppercase; color: var(--brass-bright);
+}
+h1 {
+  font-family: "Libre Baskerville", Georgia, serif; font-weight: 700;
+  font-size: clamp(30px, 5vw, 40px); line-height: 1.2; text-wrap: balance;
+  margin-top: 0.9rem;
+}
+.sub { color: rgba(250, 248, 244, 0.72); font-size: 16.5px; margin-top: 1rem; max-width: 48ch; }
+
+.rule { margin: 2.2rem 0 2.4rem; border: 0; border-top: 2px solid var(--ivory); position: relative; opacity: 0.9; }
+.rule::after { content: ""; position: absolute; inset: 4px 0 auto; border-top: 1px solid var(--hair-d); }
+
+form { display: grid; gap: 1.4rem; }
+.field label {
+  display: block; font-family: "Inter", sans-serif; font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250,248,244,0.55);
+  margin-bottom: 0.5rem;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: rgba(250, 248, 244, 0.04);
+  border: 1px solid var(--hair-d);
+  border-radius: 2px;
+  color: var(--ivory);
+  font-family: "Source Serif 4", Georgia, serif; font-size: 15.5px;
+  padding: 0.7rem 0.9rem;
+  transition: border-color 280ms var(--ease), background-color 280ms var(--ease);
+}
+.field select { appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23c2a165' stroke-width='1.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.8rem center; background-size: 12px;
+}
+.field select option { background: var(--panel); color: var(--ivory); }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: rgba(250,248,244,0.3); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--brass-bright); background: rgba(250, 248, 244, 0.06); outline: none;
+}
+.field textarea { resize: vertical; min-height: 96px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+@media (max-width: 560px) { .two { grid-template-columns: 1fr; } }
+
+.btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: "Inter", system-ui, sans-serif; font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #fdfcf9; border: 0; cursor: pointer; border-radius: 2px;
+  padding: 1rem 2.2rem;
+  background-image: linear-gradient(140deg, #34694c 0%, #2b5940 60%, #275339 100%);
+  box-shadow: 0 12px 32px -16px rgba(15, 46, 31, 0.7);
+  transition: filter 280ms var(--ease), transform 320ms var(--ease), box-shadow 320ms var(--ease);
+}
+.btn:hover { filter: brightness(1.07); transform: translateY(-1px);
+  box-shadow: 0 18px 40px -16px rgba(15, 46, 31, 0.8); }
+.btn:active { transform: translateY(0); }
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
+  transition: opacity 420ms var(--ease);
+  background: radial-gradient(130px circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(232, 240, 235, 0.28), transparent 65%);
+}
+.btn:hover::before { opacity: 1; }
+.btn[disabled] { opacity: 0.55; cursor: default; transform: none; }
+.btn .arrow { display: inline-block; transition: transform 320ms var(--ease); }
+.btn:hover .arrow { transform: translateX(4px); }
+
+.err {
+  font-family: "Inter", sans-serif; font-size: 12.5px; color: #c98585;
+  min-height: 1.2em;
+}
+
+.back {
+  margin-top: 2.4rem;
+  font-family: "Inter", sans-serif; font-size: 12px; letter-spacing: 0.06em;
+  color: rgba(250, 248, 244, 0.5); text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%;
+  transition: background-size 360ms var(--ease), color 280ms var(--ease);
+  padding-bottom: 2px;
+}
+.back:hover { color: var(--brass-bright); background-size: 100% 1px; }
+
+/* Confirmation: the docket entry. */
+.done { display: none; text-align: center; }
+.done.show { display: block; animation: rise 900ms var(--ease) forwards; }
+.done svg { height: 64px; width: auto; color: var(--ivory); opacity: 0.92; margin-bottom: 1.6rem; }
+.done h2 { font-family: "Libre Baskerville", Georgia, serif; font-size: 26px; }
+.done p { color: rgba(250,248,244,0.7); margin-top: 0.8rem; font-style: italic; max-width: 40ch;
+  margin-left: auto; margin-right: auto; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .sheet { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="sheet" id="formSheet">
+  <p class="kicker">Atticus · Request access</p>
+  <h1>Ask to be written to.</h1>
+  <p class="sub">
+    Atticus is being prepared with a small number of practitioners. Leave your name and
+    we will write to you when a seat opens.
+  </p>
+  <hr class="rule" />
+
+  <form id="interestForm" novalidate>
+    <div class="two">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+    </div>
+    <div class="two">
+      <div class="field">
+        <label for="organization">Firm or organization</label>
+        <input id="organization" name="organization" type="text" autocomplete="organization" />
+      </div>
+      <div class="field">
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="">Select one</option>
+          <option>Patent attorney</option>
+          <option>Patent agent</option>
+          <option>In-house counsel</option>
+          <option>Inventor / founder</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="note">What does your prosecution practice need most?</label>
+      <textarea id="note" name="note" maxlength="2000"></textarea>
+    </div>
+    <p class="err" id="formErr" role="alert"></p>
+    <div>
+      <button class="btn" id="submitBtn" type="submit">
+        Enter my name <span class="arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+  </form>
+
+  <a class="back" href="/landing.html">&larr; Return to the reading room</a>
+</div>
+
+<div class="sheet done" id="doneSheet">
+  <svg viewBox="30 36 184 128" aria-hidden="true">
+    <path fill-rule="evenodd" fill="currentColor"
+      d="M 46 71 C 56 68, 66 64, 74 60 C 80 50, 94 50, 100 58 C 104 63, 105 68, 105 72 C 119 76, 132 81, 143 88 C 161 73, 183 58, 198 47 C 204 43, 208 47, 204 52 C 190 66, 173 84, 159 97 C 155 107, 147 116, 137 122 C 128 128, 116 130.5, 106 129.5 C 90 127.5, 76 113, 69 97 C 67 90, 70 82, 72 76 C 62 74, 54 72.5, 46 71 Z M 88 62 a 2.8 2.8 0 1 0 0.1 0 Z M 113 91 C 123 87.5, 135 90, 142 97 C 135 102.5, 122 102, 114 97 C 111 95, 110 92, 113 91 Z" />
+    <path stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none" d="M 100 128 L 97 148 M 111 129 L 111 148" />
+    <path stroke="currentColor" stroke-width="2.6" d="M 38 151 H 202" />
+    <path stroke="currentColor" stroke-width="1" opacity="0.55" d="M 38 157 H 202" />
+  </svg>
+  <h2>Entered in the docket.</h2>
+  <p>We will write to you when a seat opens. Thank you for your interest in careful work.</p>
+  <p style="margin-top:1.6rem"><a class="back" href="/landing.html">&larr; Return to the reading room</a></p>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById("interestForm");
+  var err = document.getElementById("formErr");
+  var btn = document.getElementById("submitBtn");
+
+  // Cursor-trailing glow, the house gesture.
+  btn.addEventListener("mousemove", function (e) {
+    var r = btn.getBoundingClientRect();
+    btn.style.setProperty("--gx", ((e.clientX - r.left) / r.width) * 100 + "%");
+    btn.style.setProperty("--gy", ((e.clientY - r.top) / r.height) * 100 + "%");
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    err.textContent = "";
+    var name = document.getElementById("name").value.trim();
+    var email = document.getElementById("email").value.trim();
+    if (!name) { err.textContent = "Please tell us your name."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      err.textContent = "That email address does not look complete."; return;
+    }
+    btn.disabled = true;
+    fetch("/api/v1/interest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        organization: document.getElementById("organization").value.trim(),
+        role: document.getElementById("role").value,
+        note: document.getElementById("note").value.trim(),
+      }),
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("The clerk could not record that just now. Please try again.");
+        document.getElementById("formSheet").style.display = "none";
+        document.getElementById("doneSheet").classList.add("show");
+      })
+      .catch(function (ex) {
+        err.textContent = ex.message;
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

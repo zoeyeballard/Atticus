@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src import __version__
 from src.api.middleware import RequestContextMiddleware
-from src.api.routes import analyses, analyze, audit, draft, health, search, verify
+from src.api.routes import analyses, analyze, audit, draft, health, interest, search, verify
 from src.config import get_settings
 
 settings = get_settings()
@@ -34,7 +34,7 @@ app.add_middleware(
 )
 
 prefix = settings.api_prefix
-for module in (health, analyze, analyses, draft, search, verify, audit):
+for module in (health, analyze, analyses, draft, search, verify, audit, interest):
     app.include_router(module.router, prefix=prefix)
 
 
