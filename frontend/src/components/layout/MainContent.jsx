@@ -7,8 +7,8 @@ export default function MainContent({ children }) {
       <footer className="mx-auto w-full max-w-4xl px-8 pb-8 pt-16">
         <div className="border-t border-borderc pt-4 flex items-baseline justify-between gap-6">
           <p className="colophon">
-            Atticus · a verification-first drafting instrument · every assertion traceable to
-            its source
+            <a href="/landing.html" className="link-quiet hover:text-accent">Atticus</a> · a
+            verification-first drafting instrument · every assertion traceable to its source
           </p>
           <p className="colophon shrink-0">Attorney review required</p>
         </div>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Atticus · Every assertion, traceable to its source</title>
+<meta name="description" content="Atticus reads USPTO office actions, verifies every cited reference against the record, and drafts responses a practitioner can stand behind." />
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+/* The night library: the working instrument's world after hours. A deliberately
+   single-theme page; the drama lives here so the tool itself can stay quiet. */
+:root {
+  --night: #161d19;
+  --night-panel: #1c2420;
+  --ivory: #faf8f4;
+  --parchment: #f0ece4;
+  --ink: #1c2420;
+  --ink-soft: #5a5f57;
+  --brass: #8b7355;
+  --brass-bright: #b99b6b;
+  --forest: #2b5940;
+  --forest-tint: #e8f0eb;
+  --hairline-dark: rgba(250, 248, 244, 0.16);
+  --hairline-light: #d4cfc6;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--night);
+  color: var(--ivory);
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+::selection { background: var(--forest); color: var(--ivory); }
+
+.kicker {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+.mono { font-family: "JetBrains Mono", monospace; font-variant-numeric: lining-nums tabular-nums; }
+
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 1.5px solid var(--brass-bright); outline-offset: 3px; }
+
+/* ---------- Hero ---------- */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 1.5rem 5rem;
+  position: relative;
+}
+.hero .kicker { color: var(--brass-bright); opacity: 0; animation: rise 900ms var(--ease) 200ms forwards; }
+
+.bird-wrap { margin: 2.2rem 0 0; opacity: 0; animation: settle 1100ms var(--ease) 500ms forwards; }
+.bird-wrap svg { height: 84px; width: auto; color: var(--ivory); display: block; }
+
+/* The masthead rule draws itself beneath the bird's feet. */
+.hero-rule { width: min(320px, 60vw); margin: 0 auto; }
+.hero-rule .r1, .hero-rule .r2 {
+  display: block; height: 0; border-top: 2px solid var(--ivory);
+  transform: scaleX(0); transform-origin: center;
+  animation: draw 1200ms var(--ease) 700ms forwards;
+}
+.hero-rule .r2 { border-top-width: 1px; opacity: 0.45; margin-top: 4px; animation-delay: 850ms; }
+
+h1 {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 76px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  max-width: 15ch;
+  margin-top: 2.6rem;
+}
+h1 .line { display: block; opacity: 0; transform: translateY(14px); animation: rise 950ms var(--ease) forwards; }
+h1 .line:nth-child(1) { animation-delay: 1050ms; }
+h1 .line:nth-child(2) { animation-delay: 1200ms; }
+h1 em { font-style: italic; color: var(--brass-bright); }
+
+.hero p.sub {
+  max-width: 52ch;
+  margin-top: 1.8rem;
+  color: rgba(250, 248, 244, 0.75);
+  font-size: 18px;
+  opacity: 0; animation: rise 900ms var(--ease) 1450ms forwards;
+}
+.cta-row { display: flex; gap: 1rem; margin-top: 2.6rem; flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: rise 900ms var(--ease) 1650ms forwards; }
+
+.btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: "Inter", system-ui, sans-serif; font-size: 14px; font-weight: 500;
+  letter-spacing: 0.02em; text-decoration: none; cursor: pointer;
+  padding: 0.72rem 1.4rem; border-radius: 2px;
+  transition: filter 280ms var(--ease), border-color 280ms var(--ease), color 280ms var(--ease);
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
+  transition: opacity 420ms var(--ease);
+  background: radial-gradient(130px circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(232, 240, 235, 0.28), transparent 65%);
+}
+.btn:hover::before { opacity: 1; }
+.btn-solid {
+  color: #fdfcf9;
+  background-image: linear-gradient(180deg, #336349 0%, #2b5940 55%, #26503a 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.18);
+  border: 0;
+}
+.btn-solid:hover { filter: brightness(1.05); }
+.btn-ghost { border: 1px solid var(--hairline-dark); color: rgba(250,248,244,0.85); }
+.btn-ghost:hover { border-color: var(--brass-bright); color: var(--brass-bright); }
+
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  color: rgba(250,248,244,0.35); font-family: "Inter", sans-serif; font-size: 11px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  opacity: 0; animation: rise 900ms var(--ease) 2100ms forwards;
+}
+
+/* ---------- The Method (printed page) ---------- */
+.method { background: var(--parchment); color: var(--ink); padding: 7rem 1.5rem; }
+.method-inner { max-width: 1020px; margin: 0 auto; }
+.method .kicker { color: var(--brass); }
+.method h2 {
+  font-family: "Libre Baskerville", Georgia, serif; font-weight: 700;
+  font-size: clamp(28px, 4vw, 42px); margin-top: 0.8rem; text-wrap: balance;
+}
+.rule-double { border: 0; border-top: 2px solid var(--ink); position: relative; margin: 1.6rem 0 3.4rem; }
+.rule-double::after { content: ""; position: absolute; inset: 3px 0 auto 0; border-top: 1px solid var(--hairline-light); }
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+@media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
+.step .numeral {
+  font-family: "Libre Baskerville", Georgia, serif; font-size: 30px; color: var(--brass);
+  line-height: 1;
+}
+.step h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 19px; margin: 0.9rem 0 0.6rem; }
+.step p { color: var(--ink-soft); font-size: 15.5px; }
+
+.leader { display: flex; align-items: baseline; gap: 0.7rem; margin-top: 1.1rem;
+  font-family: "Inter", sans-serif; font-size: 11.5px; color: var(--ink-soft); }
+.leader .fill { flex: 1; border-bottom: 1px dotted #b9b2a6; transform: translateY(-3px); }
+.leader .val { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink); }
+
+/* ---------- Doctrine (pull quote) ---------- */
+.doctrine { padding: 8rem 1.5rem; }
+.doctrine-inner { max-width: 800px; margin: 0 auto; }
+.doctrine blockquote {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: clamp(24px, 3.4vw, 36px); line-height: 1.45; text-wrap: balance;
+}
+.doctrine blockquote::first-letter {
+  font-size: 3.1em; float: left; line-height: 0.85;
+  padding: 0.08em 0.12em 0 0; color: var(--brass-bright);
+}
+.doctrine .attribution {
+  margin-top: 2rem; font-family: "Inter", sans-serif; font-size: 12px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250,248,244,0.45);
+}
+
+/* ---------- Record (honest numbers) ---------- */
+.record { border-top: 1px solid var(--hairline-dark); border-bottom: 1px solid var(--hairline-dark);
+  padding: 3.4rem 1.5rem; }
+.record-inner { max-width: 1020px; margin: 0 auto; display: grid;
+  grid-template-columns: repeat(3, 1fr); gap: 2.5rem; text-align: center; }
+@media (max-width: 800px) { .record-inner { grid-template-columns: 1fr; } }
+.record .fig { font-family: "Libre Baskerville", Georgia, serif; font-size: 34px; color: var(--brass-bright); }
+.record .cap { font-family: "Inter", sans-serif; font-size: 12px; letter-spacing: 0.06em;
+  color: rgba(250,248,244,0.6); margin-top: 0.5rem; }
+
+/* ---------- Colophon ---------- */
+.colophon { padding: 6rem 1.5rem 4rem; text-align: center; }
+.colophon svg { height: 56px; width: auto; color: var(--ivory); opacity: 0.9; margin-bottom: 1.8rem; }
+.colophon .close-line { font-style: italic; color: rgba(250,248,244,0.65); max-width: 46ch; margin: 0 auto; }
+.colophon .fine {
+  margin-top: 2.6rem; font-family: "Inter", sans-serif; font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,248,244,0.35);
+}
+.colophon .cta-row { margin-top: 2.4rem; }
+
+/* ---------- Reveals & motion ---------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes settle { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes draw { to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+  .reveal, .hero .kicker, .bird-wrap, .hero p.sub, .cta-row, .scroll-hint, h1 .line { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="kicker">Atticus · A drafting instrument for patent prosecution</p>
+
+  <div class="bird-wrap" aria-hidden="true">
+    <svg viewBox="42 40 168 110">
+      <path fill-rule="evenodd" fill="currentColor"
+        d="M 46 71 C 56 68, 66 64, 74 60 C 80 50, 94 50, 100 58 C 104 63, 105 68, 105 72 C 119 76, 132 81, 143 88 C 161 73, 183 58, 198 47 C 204 43, 208 47, 204 52 C 190 66, 173 84, 159 97 C 155 107, 147 116, 137 122 C 128 128, 116 130.5, 106 129.5 C 90 127.5, 76 113, 69 97 C 67 90, 70 82, 72 76 C 62 74, 54 72.5, 46 71 Z M 88 62 a 2.8 2.8 0 1 0 0.1 0 Z M 113 91 C 123 87.5, 135 90, 142 97 C 135 102.5, 122 102, 114 97 C 111 95, 110 92, 113 91 Z" />
+      <path stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"
+        d="M 100 128 L 97 148 M 111 129 L 111 148" />
+    </svg>
+  </div>
+  <div class="hero-rule" aria-hidden="true"><span class="r1"></span><span class="r2"></span></div>
+
+  <h1>
+    <span class="line">Every assertion,</span>
+    <span class="line"><em>traceable</em> to its source.</span>
+  </h1>
+
+  <p class="sub">
+    Atticus reads USPTO office actions, verifies every cited reference against the record,
+    and drafts responses a practitioner can stand behind.
+  </p>
+
+  <div class="cta-row">
+    <a class="btn btn-solid" href="/">Open Atticus</a>
+    <a class="btn btn-ghost" href="#method">Read the method</a>
+  </div>
+
+  <div class="scroll-hint">The method</div>
+</section>
+
+<section class="method" id="method">
+  <div class="method-inner">
+    <div class="reveal">
+      <p class="kicker">The Method</p>
+      <h2>Read. Verify. Draft. In that order, always.</h2>
+      <hr class="rule-double" />
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="numeral">I.</div>
+        <h3>Read the record</h3>
+        <p>
+          The office action is fetched from the USPTO and parsed into its grounds of
+          rejection, claim by claim, reference by reference. Structure first, so every
+          later step can be checked.
+        </p>
+        <div class="leader"><span>Grounds parsed</span><span class="fill"></span><span class="val">&sect;101 &middot; 102 &middot; 103 &middot; 112</span></div>
+      </div>
+
+      <div class="step reveal">
+        <div class="numeral">II.</div>
+        <h3>Verify every citation</h3>
+        <p>
+          Each cited patent and publication is checked against USPTO records; each
+          characterization is tested against the passage it cites. What cannot be
+          confirmed is flagged before you ever see it.
+        </p>
+        <div class="leader"><span>Taken on the model&rsquo;s word</span><span class="fill"></span><span class="val">nothing</span></div>
+      </div>
+
+      <div class="step reveal">
+        <div class="numeral">III.</div>
+        <h3>Draft for review</h3>
+        <p>
+          Arguments arrive grounded, with inline sources you can open in one click.
+          Edit freely, then export a response to Word in filing form. You remain
+          counsel of record; Atticus remains the clerk.
+        </p>
+        <div class="leader"><span>Export</span><span class="fill"></span><span class="val">.docx</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="doctrine">
+  <div class="doctrine-inner reveal">
+    <blockquote>
+      If it cannot be traced to a source, it is flagged. An unverified sentence never
+      dresses itself as a verified one.
+    </blockquote>
+    <p class="attribution">The working rule</p>
+  </div>
+</section>
+
+<section class="record">
+  <div class="record-inner">
+    <div class="reveal">
+      <div class="fig mono">655</div>
+      <div class="cap">passages of MPEP guidance indexed for retrieval</div>
+    </div>
+    <div class="reveal">
+      <div class="fig mono">0</div>
+      <div class="cap">fabricated citations across evaluated office actions</div>
+    </div>
+    <div class="reveal">
+      <div class="fig">every</div>
+      <div class="cap">draft reviewed by an attorney before it is anything at all</div>
+    </div>
+  </div>
+</section>
+
+<section class="colophon">
+  <div class="reveal">
+    <svg viewBox="42 40 168 120" aria-hidden="true">
+      <path fill-rule="evenodd" fill="currentColor"
+        d="M 46 71 C 56 68, 66 64, 74 60 C 80 50, 94 50, 100 58 C 104 63, 105 68, 105 72 C 119 76, 132 81, 143 88 C 161 73, 183 58, 198 47 C 204 43, 208 47, 204 52 C 190 66, 173 84, 159 97 C 155 107, 147 116, 137 122 C 128 128, 116 130.5, 106 129.5 C 90 127.5, 76 113, 69 97 C 67 90, 70 82, 72 76 C 62 74, 54 72.5, 46 71 Z M 88 62 a 2.8 2.8 0 1 0 0.1 0 Z M 113 91 C 123 87.5, 135 90, 142 97 C 135 102.5, 122 102, 114 97 C 111 95, 110 92, 113 91 Z" />
+      <path stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none" d="M 100 128 L 97 148 M 111 129 L 111 148" />
+      <path stroke="currentColor" stroke-width="2.6" d="M 38 151 H 202" />
+      <path stroke="currentColor" stroke-width="1" opacity="0.55" d="M 38 157 H 202" />
+    </svg>
+    <p class="close-line">
+      Named for a lawyer who checked every fact twice, and a bird that repeats
+      only what it has actually heard.
+    </p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-solid" href="/">Open Atticus</a>
+    </div>
+    <p class="fine">Working drafts for attorney review &middot; not legal advice</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Section reveals
+  var items = document.querySelectorAll(".reveal");
+  if (reduced || !("IntersectionObserver" in window)) {
+    items.forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.18 });
+    items.forEach(function (el) { io.observe(el); });
+  }
+
+  // Cursor-trailing glow on buttons (same gesture as the instrument itself)
+  document.querySelectorAll(".btn").forEach(function (el) {
+    el.addEventListener("mousemove", function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty("--gx", ((e.clientX - r.left) / r.width) * 100 + "%");
+      el.style.setProperty("--gy", ((e.clientY - r.top) / r.height) * 100 + "%");
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
